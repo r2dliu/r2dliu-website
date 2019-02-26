@@ -5,7 +5,7 @@
 	"dependencies": {
 		"react": "^16.8.3",
 		"react-dom": "^16.8.3",
-		"react-router-dom": "/home/r2dliu4.3.1",
+		"react-router-dom": "4.3.1",
 		"react-scripts": "2.1.5"
 	},
 	"scripts": {
@@ -26,8 +26,7 @@
 		"not op_mini all"
 	],
 	"devDependencies": {
-		"eslint": "/home/r2dliu5.14.1",
-		"gh-pages": "/home/r2dliu2.0.1"
+		"gh-pages": "2.0.1"
 	},
 	"homepage": "http://r2dliu.github.io/r2dliu-website"
 }
