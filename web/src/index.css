@@ -1,69 +1,64 @@
 @font-face {
-	font-family: "bebasbold";
+	font-family: "Bebas Bold";
 	src: url("./fonts/BebasNeue Bold.ttf");
 }
 
 @font-face {
-	font-family: "bebasregular";
+	font-family: "Bebas Regular";
 	src: url("./fonts/BebasNeue Regular.ttf");
 }
 
 @font-face {
-	font-family: "bebasthin";
+	font-family: "Bebas Thin";
 	src: url("./fonts/BebasNeue Thin.ttf");
 }
 
 @font-face {
-	font-family: "bebaslight";
+	font-family: "Bebas Light";
 	src: url("./fonts/BebasNeue Light.ttf");
 }
 
 @font-face {
-	font-family: "sansbold";
+	font-family: "Sans Bold";
 	src: url("./fonts/SourceSansPro-Bold.otf");
 }
 
 @font-face {
-	font-family: "sans";
+	font-family: "Sans";
 	src: url("./fonts/SourceSansPro-Regular.otf");
 }
 
 @font-face {
-	font-family: "brandonmed";
+	font-family: "Brandon Medium";
 	src: url("./fonts/Brandon_med.otf");
 }
 
 @font-face {
-	font-family: "brandonbold";
+	font-family: "Brandon Bold";
 	src: url("./fonts/Brandon_bld.otf");
 }
 
 @font-face {
-	font-family: "brandonthin";
+	font-family: "Brandon Thin";
 	src: url("./fonts/Brandon_thin.otf");
 }
 
 @font-face {
-	font-family: "dinprocond";
+	font-family: "Din Pro Medium";
 	src: url("./fonts/DINPro-CondMedium.otf");
 }
 
 @font-face {
-	font-family: "dinpro";
+	font-family: "Din Pro";
 	src: url("./fonts/DINPro.otf");
 }
 
-html {
+html, body, body>div {
 	height: 100%;
 }
 
 body {
 	margin: 0;
-	height: 100%;
-	background-image: url("https://i.imgur.com/r6E1bPY.png");
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: center;
 }
 
 code {

@@ -1,0 +1,37 @@
+@import "/home/r2dliu/r2dliu-website/web/src/breakpoints.scss";
+
+.Home {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .title {
+        font-family: "Bebas Bold";
+        font-size: 80px;
+    }
+    
+    .description {
+        font-family: "Brandon Bold";
+        font-size: 20px;
+    }
+
+    .button-mobile {
+        display: none;
+        @include breakpoints("below-tablet-portrait") {
+            display: flex;
+        }
+    }
+
+    .button {
+        display: none;
+        @include breakpoints("tablet-portrait") {
+            display: flex;
+            color: white;
+            :hover {
+                background: white;
+                color: black;
+            }
+        }
+    }
+}
