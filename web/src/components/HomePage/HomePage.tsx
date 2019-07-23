@@ -1,40 +1,42 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import cn from "classnames";
-import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 import styles from "./HomePage.module.scss";
 import { number } from "prop-types";
 
 function HomePage() {
 	const [isClicked, setIsClicked] = useState(false);
-
-	const testFunction = () => {
-		console.log("test animation");
+	const [isAnimationDone, setIsAnimationDone] = useState(false);
+	const markAnimationFinished = () => {
+		setIsAnimationDone(true);
 	};
 
-	const testOnClick = () => {
-		console.log("clicked");
+	const markClicked = () => {
+		setIsClicked(true);
 	};
 
-	const buttonClassNames = cn(styles.button, {
+	const getClickedClassNames = (classNames: string) => cn(classNames, {
 		[styles.clicked]: isClicked,
 	});
 
+	if (isAnimationDone) {
+		return <Redirect to="/about" />;
+	}
+
 	return (
-		<div className={styles.Home}>
-			<div>
-				<div className={styles.title}>David Liu</div>
-				<div className={styles.description}>Developer | Designer | Player</div>
-				<Button
-					className={styles.button}
-					variant="outlined"
-					onAnimationEnd={testFunction}
-					onClick={testOnClick}
-				>
-					{"About Me"}
-				</Button>
-			</div>
+		<div onAnimationEnd={markAnimationFinished} className={styles.Home}>
+			<div className={getClickedClassNames(styles.title)}>David Liu</div>
+			<div className={getClickedClassNames(styles.description)}>Developer | Designer | Player</div>
+			<Button
+				className={getClickedClassNames(styles.button)}
+				variant="outlined"
+				onClick={markClicked}
+				disabled={isClicked}
+			>
+				<div className={styles.buttonContent}>{"About Me"}</div>
+			</Button>
 		</div>
 	);
 }

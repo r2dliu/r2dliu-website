@@ -1,0 +1,22 @@
+@import "/home/r2dliu/r2dliu-website/web/src/breakpoints.scss";
+
+.CanvasPage {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .sideNav {
+        min-width: 300px;
+        max-width: 300px;
+        height: 100%;
+        background: blue;
+    }
+    
+    .canvas {
+        width: 100%;
+        height: 100%;
+        background: red;
+    }
+}
+   
