@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import cn from "classnames";
-import { Redirect, withRouter, RouteComponentProps } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 import styles from "./HomePage.module.scss";
 
-interface Props extends RouteComponentProps<any> { }
-
-function HomePage(props: Props) {
+function HomePage() {
 	const [isClicked, setIsClicked] = useState(false);
 	const [isAnimationDone, setIsAnimationDone] = useState(false);
 	const markAnimationFinished = () => {
-		console.log("animation done");
 		setIsAnimationDone(true);
 	};
 
@@ -24,7 +21,6 @@ function HomePage(props: Props) {
 	});
 
 	if (isAnimationDone) {
-		props.history.push("/");
 		return <Redirect to="/about" />;
 	}
 
@@ -44,4 +40,4 @@ function HomePage(props: Props) {
 	);
 }
 
-export default withRouter(HomePage);
+export default HomePage;

@@ -84,36 +84,6 @@
             );
         }
     }
-    
-    &.mobile {
-        padding: 0;
-
-        .menuItem {
-            &.firstItem {
-                animation-delay: 0s;
-            }
-
-            &.secondItem {
-                animation-delay: 0.05s;
-            }
-
-            &.thirdItem {
-                animation-delay: 0.1s;
-            }
-
-            &.fourthItem {
-                animation-delay: 0.15s;
-            }
-
-            &.fifthItem {
-                animation-delay: 0.20s;
-            }
-
-            &.sixthItem {
-                animation-delay: 0.25s;
-            }
-        }
-    }
 }
 
 @keyframes fade-in {

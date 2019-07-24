@@ -1,93 +1,52 @@
 import React, { useState, useEffect } from "react";
-// import Button from "@material-ui/core/Button";
+import { get } from "lodash";
 import cn from "classnames";
 import { RouteComponentProps } from "react-router-dom";
 import { withRouter } from "react-router";
-import {
-	HomeOutlined,
-	InfoOutlined,
-	WorkOutline,
-	FeaturedPlayListOutlined,
-	VideogameAssetOutlined,
-	ContactSupportOutlined,
-} from "@material-ui/icons";
 
-import Spacer from "../Spacer";
+import DesktopMenu from "./DesktopMenu";
 import styles from "./CanvasPage.module.scss";
 import Breakpoint from "react-socks";
 
-interface Props extends RouteComponentProps<{ page: string }> { }
-
-function CanvasPage(props: Props) {
+function CanvasPage(props: RouteComponentProps) {
 	const [isLoaded, setIsLoaded] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	useEffect(() => {
 		setIsLoaded(true);
 	}, []);
 
-	const page = props.match.params;
+	const toggleMenuOpen = () => { setIsMenuOpen(!isMenuOpen); };
+
+	const page = get(props.match, ["params", "id"], "");
 
 	return (
 		<div className={styles.CanvasPage}>
-			<Breakpoint s={true} down={true}>
-				<div className={styles.mobile} >
-					<div className={styles.mobileNav} >
-						{"test"}
-					</div>
-					<div className={styles.canvas} />
+			<Breakpoint className={styles.mobile} s={true} down={true}>
+				<div className={cn(styles.mobileNav, { [styles.loaded]: isLoaded })}  >
+					<button
+						className={cn(styles.hamburger, styles.hamburgerSlider, { [styles.isActive]: isMenuOpen })}
+						type="button"
+						onClick={toggleMenuOpen}
+					>
+						<span className={styles.hamburgerBox}>
+							<span className={styles.hamburgerInner} />
+						</span>
+					</button>
 				</div>
-			</Breakpoint>
-			<Breakpoint m={true} up={true}>
-				<div className={styles.desktop} >
-					<div className={cn(styles.sideNav, { [styles.loaded]: isLoaded })}>
-						<div className={styles.menu}>
-							<div className={styles.menuItem}>
-								<div>
-									<HomeOutlined className={styles.icon} />
-								</div>
-								<div className={styles.iconText}>Home</div>
-							</div>
-							<Spacer size="md" />
-							<div className={styles.menuItem}>
-								<div>
-									<InfoOutlined className={styles.icon} />
-								</div>
-								<div className={styles.iconText}>About Me</div>
-							</div>
-							<Spacer size="md" />
-							<div className={styles.menuItem}>
-								<div>
-									<WorkOutline className={styles.icon} />
-								</div>
-								<div className={styles.iconText}>Projects</div>
-							</div>
-							<Spacer size="md" />
-							<div className={styles.menuItem}>
-								<div>
-									<FeaturedPlayListOutlined className={styles.icon} />
-								</div>
-								<div className={styles.iconText}>Articles</div>
-							</div>
-							<Spacer size="md" />
-							<div className={styles.menuItem}>
-								<div>
-									<VideogameAssetOutlined className={styles.icon} />
-								</div>
-								<div className={styles.iconText}>Melee</div>
-							</div>
-							<Spacer size="md" />
-							<div className={styles.menuItem}>
-								<div>
-									<ContactSupportOutlined className={styles.icon} />
-								</div>
-								<div className={styles.iconText}>Contact</div>
-							</div>
-						</div>
+				{isMenuOpen && <div className={styles.menuOverlay}>
+					<div className={styles.menu} >
+						<DesktopMenu page={page} isMobile={true} />
 					</div>
-					<div className={styles.canvas} />
-				</div>
+				</div>}
+				<div className={styles.canvas} />
 			</Breakpoint>
-
-		</div >
+			<Breakpoint className={styles.desktop} m={true} up={true}>
+				<div className={cn(styles.sideNav, { [styles.loaded]: isLoaded })}>
+					<DesktopMenu page={page} isMobile={false} />
+				</div>
+				<div className={styles.canvas} />
+			</Breakpoint>
+		</div>
 	);
 }
 
