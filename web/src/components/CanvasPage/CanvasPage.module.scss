@@ -39,12 +39,12 @@ $hamburger-active-hover-opacity: $hamburger-hover-opacity !default;
                 width: 2px;
                 background: white;
                 content: "";
-                animation-fill-mode: forwards;
             }
 
             &.loaded {
                 &:after {
                     animation: extend 0.6s;
+                    animation-fill-mode: forwards;
                     animation-delay: 0.3s;
                 }
             }
