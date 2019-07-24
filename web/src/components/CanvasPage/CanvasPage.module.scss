@@ -2,21 +2,99 @@
 
 .CanvasPage {
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
-    .sideNav {
-        min-width: 300px;
-        max-width: 300px;
-        height: 100%;
-        background: blue;
+    .desktop, .mobile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-    
+
+    .desktop {
+        flex-direction: row;
+
+        .sideNav {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 250px;
+            max-width: 250px;
+            height: 100%;
+
+            &:after {
+                height: 0;
+                position: absolute;
+                top: 20px;
+                left: 250px;
+                width: 2px;
+                background: white;
+                content: "";
+            }
+
+            &.loaded {
+                &:after {
+                    animation: extend 0.6s;
+                    animation-fill-mode: forwards;
+                    animation-delay: 0.3s;
+                }
+            }
+
+            .menu {
+                padding: 40px 0;
+
+                .menuItem {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    width: 170px;
+                    height: 40px; 
+
+                    border-left: 5px solid gray;
+                    
+                    .icon, .iconText {
+                        color: white;
+                        font-family: "Bebas Bold";
+                        letter-spacing: 2px;
+                        margin-top: 4px;
+                    }
+
+                    .icon {
+                        margin-left: 10px;
+                        font-size: 24px;
+                    }
+
+                    .iconText {
+                        margin-left: 10px;
+                        font-size: 24px;
+                    }
+                }
+            }
+        }
+    }
+
+    .mobile {
+        flex-direction: column;
+
+        .mobileNav {
+            height: 50px;
+            background-color:red;
+            width: 100%;
+        }
+    }
+
     .canvas {
         width: 100%;
         height: 100%;
-        background: red;
+    }
+}
+
+@keyframes extend {
+    0% {
+        height: 0;
+    }
+
+    100% {
+        animation-timing-function: cubic-bezier(.02,1.18,.73,.98);
+        height: calc(100% - 40px);
     }
 }
    

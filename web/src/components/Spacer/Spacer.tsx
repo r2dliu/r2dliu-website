@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Spacer.modules.scss";
+import styles from "./Spacer.module.scss";
 
 interface Props {
 	size: "xs" | "sm" | "md" | "lg" | "xl";
@@ -8,7 +8,7 @@ interface Props {
 function Spacer(props: Props) {
 	const currSize = props.size;
 
-	const getSizeClassName = (size: string) => {
+	const getSizeClassName = (size: string | null) => {
 		switch (size) {
 			case "xs":
 				return styles.xs;
@@ -27,5 +27,9 @@ function Spacer(props: Props) {
 
 	return <div className={getSizeClassName(currSize)} />;
 }
+
+Spacer.defaultProps = {
+	size: "md",
+};
 
 export default Spacer;
