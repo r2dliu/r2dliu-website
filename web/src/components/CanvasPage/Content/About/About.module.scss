@@ -1,0 +1,113 @@
+@import "src/textStyles.scss";
+
+.About {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .cardContainer {
+        display: flex;
+        margin-top: 25px;
+        width: 900px;
+        height: 475px;
+
+        .profileCard {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+
+            .main {
+                height: 400px;
+                width: 100%;
+                display: flex;
+
+                .pictureContainer {
+                    width: 250px;
+                    height: calc(100% - 50px);
+                    padding: 25px;
+                    border-right: 1px solid white;
+
+                    .picture {
+                        height: 100%;
+                        background: url("https://d3u0wiaxz6it97.cloudfront.net/assets/Profile.JPG"); 
+                        background-size: 275px 400px;
+                        background-position-y: -50px;
+                        background-repeat: no-repeat;
+                        border: 1px solid gray;
+                        filter: grayscale(100%);  
+                        transition: all 0.2s ease-in;
+                        
+                        &:hover {
+                            filter: grayscale(0%);
+                            border: 1px solid white;
+                        }
+                    }
+                }
+
+                .descriptionContainer {
+                    width: 650px;
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+
+                    .description {
+                        display:flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        padding: 25px;
+                        height: 190px;
+                        
+                        .header {
+                            font-size: 30px;
+                            font-family: "Bebas Regular";
+                            font-weight: 200;
+                            letter-spacing: 1px;
+                        }
+
+                        .body {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-start;
+                            font-size: 16px;
+                            font-family: "Brandon Medium";
+                        }
+
+                    }
+
+                    .work {
+                        display: flex;
+                        flex-direction: column;
+                        height: 60px;
+                        padding: 0px 25px;
+                        align-items: flex-start;
+
+                        .header {
+                            font-size: 30px;
+                            font-family: "Bebas Regular";
+                            font-weight: 200;
+                            letter-spacing: 1px;
+                        }
+
+                        .body {
+                            text-align: left;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-start;
+                            font-size: 16px;
+                            font-family: "Brandon Medium";
+
+                            .link {
+                                @include link;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .social {
+                background: black;
+            }
+        }
+    }
+}

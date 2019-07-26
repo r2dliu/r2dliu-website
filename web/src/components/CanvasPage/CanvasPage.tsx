@@ -3,10 +3,11 @@ import { get } from "lodash";
 import cn from "classnames";
 import { RouteComponentProps } from "react-router-dom";
 import { withRouter } from "react-router";
-
-import DesktopMenu from "./DesktopMenu";
-import styles from "./CanvasPage.module.scss";
 import Breakpoint from "react-socks";
+
+import About from "./Content/About";
+import Menu from "./Menu";
+import styles from "./CanvasPage.module.scss";
 
 function CanvasPage(props: RouteComponentProps) {
 	const [isLoaded, setIsLoaded] = useState(false);
@@ -19,9 +20,18 @@ function CanvasPage(props: RouteComponentProps) {
 
 	const page = get(props.match, ["params", "id"], "");
 
+	const getCanvasEl = (currPage: string) => {
+		switch (currPage) {
+			case "about":
+				return <About />;
+			default:
+				return null;
+		}
+	};
+
 	return (
 		<div className={styles.CanvasPage}>
-			<Breakpoint className={styles.mobile} s={true} down={true}>
+			<Breakpoint className={styles.mobile} xs={true} only={true}>
 				<div className={cn(styles.mobileNav, { [styles.loaded]: isLoaded })}  >
 					<button
 						className={cn(styles.hamburger, styles.hamburgerSlider, { [styles.isActive]: isMenuOpen })}
@@ -33,18 +43,26 @@ function CanvasPage(props: RouteComponentProps) {
 						</span>
 					</button>
 				</div>
-				{isMenuOpen && <div className={styles.menuOverlay}>
+				<div
+					className={cn(styles.menuOverlay, {
+						[styles.show]: isMenuOpen,
+					})}
+				>
 					<div className={styles.menu} >
-						<DesktopMenu page={page} isMobile={true} />
+						<Menu page={page} isMobile={true} />
 					</div>
-				</div>}
-				<div className={styles.canvas} />
-			</Breakpoint>
-			<Breakpoint className={styles.desktop} m={true} up={true}>
-				<div className={cn(styles.sideNav, { [styles.loaded]: isLoaded })}>
-					<DesktopMenu page={page} isMobile={false} />
 				</div>
 				<div className={styles.canvas} />
+			</Breakpoint>
+			<Breakpoint className={styles.desktop} s={true} up={true}>
+				<div className={cn(styles.sideNav, { [styles.loaded]: isLoaded })}>
+					<Menu page={page} isMobile={false} />
+				</div>
+				<div className={styles.canvas}>
+					<div className={styles.display}>
+						{getCanvasEl(page)}
+					</div>
+				</div>
 			</Breakpoint>
 		</div>
 	);

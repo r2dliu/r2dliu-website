@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import cn from "classnames";
 import { Redirect } from "react-router-dom";
@@ -8,8 +8,16 @@ import styles from "./HomePage.module.scss";
 function HomePage() {
 	const [isClicked, setIsClicked] = useState(false);
 	const [isAnimationDone, setIsAnimationDone] = useState(false);
-	const markAnimationFinished = () => {
-		setIsAnimationDone(true);
+	const [isLoaded, setIsLoaded] = useState(false);
+
+	useEffect(() => {
+		setIsLoaded(true);
+	}, []);
+
+	const markAnimationFinished = (e: AnimationEvent) => {
+		if (e.animationName.includes("fade-out")) {
+			setIsAnimationDone(true);
+		}
 	};
 
 	const markClicked = () => {
@@ -25,18 +33,29 @@ function HomePage() {
 	}
 
 	return (
+		// @ts-ignore
 		<div onAnimationEnd={markAnimationFinished} className={styles.Home}>
-			<div className={getClickedClassNames(styles.title)}>David Liu</div>
-			<div className={getClickedClassNames(styles.description)}>Developer | Designer | Player</div>
+			<div
+				className={cn(getClickedClassNames(styles.title), { [styles.loaded]: isLoaded })}
+			>
+				David Liu
+			</div>
+			<div
+				className={cn(getClickedClassNames(styles.description), {
+					[styles.loaded]: isLoaded,
+				})}
+			>
+				Software | Design | Bouldering | Melee
+			</div>
 			<Button
-				className={getClickedClassNames(styles.button)}
+				className={cn(getClickedClassNames(styles.button), { [styles.loaded]: isLoaded })}
 				variant="outlined"
 				onClick={markClicked}
 				disabled={isClicked}
 			>
 				<div className={styles.buttonContent}>{"About Me"}</div>
 			</Button>
-		</div>
+		</div >
 	);
 }
 

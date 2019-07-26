@@ -3,25 +3,34 @@ import Button from "@material-ui/core/Button";
 import cn from "classnames";
 import { RouteComponentProps } from "react-router-dom";
 import { withRouter } from "react-router";
-import {
-	HomeOutlined,
-	InfoOutlined,
-	WorkOutline,
-	FeaturedPlayListOutlined,
-	VideogameAssetOutlined,
-	ContactSupportOutlined,
-} from "@material-ui/icons";
+// import {
+// 	HomeOutlined,
+// 	InfoOutlined,
+// 	WorkOutline,
+// 	FeaturedPlayListOutlined,
+// 	VideogameAssetOutlined,
+// 	ContactSupportOutlined,
+// } from "@material-ui/icons";
+
+import HomeOutlined from "@material-ui/icons/HomeOutlined";
+import InfoOutlined from "@material-ui/icons/InfoOutlined";
+import WorkOutline from "@material-ui/icons/WorkOutline";
+import FeaturedPlayListOutlined from "@material-ui/icons/FeaturedPlayListOutlined";
+import VideogameAssetOutlined from "@material-ui/icons/VideogameAssetOutlined";
+import ContactSupportOutlined from "@material-ui/icons/ContactSupportOutlined";
 
 import Spacer from "../../Spacer";
-import styles from "./DesktopMenu.module.scss";
+import styles from "./Menu.module.scss";
 
 interface Props extends RouteComponentProps {
 	page: string;
+	isMobile: boolean;
 }
 
-function DesktopMenu(props: Props) {
+function Menu(props: Props) {
 	const {
 		page,
+		isMobile,
 	} = props;
 
 	const redirect = (e: SyntheticEvent) => {
@@ -35,8 +44,12 @@ function DesktopMenu(props: Props) {
 	};
 
 	return (
-		<div className={styles.DesktopMenu}>
-			<Button id="home" className={cn(styles.menuItem, styles.firstItem)} onClick={redirect}>
+		<div className={cn(styles.Menu, { [styles.mobile]: isMobile })}>
+			<Button
+				id="home"
+				className={cn(styles.menuItem, styles.firstItem)}
+				onClick={redirect}
+			>
 				<div>
 					<HomeOutlined className={styles.icon} />
 				</div>
@@ -45,7 +58,9 @@ function DesktopMenu(props: Props) {
 			<Spacer size="md" />
 			<Button
 				id="about"
-				className={cn(styles.menuItem, styles.secondItem, { [styles.highlight]: page === "about" })}
+				className={cn(styles.menuItem, styles.secondItem, {
+					[styles.highlight]: page === "about",
+				})}
 				onClick={redirect}
 			>
 				<div>
@@ -56,7 +71,9 @@ function DesktopMenu(props: Props) {
 			<Spacer size="md" />
 			<Button
 				id="projects"
-				className={cn(styles.menuItem, styles.thirdItem, { [styles.highlight]: page === "projects" })}
+				className={cn(styles.menuItem, styles.thirdItem, {
+					[styles.highlight]: page === "projects",
+				})}
 				onClick={redirect}
 			>
 				<div>
@@ -67,7 +84,9 @@ function DesktopMenu(props: Props) {
 			<Spacer size="md" />
 			<Button
 				id="articles"
-				className={cn(styles.menuItem, styles.fourthItem, { [styles.highlight]: page === "articles" })}
+				className={cn(styles.menuItem, styles.fourthItem, {
+					[styles.highlight]: page === "articles",
+				})}
 				onClick={redirect}
 			>
 				<div>
@@ -78,7 +97,9 @@ function DesktopMenu(props: Props) {
 			<Spacer size="md" />
 			<Button
 				id="melee"
-				className={cn(styles.menuItem, styles.fifthItem, { [styles.highlight]: page === "melee" })}
+				className={cn(styles.menuItem, styles.fifthItem, {
+					[styles.highlight]: page === "melee",
+				})}
 				onClick={redirect}
 			>
 				<div>
@@ -89,7 +110,9 @@ function DesktopMenu(props: Props) {
 			<Spacer size="md" />
 			<Button
 				id="contact"
-				className={cn(styles.menuItem, styles.sixthItem, { [styles.highlight]: page === "contact" })}
+				className={cn(styles.menuItem, styles.sixthItem, {
+					[styles.highlight]: page === "contact",
+				})}
 				onClick={redirect}
 			>
 				<div>
@@ -101,4 +124,4 @@ function DesktopMenu(props: Props) {
 	);
 }
 
-export default withRouter(DesktopMenu);
+export default withRouter(Menu);
