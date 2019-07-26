@@ -9,3 +9,21 @@
 		color: gray;
 	}
 }
+
+@mixin button {
+	border-radius: 0;
+	border: 2px solid white;
+	color: white;
+	transition: all 0.2s linear;
+
+	&:hover {
+		background: white;
+		color: black;
+	}
+
+	&.clicked {
+		background: none;
+		color: white;
+		border: none;
+	}
+}

@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import HomePage from "./components/HomePage";
-import CanvasPage from "./components/CanvasPage";
+import HomePage from "./components/pages/HomePage";
+import CanvasPage from "./components/pages/CanvasPage";
 import { setDefaultBreakpoints, BreakpointProvider } from "react-socks";
 
 import styles from "./App.module.scss";

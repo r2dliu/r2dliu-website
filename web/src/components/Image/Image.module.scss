@@ -1,0 +1,21 @@
+.Image { 
+    height: 100%;
+    max-width: 100%;
+
+    .preview, .highRes {
+        height: 100%;
+        max-width: 100%;
+    }
+
+    .preview {
+        position: absolute;
+        left: 0;
+        top: 0;
+        filter: blur(4px);
+        transition: opacity ease-in .4s;
+        
+        &.loaded {
+            opacity: 0;
+        }
+    }
+}

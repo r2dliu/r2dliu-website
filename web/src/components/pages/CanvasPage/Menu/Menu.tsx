@@ -19,13 +19,14 @@ import FeaturedPlayListOutlined from "@material-ui/icons/FeaturedPlayListOutline
 import VideogameAssetOutlined from "@material-ui/icons/VideogameAssetOutlined";
 import ContactSupportOutlined from "@material-ui/icons/ContactSupportOutlined";
 
-import Spacer from "../../Spacer";
+import Spacer from "../../../Spacer";
 import styles from "./Menu.module.scss";
 
 interface Props extends RouteComponentProps {
 	page: string;
 	isMobile: boolean;
 	closeMenu?: () => void;
+	setIsNavigating: (bool: boolean) => void;
 }
 
 function Menu(props: Props) {
@@ -33,6 +34,7 @@ function Menu(props: Props) {
 		page,
 		isMobile,
 		closeMenu,
+		setIsNavigating,
 	} = props;
 
 	const redirect = (e: SyntheticEvent) => {
@@ -42,10 +44,10 @@ function Menu(props: Props) {
 				buttonName = "";
 			}
 			if (closeMenu) {
-				console.log(closeMenu);
 				closeMenu();
 			}
-			props.history.push(`/${buttonName}`);
+			setIsNavigating(true);
+			setTimeout(() => props.history.push(`/${buttonName}`), 800);
 		}
 	};
 

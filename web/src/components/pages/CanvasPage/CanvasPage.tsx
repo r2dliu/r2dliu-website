@@ -12,8 +12,11 @@ import styles from "./CanvasPage.module.scss";
 function CanvasPage(props: RouteComponentProps) {
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [isNavigating, setIsNavigating] = useState(false);
+
 	useEffect(() => {
 		setIsLoaded(true);
+		setIsNavigating(false);
 	}, []);
 
 	const toggleMenuOpen = () => { setIsMenuOpen(!isMenuOpen); };
@@ -21,6 +24,7 @@ function CanvasPage(props: RouteComponentProps) {
 	const page = get(props.match, ["params", "id"], "");
 
 	const getCanvasEl = (currPage: string) => {
+		// TODO: write wrapper or use Providers to give isNavigating/setNavigating to all canvas els
 		switch (currPage) {
 			case "about":
 				return <About />;
@@ -49,17 +53,31 @@ function CanvasPage(props: RouteComponentProps) {
 					})}
 				>
 					<div className={styles.menu} >
-						<Menu page={page} isMobile={true} closeMenu={toggleMenuOpen} />
+						<Menu
+							page={page}
+							isMobile={true}
+							closeMenu={toggleMenuOpen}
+							setIsNavigating={setIsNavigating}
+						/>
 					</div>
 				</div>
 				<div className={styles.canvas} />
 			</Breakpoint>
 			<Breakpoint className={styles.desktop} s={true} up={true}>
 				<div className={cn(styles.sideNav, { [styles.loaded]: isLoaded })}>
-					<Menu page={page} isMobile={false} />
+					<Menu
+						page={page}
+						isMobile={false}
+						setIsNavigating={setIsNavigating}
+					/>
 				</div>
-				<div className={styles.canvas}>
-					<div className={styles.display}>
+				<div
+					className={cn(styles.canvas, {
+						[styles.loaded]: isLoaded,
+						[styles.navigating]: isNavigating,
+					})}
+				>
+					<div className={styles.display} >
 						{getCanvasEl(page)}
 					</div>
 				</div>
