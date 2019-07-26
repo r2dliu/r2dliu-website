@@ -50,6 +50,36 @@ $hamburger-active-hover-opacity: $hamburger-hover-opacity !default;
                 }
             }
         }
+
+        .canvas {
+            position: fixed;
+            height: calc(100% - 36px);
+            width: calc(100% - 250px);
+            left: 250px;
+            
+            overflow-y: scroll;
+            overflow-x: hidden;
+    
+            opacity: 0;
+
+            &.loaded {
+                animation: fade-in 0.6s ease-in;
+                animation-fill-mode: forwards;
+    
+                &.navigating {
+                    animation: fade-out 0.6s ease-in;
+                    animation-fill-mode: forwards;
+                }
+            }
+            
+            -webkit-mask: linear-gradient(0deg, rgba(0,0,0,1) 95%, rgba(0,0,0,0) 100%), linear-gradient(180deg, rgba(0,0,0,1) 95%, rgba(0,0,0,0) 100%);
+            -webkit-mask-composite: source-in;
+    
+            .display {
+                height: 100%;
+                padding: 0 25px;
+            }
+        }
     }
 
     .mobile {
@@ -219,6 +249,7 @@ $hamburger-active-hover-opacity: $hamburger-hover-opacity !default;
         }
 
         .menuOverlay {
+            z-index: 1000;
             position: absolute;
             top: 44px;
             width: 100%;
@@ -239,33 +270,24 @@ $hamburger-active-hover-opacity: $hamburger-hover-opacity !default;
                 padding-left: 15px;
             }
         }
-    }
 
-    .canvas {
-        position: fixed;
-        height: calc(100% - 36px);
-        width: calc(100% - 250px);
-        left: 250px;
-        
-        overflow-y: scroll;
-        overflow-x: hidden;
-
-        opacity: 0;
-        transition: all .6s ease-in;
-        &.loaded {
-            opacity: 1;
-
-            &.navigating {
-                opacity: 0;
-            }
-        }
-        
-        -webkit-mask: linear-gradient(0deg, rgba(0,0,0,1) 95%, rgba(0,0,0,0) 100%), linear-gradient(180deg, rgba(0,0,0,1) 95%, rgba(0,0,0,0) 100%);
-        -webkit-mask-composite: source-in;
-
-        .display {
+        .canvas {
+            opacity: 0;
             height: 100%;
-            padding: 0 25px;
+            width: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            transition: all 0.6s ease-in;
+
+            &.loaded {
+                animation: fade-in 0.6s ease-in;
+                animation-fill-mode: forwards;
+    
+                &.navigating {
+                    animation: fade-out 0.6s ease-in;
+                    animation-fill-mode: forwards;
+                }
+            }
         }
     }
 }
@@ -284,18 +306,19 @@ $hamburger-active-hover-opacity: $hamburger-hover-opacity !default;
 @keyframes fade-in {
     0% {
         opacity: 0;
-        transform: translateY(6px);
-    }
-
-    90% {
-        animation-timing-function: cubic-bezier();
-        opacity: 1;
-        transform: translateY(-2px);
     }
 
     100% {
-        animation-timing-function: cubic-bezier();
         opacity: 1;
-        transform: translateY(0px);
+    }
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
     }
 }

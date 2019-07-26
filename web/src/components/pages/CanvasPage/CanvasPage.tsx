@@ -61,7 +61,14 @@ function CanvasPage(props: RouteComponentProps) {
 						/>
 					</div>
 				</div>
-				<div className={styles.canvas} />
+				<div
+					className={cn(styles.canvas, {
+						[styles.loaded]: isLoaded,
+						[styles.navigating]: isNavigating,
+					})}
+				>
+					{getCanvasEl(page)}
+				</div>
 			</Breakpoint>
 			<Breakpoint className={styles.desktop} s={true} up={true}>
 				<div className={cn(styles.sideNav, { [styles.loaded]: isLoaded })}>

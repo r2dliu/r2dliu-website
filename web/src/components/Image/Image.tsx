@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { omit } from "lodash";
 import cn from "classnames";
 import styles from "./Image.module.scss";
