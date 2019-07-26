@@ -25,19 +25,25 @@ import styles from "./Menu.module.scss";
 interface Props extends RouteComponentProps {
 	page: string;
 	isMobile: boolean;
+	closeMenu?: () => void;
 }
 
 function Menu(props: Props) {
 	const {
 		page,
 		isMobile,
+		closeMenu,
 	} = props;
 
 	const redirect = (e: SyntheticEvent) => {
 		let buttonName = (e.currentTarget as HTMLElement).id;
-		if (buttonName !== props.page) {
+		if (buttonName !== page) {
 			if (buttonName === "home") {
 				buttonName = "";
+			}
+			if (closeMenu) {
+				console.log(closeMenu);
+				closeMenu();
 			}
 			props.history.push(`/${buttonName}`);
 		}

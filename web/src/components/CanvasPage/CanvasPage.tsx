@@ -49,7 +49,7 @@ function CanvasPage(props: RouteComponentProps) {
 					})}
 				>
 					<div className={styles.menu} >
-						<Menu page={page} isMobile={true} />
+						<Menu page={page} isMobile={true} closeMenu={toggleMenuOpen} />
 					</div>
 				</div>
 				<div className={styles.canvas} />
