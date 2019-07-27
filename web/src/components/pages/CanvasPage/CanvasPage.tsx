@@ -6,6 +6,7 @@ import { withRouter } from "react-router";
 import Breakpoint from "react-socks";
 
 import About from "./Content/About";
+import Melee from "./Content/Melee";
 import Menu from "./Menu";
 import styles from "./CanvasPage.module.scss";
 
@@ -17,7 +18,8 @@ function CanvasPage(props: RouteComponentProps) {
 	useEffect(() => {
 		setIsLoaded(true);
 		setIsNavigating(false);
-	}, []);
+		return () => setIsLoaded(false);
+	}, [props.match]);
 
 	const toggleMenuOpen = () => { setIsMenuOpen(!isMenuOpen); };
 
@@ -28,6 +30,8 @@ function CanvasPage(props: RouteComponentProps) {
 		switch (currPage) {
 			case "about":
 				return <About />;
+			case "melee":
+				return <Melee />;
 			default:
 				return null;
 		}
