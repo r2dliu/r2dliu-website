@@ -5,10 +5,17 @@ import styles from "./Image.module.scss";
 
 interface Props {
 	src: string;
-	preview: string;
+	width: string;
+	height?: string;
+	preview?: string;
 }
 
-export default function Image(props: Props) {
+const defaultProps = {
+	height: null,
+	width: null,
+};
+
+function Image(props: Props) {
 	const [isLoaded, setIsLoaded] = useState(false);
 	const {
 		preview,
@@ -29,14 +36,18 @@ export default function Image(props: Props) {
 				src={src}
 				alt="main"
 			/>
-			<img
+			{preview && <img
 				{...filteredProps}
 				className={cn(styles.preview, {
 					[styles.loaded]: isLoaded,
 				})}
 				src={preview}
 				alt="preview"
-			/>
+			/>}
 		</div>
 	);
-}
+};
+
+Image.defaultProps = defaultProps;
+
+export default Image;

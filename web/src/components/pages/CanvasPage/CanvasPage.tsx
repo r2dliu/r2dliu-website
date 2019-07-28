@@ -7,6 +7,7 @@ import Breakpoint from "react-socks";
 
 import About from "./Content/About";
 import Melee from "./Content/Melee";
+import Articles from "./Content/Articles";
 import Menu from "./Menu";
 import styles from "./CanvasPage.module.scss";
 
@@ -26,10 +27,11 @@ function CanvasPage(props: RouteComponentProps) {
 	const page = get(props.match, ["params", "id"], "");
 
 	const getCanvasEl = (currPage: string) => {
-		// TODO: write wrapper or use Providers to give isNavigating/setNavigating to all canvas els
 		switch (currPage) {
 			case "about":
 				return <About />;
+			case "articles":
+				return <Articles />;
 			case "melee":
 				return <Melee />;
 			default:
@@ -69,6 +71,7 @@ function CanvasPage(props: RouteComponentProps) {
 					className={cn(styles.canvas, {
 						[styles.loaded]: isLoaded,
 						[styles.navigating]: isNavigating,
+						[styles.menuOpen]: isMenuOpen,
 					})}
 				>
 					{getCanvasEl(page)}
@@ -88,7 +91,7 @@ function CanvasPage(props: RouteComponentProps) {
 						[styles.navigating]: isNavigating,
 					})}
 				>
-					<div className={styles.display} >
+					<div className={styles.display}>
 						{getCanvasEl(page)}
 					</div>
 				</div>

@@ -53,7 +53,7 @@ function HomePage() {
 				onClick={markClicked}
 				disabled={isClicked}
 			>
-				<div className={styles.buttonContent}>{"About Me"}</div>
+				<div className={styles.buttonContent}><b>{"About Me"}</b></div>
 			</Button>
 		</div >
 	);

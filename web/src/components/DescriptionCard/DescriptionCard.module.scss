@@ -1,0 +1,24 @@
+.DescriptionCard {
+    display: flex;
+    flex-direction: row;
+    
+    .left {
+        order: 1;
+        border-right: 1px solid white;
+        
+        .reverse {
+            border-right: none;
+            padding: none;
+            order: 2;
+        }
+    }
+
+    .right {
+        order: 2;
+
+        .reverse {
+            order: 1;
+            border-left: 1px solid white;
+        }
+    }
+}

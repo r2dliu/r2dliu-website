@@ -38,9 +38,9 @@
                         width: 250px;
                         height: 350px;
                         border: 1px solid gray;
-                        filter: grayscale(100%);  
+                        filter: grayscale(100%);
                         transition: all 0.2s ease-in;
-                        
+
                         &:hover {
                             filter: grayscale(0%);
                             border: 1px solid white;
@@ -61,7 +61,7 @@
                         }
                     }
 
-                    .resume {                        
+                    .resume {
                         .button {
                             width: 90px;
                             padding: 2px;
@@ -77,24 +77,17 @@
                     flex-direction: column;
 
                     .description {
-                        display:flex;
+                        display: flex;
                         flex-direction: column;
                         align-items: flex-start;
                         padding: 25px;
-                        
+
                         .header {
-                            font-size: 30px;
-                            font-family: "Bebas Regular";
-                            font-weight: 200;
-                            letter-spacing: 1px;
+                            @include header;
                         }
 
                         .body {
-                            display: flex;
-                            flex-direction: column;
-                            align-items: flex-start;
-                            font-size: 16px;
-                            font-family: "Brandon Medium";
+                            @include body;
                         }
 
                     }
