@@ -22,7 +22,9 @@ function CanvasPage(props: RouteComponentProps) {
 		return () => setIsLoaded(false);
 	}, [props.match]);
 
-	const toggleMenuOpen = () => { setIsMenuOpen(!isMenuOpen); };
+	const toggleMenuOpen = () => {
+		setIsMenuOpen(!isMenuOpen);
+	};
 
 	const page = get(props.match, ["params", "id"], "");
 
@@ -42,9 +44,17 @@ function CanvasPage(props: RouteComponentProps) {
 	return (
 		<div className={styles.CanvasPage}>
 			<Breakpoint className={styles.mobile} xs={true} only={true}>
-				<div className={cn(styles.mobileNav, { [styles.loaded]: isLoaded })}  >
+				<div
+					className={cn(styles.mobileNav, {
+						[styles.loaded]: isLoaded
+					})}
+				>
 					<button
-						className={cn(styles.hamburger, styles.hamburgerSlider, { [styles.isActive]: isMenuOpen })}
+						className={cn(
+							styles.hamburger,
+							styles.hamburgerSlider,
+							{ [styles.isActive]: isMenuOpen }
+						)}
 						type="button"
 						onClick={toggleMenuOpen}
 					>
@@ -55,10 +65,10 @@ function CanvasPage(props: RouteComponentProps) {
 				</div>
 				<div
 					className={cn(styles.menuOverlay, {
-						[styles.show]: isMenuOpen,
+						[styles.show]: isMenuOpen
 					})}
 				>
-					<div className={styles.menu} >
+					<div className={styles.menu}>
 						<Menu
 							page={page}
 							isMobile={true}
@@ -71,14 +81,18 @@ function CanvasPage(props: RouteComponentProps) {
 					className={cn(styles.canvas, {
 						[styles.loaded]: isLoaded,
 						[styles.navigating]: isNavigating,
-						[styles.menuOpen]: isMenuOpen,
+						[styles.menuOpen]: isMenuOpen
 					})}
 				>
 					{getCanvasEl(page)}
 				</div>
 			</Breakpoint>
 			<Breakpoint className={styles.desktop} s={true} up={true}>
-				<div className={cn(styles.sideNav, { [styles.loaded]: isLoaded })}>
+				<div
+					className={cn(styles.sideNav, {
+						[styles.loaded]: isLoaded
+					})}
+				>
 					<Menu
 						page={page}
 						isMobile={false}
@@ -88,12 +102,10 @@ function CanvasPage(props: RouteComponentProps) {
 				<div
 					className={cn(styles.canvas, {
 						[styles.loaded]: isLoaded,
-						[styles.navigating]: isNavigating,
+						[styles.navigating]: isNavigating
 					})}
 				>
-					<div className={styles.display}>
-						{getCanvasEl(page)}
-					</div>
+					<div className={styles.display}>{getCanvasEl(page)}</div>
 				</div>
 			</Breakpoint>
 		</div>

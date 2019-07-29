@@ -17,10 +17,8 @@ function ArticlePage(props: RouteComponentProps) {
 		return () => setIsLoaded(false);
 	}, [props.match]);
 
-
 	const article = get(props.match, ["params", "id"], "");
 
-	console.log(article);
 	// const getCanvasEl = (currPage: string) => {
 	// 	switch (currPage) {
 	// 		case "about":
@@ -38,22 +36,18 @@ function ArticlePage(props: RouteComponentProps) {
 		<div
 			className={cn(styles.ArticlePage, {
 				[styles.loaded]: isLoaded,
-				[styles.navigating]: isNavigating,
+				[styles.navigating]: isNavigating
 			})}
 		>
+			<div className={styles.titleContainer}>
+				<div className={styles.title}>Title here</div>
+			</div>
 			{/* <Breakpoint className={styles.mobile} xs={true} only={true}>
 
 			</Breakpoint> */}
 			<Breakpoint className={styles.desktop} s={true} up={true}>
-				<div className={styles.titleContainer}>
-					<div className={styles.title}>
-						Title here
-					</div>
-				</div>
 				<div className={cn(styles.canvas)}>
-					<div className={styles.display}>
-						Articles tuff here
-					</div>
+					<div className={styles.display}>Articles tuff here</div>
 				</div>
 			</Breakpoint>
 		</div>

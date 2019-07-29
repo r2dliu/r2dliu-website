@@ -35,7 +35,7 @@ function Melee() {
 		>
 			{"See ssbwiki"}
 		</Link>
-	)
+	);
 
 	const docKidLink = (
 		<Link
@@ -47,16 +47,13 @@ function Melee() {
 	);
 
 	const channelLink = (
-		<Link
-			className={styles.link}
-			href="https://twitch.tv/r2dliu"
-		>
+		<Link className={styles.link} href="https://twitch.tv/r2dliu">
 			{"twitch.tv/r2dliu"}
 		</Link>
 	);
 
 	const descriptionEl = (
-		<div className={styles.descriptionContainer} >
+		<div className={styles.descriptionContainer}>
 			<div className={styles.description}>
 				<div className={styles.header}>EGtv. R2DLiu</div>
 				<div className={styles.body}>
@@ -84,7 +81,7 @@ function Melee() {
 						<iframe
 							title="twitch-embed"
 							src="https://player.twitch.tv/?allowfullscreen&amp;playsinline&amp;player=twitch_everywhere&amp;targetOrigin=https%3A%2F%2Fembed.twitch.tv&amp;channel=r2dliu&amp;origin=https%3A%2F%2Fembed.twitch.tv"
-							width="300"
+							width="450"
 							height="300"
 							scrolling="no"
 							allow="autoplay; fullscreen"
@@ -92,7 +89,7 @@ function Melee() {
 					</div>
 				</div>
 			</div>
-		</div >
+		</div>
 	);
 }
 

@@ -21,7 +21,7 @@ function Melee() {
 				embed = new window.Twitch.Embed("twitch-embed", {
 					channel: "R2DLiu",
 					height: 480,
-					width: 854,
+					width: 854
 				});
 			});
 			document.body.appendChild(script);
@@ -58,7 +58,7 @@ function Melee() {
 		>
 			{"See ssbwiki"}
 		</Link>
-	)
+	);
 
 	const docKidLink = (
 		<Link
@@ -70,16 +70,13 @@ function Melee() {
 	);
 
 	const channelLink = (
-		<Link
-			className={styles.link}
-			href="https://twitch.tv/r2dliu"
-		>
+		<Link className={styles.link} href="https://twitch.tv/r2dliu">
 			{"twitch.tv/r2dliu"}
 		</Link>
 	);
 
 	const descriptionEl = (
-		<div className={styles.descriptionContainer} >
+		<div className={styles.descriptionContainer}>
 			<div className={styles.description}>
 				<div className={styles.header}>EGtv. R2DLiu</div>
 				<div className={styles.body}>
@@ -97,7 +94,9 @@ function Melee() {
 
 	return (
 		<div className={styles.Melee}>
-			<DescriptionCard left={image} right={descriptionEl} />
+			<div className={styles.cardContainer}>
+				<DescriptionCard left={image} right={descriptionEl} />
+			</div>
 			<div className={styles.descriptionContainer}>
 				<div className={styles.description}>
 					<div className={styles.header}>Follow me on Twitch!</div>
@@ -105,7 +104,7 @@ function Melee() {
 					<div id="twitch-embed" />
 				</div>
 			</div>
-		</div >
+		</div>
 	);
 }
 
