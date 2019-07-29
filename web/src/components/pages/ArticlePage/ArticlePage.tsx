@@ -4,12 +4,18 @@ import cn from "classnames";
 import { RouteComponentProps } from "react-router-dom";
 import { withRouter } from "react-router";
 import Breakpoint from "react-socks";
+import withNavigation from "components/helpers/withNavigation";
 
 import styles from "./ArticlePage.module.scss";
 
-function ArticlePage(props: RouteComponentProps) {
+interface Props extends RouteComponentProps {
+	isNavigating: boolean;
+	setIsNavigating: (bool: boolean) => void;
+}
+
+function ArticlePage(props: Props) {
+	const { isNavigating, setIsNavigating } = props;
 	const [isLoaded, setIsLoaded] = useState(false);
-	const [isNavigating, setIsNavigating] = useState(false);
 
 	useEffect(() => {
 		setIsLoaded(true);
@@ -54,4 +60,4 @@ function ArticlePage(props: RouteComponentProps) {
 	);
 }
 
-export default withRouter(ArticlePage);
+export default withNavigation(withRouter(ArticlePage));

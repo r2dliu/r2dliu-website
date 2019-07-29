@@ -5,16 +5,23 @@ import { RouteComponentProps } from "react-router-dom";
 import { withRouter } from "react-router";
 import Breakpoint from "react-socks";
 
+import withNavigation from "components/helpers/withNavigation";
 import About from "./Content/About";
 import Melee from "./Content/Melee";
 import Articles from "./Content/Articles";
 import Menu from "./Menu";
 import styles from "./CanvasPage.module.scss";
 
-function CanvasPage(props: RouteComponentProps) {
+interface Props extends RouteComponentProps {
+	isNavigating: boolean;
+	setIsNavigating: (bool: boolean) => void;
+}
+
+function CanvasPage(props: Props) {
+	const { isNavigating, setIsNavigating } = props;
+
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
-	const [isNavigating, setIsNavigating] = useState(false);
 
 	useEffect(() => {
 		setIsLoaded(true);
@@ -73,7 +80,6 @@ function CanvasPage(props: RouteComponentProps) {
 							page={page}
 							isMobile={true}
 							closeMenu={toggleMenuOpen}
-							setIsNavigating={setIsNavigating}
 						/>
 					</div>
 				</div>
@@ -93,11 +99,7 @@ function CanvasPage(props: RouteComponentProps) {
 						[styles.loaded]: isLoaded
 					})}
 				>
-					<Menu
-						page={page}
-						isMobile={false}
-						setIsNavigating={setIsNavigating}
-					/>
+					<Menu page={page} isMobile={false} />
 				</div>
 				<div
 					className={cn(styles.canvas, {
@@ -112,4 +114,4 @@ function CanvasPage(props: RouteComponentProps) {
 	);
 }
 
-export default withRouter(CanvasPage);
+export default withNavigation(withRouter(CanvasPage));

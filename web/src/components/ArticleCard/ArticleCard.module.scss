@@ -1,31 +1,68 @@
 @import "src/textStyles.scss";
 
 .ArticleCard {
-    display: flex;
-    align-content: center;
-    height: 100%;
-    width: 100%;
+	display: flex;
+	align-content: center;
+	height: 100%;
+	width: 100%;
+	cursor: pointer;
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 66%, rgba(0, 0, 0, 0.5) 80%, rgba(0, 0, 0, 0.6) 100%);
+	&:after {
+		content: "";
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		height: 100%;
+		left: 0;
+	}
 
-    .image {
-        position: relative;
-        width: 100%;
-    }
+	.image {
+		transition: all 0.1s ease-in;
+		opacity: 0.2;
+		position: relative;
+		width: 100%;
+	}
 
-    .label {
-        position: absolute;
-        max-height: 80px;
-        bottom: 0;
-        width: calc(100% - 16px);
-        padding: 0 8px;
+	.label {
+		color: lightgray;
+		position: absolute;
+		max-height: 100px;
+		bottom: 0;
+		width: calc(100% - 16px);
+		padding: 0 8px;
+		padding-bottom: 4px;
+		overflow: hidden;
+		opacity: 0.5;
 
-        .title {
-            @include header;
-            text-align: left;
-        }
+		.title {
+			@include header;
+			text-align: left;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			transition: all 0.1s ease-in;
+		}
 
-        .description {
-            @include body;
-            text-align: left;
-        }
-    }
+		.description {
+			@include body;
+			text-align: left;
+		}
+	}
+
+	&:hover,
+	&:active,
+	&:focus {
+		.image {
+			opacity: 0.6;
+		}
+
+		.label {
+			opacity: 0.9;
+		}
+
+		.title {
+			text-decoration: underline;
+			color: white;
+		}
+	}
 }

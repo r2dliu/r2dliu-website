@@ -19,23 +19,20 @@ import FeaturedPlayListOutlined from "@material-ui/icons/FeaturedPlayListOutline
 import VideogameAssetOutlined from "@material-ui/icons/VideogameAssetOutlined";
 import ContactSupportOutlined from "@material-ui/icons/ContactSupportOutlined";
 
+import withNavigation from "components/helpers/withNavigation";
+import NavigatingContextInterface from "components/helpers/NavigatingContextInterface";
+
 import Spacer from "../../../Spacer";
 import styles from "./Menu.module.scss";
 
-interface Props extends RouteComponentProps {
+interface Props extends RouteComponentProps, NavigatingContextInterface {
 	page: string;
 	isMobile: boolean;
 	closeMenu?: () => void;
-	setIsNavigating: (bool: boolean) => void;
 }
 
 function Menu(props: Props) {
-	const {
-		page,
-		isMobile,
-		closeMenu,
-		setIsNavigating,
-	} = props;
+	const { page, isMobile, closeMenu, setIsNavigating } = props;
 
 	const redirect = (e: SyntheticEvent) => {
 		let buttonName = (e.currentTarget as HTMLElement).id;
@@ -67,7 +64,7 @@ function Menu(props: Props) {
 			<Button
 				id="about"
 				className={cn(styles.menuItem, styles.secondItem, {
-					[styles.highlight]: page === "about",
+					[styles.highlight]: page === "about"
 				})}
 				onClick={redirect}
 			>
@@ -80,7 +77,7 @@ function Menu(props: Props) {
 			<Button
 				id="projects"
 				className={cn(styles.menuItem, styles.thirdItem, {
-					[styles.highlight]: page === "projects",
+					[styles.highlight]: page === "projects"
 				})}
 				onClick={redirect}
 			>
@@ -93,7 +90,7 @@ function Menu(props: Props) {
 			<Button
 				id="articles"
 				className={cn(styles.menuItem, styles.fourthItem, {
-					[styles.highlight]: page === "articles",
+					[styles.highlight]: page === "articles"
 				})}
 				onClick={redirect}
 			>
@@ -106,7 +103,7 @@ function Menu(props: Props) {
 			<Button
 				id="melee"
 				className={cn(styles.menuItem, styles.fifthItem, {
-					[styles.highlight]: page === "melee",
+					[styles.highlight]: page === "melee"
 				})}
 				onClick={redirect}
 			>
@@ -119,7 +116,7 @@ function Menu(props: Props) {
 			<Button
 				id="contact"
 				className={cn(styles.menuItem, styles.sixthItem, {
-					[styles.highlight]: page === "contact",
+					[styles.highlight]: page === "contact"
 				})}
 				onClick={redirect}
 			>
@@ -132,4 +129,4 @@ function Menu(props: Props) {
 	);
 }
 
-export default withRouter(Menu);
+export default withNavigation(withRouter(Menu));
