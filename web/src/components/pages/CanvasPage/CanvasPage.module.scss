@@ -1,328 +1,334 @@
-$hamburger-padding-x : 11px !default;
-$hamburger-padding-y : 11px !default;
-$hamburger-layer-width : 30px !default;
-$hamburger-layer-height : 4px !default;
-$hamburger-layer-spacing : 5px !default;
-$hamburger-layer-color : white !default;
-$hamburger-layer-border-radius : 4px !default;
-$hamburger-hover-opacity : 0.7 !default;
-$hamburger-active-layer-color : $hamburger-layer-color !default;
+$hamburger-padding-x: 11px !default;
+$hamburger-padding-y: 11px !default;
+$hamburger-layer-width: 30px !default;
+$hamburger-layer-height: 4px !default;
+$hamburger-layer-spacing: 5px !default;
+$hamburger-layer-color: white !default;
+$hamburger-layer-border-radius: 4px !default;
+$hamburger-hover-opacity: 0.7 !default;
+$hamburger-active-layer-color: $hamburger-layer-color !default;
 $hamburger-active-hover-opacity: $hamburger-hover-opacity !default;
 
 .CanvasPage {
-    height: 100%;
+	height: 100%;
 
-    .desktop,
-    .mobile {
-        display: flex;
-        align-items: center;
-    }
+	.desktop,
+	.mobile {
+		display: flex;
+		align-items: center;
+	}
 
-    .desktop {
-        flex-direction: row;
-        height: 100%;
+	.desktop {
+		flex-direction: row;
+		height: 100%;
 
-        .sideNav {
-            position: fixed;
-            left: 0;
-            top: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 250px;
-            max-width: 250px;
-            height: 100%;
+		.sideNav {
+			position: fixed;
+			left: 0;
+			top: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			min-width: 250px;
+			max-width: 250px;
+			height: 100%;
 
-            &:after {
-                height: 0;
-                position: fixed;
-                top: 20px;
-                left: 250px;
-                width: 2px;
-                background: white;
-                content: "";
-            }
+			&:after {
+				height: 0;
+				position: fixed;
+				top: 20px;
+				left: 250px;
+				width: 2px;
+				background: white;
+				content: "";
+			}
 
-            &.loaded {
-                &:after {
-                    animation: extend 0.6s;
-                    animation-fill-mode: forwards;
-                    animation-delay: 0.3s;
-                }
-            }
-        }
+			&.loaded {
+				&:after {
+					animation: extend 0.6s;
+					animation-fill-mode: forwards;
+					animation-delay: 0.3s;
+				}
+			}
+		}
 
-        .canvas {
-            position: fixed;
-            height: calc(100% - 36px);
-            width: calc(100% - 250px);
-            left: 250px;
+		.canvas {
+			position: fixed;
+			height: calc(100% - 36px);
+			width: calc(100% - 250px);
+			left: 250px;
 
-            overflow-y: scroll;
+			overflow-y: scroll;
 
-            opacity: 0;
+			opacity: 0;
 
-            &.loaded {
-                animation: fade-in 0.6s ease-in;
-                animation-fill-mode: forwards;
+			&.loaded {
+				animation: fade-in 0.6s ease-in;
+				animation-fill-mode: forwards;
 
-                &.navigating {
-                    animation: fade-out 0.6s ease-in;
-                    animation-fill-mode: forwards;
-                }
-            }
+				&.navigating {
+					animation: fade-out 0.6s ease-in;
+					animation-fill-mode: forwards;
+				}
+			}
 
-            -webkit-mask: linear-gradient(0deg, rgba(0, 0, 0, 1) 95%, rgba(0, 0, 0, 0) 100%),
-            linear-gradient(180deg, rgba(0, 0, 0, 1) 95%, rgba(0, 0, 0, 0) 100%);
-            -webkit-mask-composite: source-in;
+			-webkit-mask: linear-gradient(
+				0deg,
+				rgba(0, 0, 0, 0) 0%,
+				rgba(0, 0, 0, 1) 5%,
+				rgba(0, 0, 0, 1) 95%,
+				rgba(0, 0, 0, 0) 100%
+			);
 
-            .display {
-                height: 100%;
-                padding: 0 25px;
-            }
-        }
-    }
+			.display {
+				height: 100%;
+				padding: 0 25px;
+			}
+		}
+	}
 
-    .mobile {
-        flex-direction: column;
-        height: 100%;
+	.mobile {
+		flex-direction: column;
+		height: 100%;
 
-        .mobileNav {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            opacity: 0;
-            height: 44px;
-            background-color: black;
-            width: 100%;
-            transition: all .6s ease-in;
+		.mobileNav {
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			opacity: 0;
+			height: 44px;
+			background-color: black;
+			width: 100%;
+			transition: all 0.6s ease-in;
 
-            &.loaded {
-                opacity: 1
-            }
+			&.loaded {
+				opacity: 1;
+			}
 
-            // begin hamburger css
-            .hamburger {
-                padding: $hamburger-padding-y $hamburger-padding-x;
-                display: flex;
-                cursor: pointer;
+			// begin hamburger css
+			.hamburger {
+				padding: $hamburger-padding-y $hamburger-padding-x;
+				display: flex;
+				cursor: pointer;
 
-                transition-property: opacity, filter;
-                transition-duration: 0.15s;
-                transition-timing-function: linear;
+				transition-property: opacity, filter;
+				transition-duration: 0.15s;
+				transition-timing-function: linear;
 
-                font: inherit;
-                color: inherit;
-                text-transform: none;
-                background-color: transparent;
-                border: 0;
-                margin: 0;
-                overflow: visible;
+				font: inherit;
+				color: inherit;
+				text-transform: none;
+				background-color: transparent;
+				border: 0;
+				margin: 0;
+				overflow: visible;
 
-                &:hover {
-                    opacity: $hamburger-hover-opacity;
-                }
+				&:hover {
+					opacity: $hamburger-hover-opacity;
+				}
 
-                &.isActive {
-                    &:hover {
-                        opacity: $hamburger-active-hover-opacity;
-                    }
+				&.isActive {
+					&:hover {
+						opacity: $hamburger-active-hover-opacity;
+					}
 
-                    border-right: 1px solid grey;
+					border-right: 1px solid grey;
 
-                    .hamburger-inner,
-                    .hamburger-inner::before,
-                    .hamburger-inner::after {
-                        background-color: $hamburger-active-layer-color;
-                    }
-                }
-            }
+					.hamburger-inner,
+					.hamburger-inner::before,
+					.hamburger-inner::after {
+						background-color: $hamburger-active-layer-color;
+					}
+				}
+			}
 
-            .hamburgerBox {
-                width: $hamburger-layer-width;
-                height: $hamburger-layer-height * 3 + $hamburger-layer-spacing * 2;
-                display: inline-block;
-                position: relative;
-            }
+			.hamburgerBox {
+				width: $hamburger-layer-width;
+				height: $hamburger-layer-height * 3 + $hamburger-layer-spacing * 2;
+				display: inline-block;
+				position: relative;
+			}
 
-            .hamburgerInner {
-                display: block;
-                top: 50%;
-                margin-top: $hamburger-layer-height / -2;
+			.hamburgerInner {
+				display: block;
+				top: 50%;
+				margin-top: $hamburger-layer-height / -2;
 
-                &,
-                &::before,
-                &::after {
-                    width: $hamburger-layer-width;
-                    height: $hamburger-layer-height;
-                    background-color: $hamburger-layer-color;
-                    border-radius: $hamburger-layer-border-radius;
-                    position: absolute;
-                    transition-property: transform;
-                    transition-duration: 0.15s;
-                    transition-timing-function: ease;
-                }
+				&,
+				&::before,
+				&::after {
+					width: $hamburger-layer-width;
+					height: $hamburger-layer-height;
+					background-color: $hamburger-layer-color;
+					border-radius: $hamburger-layer-border-radius;
+					position: absolute;
+					transition-property: transform;
+					transition-duration: 0.15s;
+					transition-timing-function: ease;
+				}
 
-                &::before,
-                &::after {
-                    content: "";
-                    display: block;
-                }
+				&::before,
+				&::after {
+					content: "";
+					display: block;
+				}
 
-                &::before {
-                    top: ($hamburger-layer-spacing + $hamburger-layer-height) * -1;
-                }
+				&::before {
+					top: ($hamburger-layer-spacing + $hamburger-layer-height) * -1;
+				}
 
-                &::after {
-                    bottom: ($hamburger-layer-spacing + $hamburger-layer-height) * -1;
-                }
-            }
+				&::after {
+					bottom: ($hamburger-layer-spacing + $hamburger-layer-height) * -1;
+				}
+			}
 
-            .hamburgerSlider {
-                .hamburgerInner {
-                    top: $hamburger-layer-height / 2;
+			.hamburgerSlider {
+				.hamburgerInner {
+					top: $hamburger-layer-height / 2;
 
-                    &::before {
-                        top: $hamburger-layer-height + $hamburger-layer-spacing;
-                        transition-property: transform, opacity;
-                        transition-timing-function: ease;
-                        transition-duration: 0.15s;
-                    }
+					&::before {
+						top: $hamburger-layer-height + $hamburger-layer-spacing;
+						transition-property: transform, opacity;
+						transition-timing-function: ease;
+						transition-duration: 0.15s;
+					}
 
-                    &::after {
-                        top: ($hamburger-layer-height * 2) + ($hamburger-layer-spacing * 2);
-                    }
-                }
+					&::after {
+						top: ($hamburger-layer-height * 2) + ($hamburger-layer-spacing * 2);
+					}
+				}
 
-                &.isActive {
-                    .hamburgerInner {
-                        $y-offset: $hamburger-layer-spacing + $hamburger-layer-height;
+				&.isActive {
+					.hamburgerInner {
+						$y-offset: $hamburger-layer-spacing + $hamburger-layer-height;
 
-                        transform: translate3d(0, $y-offset, 0) rotate(45deg);
+						transform: translate3d(0, $y-offset, 0) rotate(45deg);
 
-                        &::before {
-                            transform: rotate(-45deg) translate3d($hamburger-layer-width / -7, $hamburger-layer-spacing * -1, 0);
-                            opacity: 0;
-                        }
+						&::before {
+							transform: rotate(-45deg)
+								translate3d($hamburger-layer-width / -7, $hamburger-layer-spacing * -1, 0);
+							opacity: 0;
+						}
 
-                        &::after {
-                            transform: translate3d(0, $y-offset * -2, 0) rotate(-90deg);
-                        }
-                    }
-                }
-            }
+						&::after {
+							transform: translate3d(0, $y-offset * -2, 0) rotate(-90deg);
+						}
+					}
+				}
+			}
 
-            .hamburgerSlider {
-                .hamburgerInner {
-                    top: $hamburger-layer-height / 2;
+			.hamburgerSlider {
+				.hamburgerInner {
+					top: $hamburger-layer-height / 2;
 
-                    &::before {
-                        top: $hamburger-layer-height + $hamburger-layer-spacing;
-                        transition-property: transform, opacity;
-                        transition-timing-function: ease;
-                        transition-duration: 0.15s;
-                    }
+					&::before {
+						top: $hamburger-layer-height + $hamburger-layer-spacing;
+						transition-property: transform, opacity;
+						transition-timing-function: ease;
+						transition-duration: 0.15s;
+					}
 
-                    &::after {
-                        top: ($hamburger-layer-height * 2) + ($hamburger-layer-spacing * 2);
-                    }
-                }
+					&::after {
+						top: ($hamburger-layer-height * 2) + ($hamburger-layer-spacing * 2);
+					}
+				}
 
-                &.isActive {
-                    .hamburgerInner {
-                        $y-offset: $hamburger-layer-spacing + $hamburger-layer-height;
+				&.isActive {
+					.hamburgerInner {
+						$y-offset: $hamburger-layer-spacing + $hamburger-layer-height;
 
-                        transform: translate3d(0, $y-offset, 0) rotate(45deg);
+						transform: translate3d(0, $y-offset, 0) rotate(45deg);
 
-                        &::before {
-                            transform: rotate(-45deg) translate3d($hamburger-layer-width / -7, $hamburger-layer-spacing * -1, 0);
-                            opacity: 0;
-                        }
+						&::before {
+							transform: rotate(-45deg)
+								translate3d($hamburger-layer-width / -7, $hamburger-layer-spacing * -1, 0);
+							opacity: 0;
+						}
 
-                        &::after {
-                            transform: translate3d(0, $y-offset * -2, 0) rotate(-90deg);
-                        }
-                    }
-                }
-            }
+						&::after {
+							transform: translate3d(0, $y-offset * -2, 0) rotate(-90deg);
+						}
+					}
+				}
+			}
 
-            // end hamburger css
-        }
+			// end hamburger css
+		}
 
-        .menuOverlay {
-            z-index: 1000;
-            position: absolute;
-            top: 44px;
-            width: 100%;
-            height: calc(100% - 44px);
-            background: rgba(10, 10, 10, 0);
-            opacity: 0.0;
-            display: none;
-            transition: all 250ms ease-in;
+		.menuOverlay {
+			z-index: 1000;
+			position: absolute;
+			top: 44px;
+			width: 100%;
+			height: calc(100% - 44px);
+			background: rgba(10, 10, 10, 0);
+			opacity: 0;
+			display: none;
+			transition: all 250ms ease-in;
 
-            &.show {
-                display: block;
-                opacity: 1;
-                background: rgba(10, 10, 10, 0.7);
-            }
+			&.show {
+				display: block;
+				opacity: 1;
+				background: rgba(10, 10, 10, 0.7);
+			}
 
-            .menu {
-                margin-top: 20px;
-                padding-left: 15px;
-            }
-        }
+			.menu {
+				margin-top: 20px;
+				padding-left: 15px;
+			}
+		}
 
-        .canvas {
-            opacity: 0;
-            height: 100%;
-            width: 100%;
-            overflow-y: scroll;
-            transition: all 0.6s ease-in, filter .2s ease-in;
+		.canvas {
+			opacity: 0;
+			height: 100%;
+			width: 100%;
+			overflow-y: scroll;
+			transition: all 0.6s ease-in, filter 0.2s ease-in;
 
-            &.loaded {
-                animation: fade-in 0.6s ease-in;
-                animation-fill-mode: forwards;
+			&.loaded {
+				animation: fade-in 0.6s ease-in;
+				animation-fill-mode: forwards;
 
-                &.navigating {
-                    animation: fade-out 0.6s ease-in;
-                    animation-fill-mode: forwards;
-                }
-            }
+				&.navigating {
+					animation: fade-out 0.6s ease-in;
+					animation-fill-mode: forwards;
+				}
+			}
 
-            &.menuOpen {
-                filter: blur(8px);
-            }
-        }
-    }
+			&.menuOpen {
+				filter: blur(8px);
+			}
+		}
+	}
 }
 
 @keyframes extend {
-    0% {
-        height: 0;
-    }
+	0% {
+		height: 0;
+	}
 
-    100% {
-        animation-timing-function: cubic-bezier(.02, 1.18, .73, .98);
-        height: calc(100% - 40px);
-    }
+	100% {
+		animation-timing-function: cubic-bezier(0.02, 1.18, 0.73, 0.98);
+		height: calc(100% - 40px);
+	}
 }
 
 @keyframes fade-in {
-    0% {
-        opacity: 0;
-    }
+	0% {
+		opacity: 0;
+	}
 
-    100% {
-        opacity: 1;
-    }
+	100% {
+		opacity: 1;
+	}
 }
 
 @keyframes fade-out {
-    0% {
-        opacity: 1;
-    }
+	0% {
+		opacity: 1;
+	}
 
-    100% {
-        opacity: 0;
-    }
+	100% {
+		opacity: 0;
+	}
 }

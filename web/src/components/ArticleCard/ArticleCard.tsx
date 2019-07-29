@@ -1,5 +1,5 @@
 import React from "react";
-import cn from "classnames";
+// import cn from "classnames";
 import Image from "components/Image";
 import styles from "./ArticleCard.module.scss";
 
@@ -19,7 +19,7 @@ function ArticleCard() {
 	// } = props;
 
 	return (
-		<div className={styles.ArticleCard} >
+		<div className={styles.ArticleCard}>
 			<div className={styles.image}>
 				<Image
 					width="600px"
@@ -30,9 +30,14 @@ function ArticleCard() {
 			</div>
 			<div className={styles.label}>
 				<div className={styles.title}>Optimal Ledgedashing</div>
-				<div className={styles.description}>This is a longish sentence that describes the best way to optimally ledgedash. Is this long enough? Maybe I should make it alittle longer jsut in case, to show off the fact that I can type at 100wpm lmao im so fast at typing lol</div>
+				<div className={styles.description}>
+					This is a longish sentence that describes the best way to
+					optimally ledgedash. Is this long enough? Maybe I should
+					make it alittle longer jsut in case, to show off the fact
+					that I can type at 100wpm lmao im so fast at typing lol
+				</div>
 			</div>
-		</div >
+		</div>
 	);
 }
 
