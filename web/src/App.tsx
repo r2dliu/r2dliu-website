@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import HomePage from "./components/pages/HomePage";
 import CanvasPage from "./components/pages/CanvasPage";
+import ArticlePage from "./components/pages/ArticlePage";
 import { setDefaultBreakpoints, BreakpointProvider } from "react-socks";
 
 import styles from "./App.module.scss";
@@ -22,6 +23,7 @@ function App() {
 				<BrowserRouter>
 					<Switch>
 						<Route exact={true} path="/" component={HomePage} />
+						<Route path="/articles/:id" component={ArticlePage} />
 						<Route path="/:id" component={CanvasPage} />
 					</Switch>
 				</BrowserRouter>

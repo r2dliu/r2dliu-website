@@ -59,7 +59,6 @@ $hamburger-active-hover-opacity: $hamburger-hover-opacity !default;
             left: 250px;
 
             overflow-y: scroll;
-            overflow-x: hidden;
 
             opacity: 0;
 
@@ -278,7 +277,6 @@ $hamburger-active-hover-opacity: $hamburger-hover-opacity !default;
             height: 100%;
             width: 100%;
             overflow-y: scroll;
-            overflow-x: hidden;
             transition: all 0.6s ease-in, filter .2s ease-in;
 
             &.loaded {

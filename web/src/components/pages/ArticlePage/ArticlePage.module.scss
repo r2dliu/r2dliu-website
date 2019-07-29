@@ -1,0 +1,95 @@
+.ArticlePage {
+    height: 100%;
+
+    .desktop,
+    .mobile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .desktop {
+        height: 100%;
+        width: 100%;
+
+        .titleContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 50px;
+            width: 100%;
+
+            .title {
+
+                font-family: "Bebas Bold";
+                font-size: 50px;
+
+                &:after {
+                    height: 2px;
+                    position: fixed;
+                    top: 20px;
+                    left: 250px;
+                    width: 100%;
+                    background: white;
+                    content: "";
+                }
+
+                &.loaded {
+                    &:after {
+                        animation: extend-right 0.6s;
+                        animation-fill-mode: forwards;
+                        animation-delay: 0.3s;
+                    }
+                }
+            }
+        }
+
+        .canvas {
+            height: calc(100% - 50px);
+            width: 100%;
+            left: 250px;
+
+            overflow-y: scroll;
+
+            -webkit-mask: linear-gradient(0deg, rgba(0, 0, 0, 1) 95%, rgba(0, 0, 0, 0) 100%),
+                linear-gradient(180deg, rgba(0, 0, 0, 1) 95%, rgba(0, 0, 0, 0) 100%);
+            -webkit-mask-composite: source-in;
+
+            .display {
+                height: 100%;
+                padding: 0 25px;
+            }
+        }
+    }
+}
+
+@keyframes extend-right {
+    0% {
+        width: 0;
+    }
+
+    100% {
+        animation-timing-function: cubic-bezier(.02, 1.18, .73, .98);
+        width: 100%;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

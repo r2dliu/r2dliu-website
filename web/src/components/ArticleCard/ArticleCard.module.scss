@@ -1,0 +1,31 @@
+@import "src/textStyles.scss";
+
+.ArticleCard {
+    display: flex;
+    align-content: center;
+    height: 100%;
+    width: 100%;
+
+    .image {
+        position: relative;
+        width: 100%;
+    }
+
+    .label {
+        position: absolute;
+        max-height: 80px;
+        bottom: 0;
+        width: calc(100% - 16px);
+        padding: 0 8px;
+
+        .title {
+            @include header;
+            text-align: left;
+        }
+
+        .description {
+            @include body;
+            text-align: left;
+        }
+    }
+}
