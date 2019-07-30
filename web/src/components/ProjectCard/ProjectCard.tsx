@@ -4,7 +4,7 @@ import { withRouter } from "react-router";
 import { RouteComponentProps } from "react-router-dom";
 import withNavigation from "components/helpers/withNavigation";
 import NavigatingContextInterface from "components/helpers/NavigatingContextInterface";
-import styles from "./ArticleCard.module.scss";
+import styles from "./ProjectCard.module.scss";
 
 interface Props extends RouteComponentProps, NavigatingContextInterface {
 	background: string;
@@ -15,7 +15,7 @@ interface Props extends RouteComponentProps, NavigatingContextInterface {
 	width: string;
 }
 
-function ArticleCard(props: Props) {
+function ProjectCard(props: Props) {
 	const {
 		background,
 		previewBackground,
@@ -26,7 +26,7 @@ function ArticleCard(props: Props) {
 	} = props;
 
 	return (
-		<div className={styles.ArticleCard}>
+		<div className={styles.ProjectCard}>
 			<div className={styles.image}>
 				<Image
 					width={width}
@@ -35,12 +35,14 @@ function ArticleCard(props: Props) {
 					preview={previewBackground}
 				/>
 			</div>
-			<div className={styles.label}>
+			<div className={styles.titleContainer}>
 				<div className={styles.title}>{title}</div>
+			</div>
+			<div className={styles.descriptionContainer}>
 				<div className={styles.description}>{description}</div>
 			</div>
 		</div>
 	);
 }
 
-export default withNavigation(withRouter(ArticleCard));
+export default withNavigation(withRouter(ProjectCard));

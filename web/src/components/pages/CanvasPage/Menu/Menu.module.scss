@@ -1,6 +1,12 @@
 .Menu {
 	padding: 40px 0;
 
+	.resume {
+		&:hover {
+			text-decoration: none;
+		}
+	}
+
 	.menuItem {
 		display: flex;
 		flex-direction: row;

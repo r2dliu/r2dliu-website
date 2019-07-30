@@ -11,6 +11,7 @@
 		flex-direction: row;
 		height: 50px;
 		width: calc(100% - 100px);
+		max-width: 1200px;
 		overflow: hidden;
 
 		.title {
@@ -18,24 +19,39 @@
 			font-size: 50px;
 			margin-left: 15%;
 
-			&:before {
+			&:before,
+			&:after {
 				position: absolute;
 				height: 2px;
 				top: 36px;
-				left: 0;
 				width: 0;
 				background: white;
 				content: "";
 			}
 
+			&:before {
+				left: 0;
+			}
+
 			&:after {
-				position: absolute;
 				margin-left: 16px;
-				height: 2px;
-				top: 36px;
-				width: 0;
-				background: white;
-				content: "";
+			}
+		}
+
+		&.mobile {
+			height: 35px;
+			width: calc(100% - 50px);
+
+			.title {
+				font-size: 35px;
+				&:before,
+				&:after {
+					top: 30px;
+				}
+
+				&:after {
+					margin-left: 8px;
+				}
 			}
 		}
 	}
@@ -49,47 +65,45 @@
 				}
 
 				&:after {
-					animation: extend-after 0.6s;
+					animation: extend-after 0.9s;
 					animation-fill-mode: forwards;
-					animation-delay: 0.1s;
+					animation-delay: 0.5s;
 				}
 
 				animation: fade-in 0.6s;
 				animation-fill-mode: forwards;
 			}
+
+			&.mobile {
+				.title {
+					&:before {
+						animation: extend-before-mobile 0.3s;
+						animation-fill-mode: forwards;
+					}
+				}
+			}
 		}
 	}
 
-	.desktop,
-	.mobile {
+	.canvas {
+		transform: translateX(5px);
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
-	}
+		width: calc(100% - 90px);
+		max-width: 1210px;
+		height: calc(100% - 50px);
 
-	.desktop {
-		height: 100%;
-		width: calc(100% - 100px);
+		-webkit-mask: linear-gradient(
+			0deg,
+			rgba(0, 0, 0, 0) 0%,
+			rgba(0, 0, 0, 1) 5%,
+			rgba(0, 0, 0, 1) 95%,
+			rgba(0, 0, 0, 0) 100%
+		);
 
-		.canvas {
-			height: calc(100% - 50px);
-			width: 100%;
-			left: 250px;
-
-			overflow-y: scroll;
-
-			-webkit-mask: linear-gradient(
-				0deg,
-				rgba(0, 0, 0, 0) 0%,
-				rgba(0, 0, 0, 1) 5%,
-				rgba(0, 0, 0, 1) 95%,
-				rgba(0, 0, 0, 0) 100%
-			);
-
-			.display {
-				height: 100%;
-				padding: 0 25px;
-			}
+		&.mobile {
+			width: calc(100% - 40px);
 		}
 	}
 }
@@ -113,6 +127,17 @@
 	100% {
 		animation-timing-function: cubic-bezier(0.76, 0.22, 0.67, -0.03);
 		width: calc(15% - 16px);
+	}
+}
+
+@keyframes extend-before-mobile {
+	0% {
+		width: 0;
+	}
+
+	100% {
+		animation-timing-function: cubic-bezier(0.76, 0.22, 0.67, -0.03);
+		width: calc(15% - 8px);
 	}
 }
 

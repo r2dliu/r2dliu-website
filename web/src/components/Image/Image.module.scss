@@ -1,23 +1,24 @@
 .Image {
-    height: 100%;
-    max-width: 100%;
+	height: 100%;
+	max-width: 100%;
+	position: relative;
 
-    .preview,
-    .highRes {
-        height: 100%;
-        max-width: 100%;
-        vertical-align: bottom;
-    }
+	.preview,
+	.highRes {
+		height: 100%;
+		max-width: 100%;
+		vertical-align: bottom;
+	}
 
-    .preview {
-        position: absolute;
-        left: 0;
-        top: 0;
-        filter: blur(4px);
-        transition: opacity ease-in .4s;
+	.preview {
+		position: absolute;
+		left: 0;
+		top: 0;
+		filter: blur(4px);
+		transition: opacity ease-in 0.4s;
 
-        &.loaded {
-            opacity: 0;
-        }
-    }
+		&.loaded {
+			opacity: 0;
+		}
+	}
 }

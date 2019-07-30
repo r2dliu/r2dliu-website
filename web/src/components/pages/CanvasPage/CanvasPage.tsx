@@ -9,6 +9,7 @@ import withNavigation from "components/helpers/withNavigation";
 import About from "./Content/About";
 import Melee from "./Content/Melee";
 import Articles from "./Content/Articles";
+import Projects from "./Content/Projects";
 import Menu from "./Menu";
 import styles from "./CanvasPage.module.scss";
 
@@ -27,7 +28,7 @@ function CanvasPage(props: Props) {
 		setIsLoaded(true);
 		setIsNavigating(false);
 		return () => setIsLoaded(false);
-	}, [props.match]);
+	}, [props.match, setIsNavigating]);
 
 	const toggleMenuOpen = () => {
 		setIsMenuOpen(!isMenuOpen);
@@ -43,6 +44,8 @@ function CanvasPage(props: Props) {
 				return <Articles />;
 			case "melee":
 				return <Melee />;
+			case "projects":
+				return <Projects />;
 			default:
 				return null;
 		}

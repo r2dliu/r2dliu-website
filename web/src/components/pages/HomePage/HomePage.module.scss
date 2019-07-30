@@ -1,167 +1,168 @@
 .Home {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 
-    .title {
-        font-family: "Bebas Bold";
-        letter-spacing: 3px;
-        font-size: 80px;
-        opacity: 0;
+	.title {
+		font-family: "Bebas Bold";
+		letter-spacing: 3px;
+		font-size: 80px;
+		opacity: 0;
 
-        &.loaded {
-            animation: fade-in 0.6s;
-            animation-fill-mode: forwards;
-        }
+		&.loaded {
+			animation: fade-in 0.3s;
+			animation-fill-mode: forwards;
+		}
 
-        &.clicked {
-            opacity:1;
-            animation: fade-out 0.9s;
-            animation-delay: 0.4s;
-            animation-fill-mode: forwards;
-        }
-    }
-    
-    .description {
-        font-family: "Brandon Bold";
-        font-size: 20px;
-        transition: all .6s ease-in;
-        transition-delay: 1.2s;
-        opacity: 0;
-        
-        &.loaded {
-            animation: fade-in 0.6s;
-            animation-fill-mode: forwards;
-        }
+		&.clicked {
+			opacity: 1;
+			animation: fade-out 0.3s;
+			animation-delay: 0.5s;
+			animation-fill-mode: forwards;
+		}
+	}
 
-        &.clicked {
-            opacity: 1;
-            animation: fade-out 0.9s;
-            animation-delay: 0.2s;
-            animation-fill-mode: forwards;
-        }
-    }
+	.description {
+		font-family: "Brandon Bold";
+		font-size: 20px;
+		opacity: 0;
 
-    .button {
-        display: inline-flex;
-        border-radius: 0;
-        border: none;
-        margin-top: 30px;
-        color: white;
-        opacity: 0;
+		&.loaded {
+			animation: fade-in 0.3s;
+			animation-fill-mode: forwards;
+		}
 
-        &:before, &:after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background: white;
-            transition: all 0.2s linear;
-        }
+		&.clicked {
+			opacity: 1;
+			animation: fade-out 0.3s;
+			animation-delay: 0.4s;
+			animation-fill-mode: forwards;
+		}
+	}
 
-    
-        span::before, span::after {
-            content: '';
-            position: absolute;
-            width: 2px;
-            height: 100%;
-            background: white;
-            transition: all 0.2s linear;
-        }
+	.button {
+		display: inline-flex;
+		border-radius: 0;
+		border: none;
+		margin-top: 30px;
+		color: white;
+		opacity: 0;
 
-        &:before {
-            left: 0;
-            bottom: 0;
-            transition-delay: 0.6s;
-        }
+		&:before,
+		&:after {
+			content: "";
+			position: absolute;
+			width: 100%;
+			height: 2px;
+			background: white;
+			transition: all 0.1s linear;
+		}
 
-        &:after {
-            right: 0;
-            top: 0;
-            transition-delay: 0.2s;
-        }
+		span::before,
+		span::after {
+			content: "";
+			position: absolute;
+			width: 2px;
+			height: 100%;
+			background: white;
+			transition: all 0.1s linear;
+		}
 
-        span::before {
-            left: 0;
-            top: 0;
-            transition-delay: 0s;
-        }
+		&:before {
+			left: 0;
+			bottom: 0;
+			transition-delay: 0.3s;
+		}
 
-        span::after {
-            right: 0;
-            bottom: 0;
-            transition-delay: 0.4s;
-        }
+		&:after {
+			right: 0;
+			top: 0;
+			transition-delay: 0.1s;
+		}
 
-        &:hover {
-            background: white;
-            color: black;
-        }
+		span::before {
+			left: 0;
+			top: 0;
+			transition-delay: 0s;
+		}
 
-        &.loaded {
-            animation: fade-in 0.6s;
-            animation-fill-mode: forwards;
-        }
+		span::after {
+			right: 0;
+			bottom: 0;
+			transition-delay: 0.2s;
+		}
 
-        &.clicked {
-            background: none;
-            color: white;
-            border: none;
+		&:hover {
+			background: white;
+			color: black;
+		}
 
-            &:before, &:after {
-                width: 0;
-            }
+		&.loaded {
+			animation: fade-in 0.3s;
+			animation-fill-mode: forwards;
+		}
 
-            span::before, span::after {
-                height: 0;
-            }
+		&.clicked {
+			background: none;
+			color: white;
+			border: none;
 
-            .buttonContent {
-                opacity: 1;
-                animation: fade-out 0.9s;
-                animation-delay: 0s;
-                animation-fill-mode: forwards;
-            }
-        }
-    }
+			&:before,
+			&:after {
+				width: 0;
+			}
+
+			span::before,
+			span::after {
+				height: 0;
+			}
+
+			.buttonContent {
+				opacity: 1;
+				animation: fade-out 0.2s;
+				animation-delay: 0.4s;
+				animation-fill-mode: forwards;
+			}
+		}
+	}
 }
 
 @keyframes fade-out {
-    0% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+	0% {
+		opacity: 1;
+		transform: translateY(0);
+	}
 
-    15% {
-        animation-timing-function: cubic-bezier();
-        opacity: 0.9;
-        transform: translateY(-2px)
-    }
+	15% {
+		animation-timing-function: cubic-bezier();
+		opacity: 0.9;
+		transform: translateY(-2px);
+	}
 
-    90% {
-        animation-timing-function: cubic-bezier();
-        opacity: 0;
-        transform: translateY(6px);
-    }
+	90% {
+		animation-timing-function: cubic-bezier();
+		opacity: 0;
+		transform: translateY(6px);
+	}
 
-    100% {
-        animation-timing-function: cubic-bezier();
-        opacity: 0;
-        transform: translateY(6px);
-    }
+	100% {
+		animation-timing-function: cubic-bezier();
+		opacity: 0;
+		transform: translateY(6px);
+	}
 }
 
 @keyframes fade-in {
-    0% {
-        opacity: 0;
-        transform: translateY(-6px);
-    }
+	0% {
+		opacity: 0;
+		transform: translateY(-6px);
+	}
 
-    100% {
-        animation-timing-function: cubic-bezier();
-        opacity: 1;
-        transform: translateY(0px);
-    }
+	100% {
+		animation-timing-function: cubic-bezier();
+		opacity: 1;
+		transform: translateY(0px);
+	}
 }

@@ -1,47 +1,64 @@
 // @ts-nocheck
 
-import React, { useState, useEffect } from "react";
-import { Responsive as ResponsiveGridLayout } from "react-grid-layout";
+import React, { SyntheticEvent } from "react";
 import GridLayout from "react-grid-layout";
 import ArticleCard from "components/ArticleCard";
+import { withRouter } from "react-router";
+import { RouteComponentProps } from "react-router-dom";
 import withNavigation from "components/helpers/withNavigation";
+import NavigatingContextInterface from "components/helpers/NavigatingContextInterface";
 import styles from "./Articles.module.scss";
+import Link from "@material-ui/core/Link";
 
-function Articles() {
+function Articles(props: NavigatingContextInterface & RouteComponentProps) {
+	const redirect = (e: SyntheticEvent) => {
+		const article = (e.currentTarget as HTMLElement).id;
+		props.setIsNavigating(true);
+		setTimeout(() => props.history.push(`/articles/${article}`), 300);
+	};
+
 	const layout = [
-		{ i: "ledgedash", x: 0, y: 0, w: 3, h: 2, static: true },
-		{ i: "nim", x: 4, y: 0, w: 3, h: 4, static: true },
-		{ i: "c", x: 4, y: 0, w: 1, h: 2 }
+		{ i: "ledgedash", x: 0, y: 0, w: 9, h: 6, static: true },
+		{ i: "nim", x: 9, y: 0, w: 7, h: 5, static: true }
 	];
 	return (
-		<GridLayout
-			className="layout"
-			layout={layout}
-			cols={12}
-			rowHeight={100}
-			width={1200}
-		>
-			<div key="ledgedash">
-				<ArticleCard
-					articleId="ledgedash"
-					background={"https://s3.r2dliu.com/assets/ledgedash.jpg"}
-					previewBackground="data:image/jpeg;base64,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"
-					title="Optimal Ledgedashing"
-					description="This is a longish sentence that describes the best way to optimally ledgedash."
-					height={"400px"}
-					width={"600px"}
-				/>
-			</div>
-			<div key="nim">b</div>
-			<div key="c">asdfa;klfj;dkfjwerrek</div>
-		</GridLayout>
+		<div className={styles.Articles}>
+			<GridLayout
+				className="layout"
+				layout={layout}
+				cols={24}
+				rowHeight={50}
+				width={1200}
+			>
+				<div key="ledgedash" id="ledgedash" onClick={redirect}>
+					<ArticleCard
+						background={
+							"https://s3.r2dliu.com/assets/articles/ledgedash/background.jpg"
+						}
+						previewBackground="data:image/jpeg;base64,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"
+						title="Optimal Ledgedashing"
+						description="Ledgedashing has become a staple in the modern era of Melee. It stands as the objectively best option from ledge for nearly every character in the game, but failure to execute often results in..."
+						height={"400px"}
+						width={"600px"}
+					/>
+				</div>
+				<div key="nim">
+					<Link href="https://s3.r2dliu.com/assets/articles/nim/nim.pdf">
+						<ArticleCard
+							background={
+								"https://s3.r2dliu.com/assets/articles/nim/background.jpg"
+							}
+							previewBackground="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAQEBAQEBAQEBAQGBgUGBggHBwcHCAwJCQkJCQwTDA4MDA4MExEUEA8QFBEeFxUVFx4iHRsdIiolJSo0MjRERFwBBAQEBAQEBAQEBAYGBQYGCAcHBwcIDAkJCQkJDBMMDgwMDgwTERQQDxAUER4XFRUXHiIdGx0iKiUlKjQyNEREXP/CABEIACoAOgMBIgACEQEDEQH/xAAaAAACAwEBAAAAAAAAAAAAAAAABAEDBQII/9oACAEBAAAAAPf0Z3FtehZwmlFrQ8ZyO7l6iOgGfKzD3QtTUyrp9ARIH//EABQBAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQIQAAAAAA//xAAUAQEAAAAAAAAAAAAAAAAAAAAA/9oACAEDEAAAAAAP/8QAKhAAAgIBBAEDAwQDAAAAAAAAAQIDBBEABRIhMRMiQRRRYRAgIzJCUoH/2gAIAQEAAT8A08iRqzuwVR2STgDVTdluwtJVpzMUd0YNhMMjEeWx0fIwNWju89BmzDUmEQfjGzSkMvuKhhwHxjOo7N2SKncptSsV5gkvMs8eYXXkGXAcZ0N1kVwwoSSQpyMs0REqKqjwoGGdvwAdVb9S36YhsJzdOYQni4X8qewe+8j9Ln1apGKawk8wGEpYDj9xx+dSU4YXO4W2eeaKJsZzxVf7HjGDxB66PbfnVCm70Nrv17jvOkRkLEgJOspLcZOIHQz7T5U6h3yezFRAoiB5pCuLMyw+1s8Cgwxct10NQbe88NiruYjkreo6xwL3E8L94kB7byRg9Y1NuNOtDP6R9YwK+Yq45sDGO1wvSkfnW11gsK3p/wCS3YX1GZkVWRX9yxdf4oDj8+f1sQz3rP08scsNaCRJC2VAnI7CYBJ4f7Z863qKSglr02svDuPGt6cWSYZJMqZUKjK5B93fnBGnqV3gjglhSRF44VwGA4eD38jUdVTuk9VpbH0kNWNjCWPos8jt4Oc5AXtfGo68ECGOCJI1JJKooVcsck4H31tE0MBsbS9h5pqZ8ydt6TnKZIAGcHH7N6kjiosxtLBiaD+U8cZEqniOXXYGNNelmaFaNf1kZmDTM3GJABnI+Xyevbr0Jtslm3ACW0LEkf1CKB/Hj284wT/VR2y5JI7Gp7kllBBtcsLysw5SE8kjQNhj15byFH31BBHXjEcY6HyeySeySfkn9ZYrr2XAsJHXCKBwXMhb5yWyABqTatuiq2mv85oiHkkaw7TMBnkccs4H2A1BPsNp4I4mqytMrOmIwchSQe8eQVI1HtW2wRRQ16UUSIoCqg4hQPAGNR7TLtKqNokXi1h5po58sGDkluJHat9vI/GqdtLDzRejLHJEF5h4yoy32bw3/D+0ADwP2//EABQRAQAAAAAAAAAAAAAAAAAAADD/2gAIAQIBAT8AT//EABQRAQAAAAAAAAAAAAAAAAAAADD/2gAIAQMBAT8AT//Z"
+							title="On the Game of Nim"
+							description="Nim is a simple but fascinating strategy and logic game. The game revolves around two players and piles of objects, known as..."
+							height={"300px"}
+							width={"400px"}
+						/>
+					</Link>
+				</div>
+			</GridLayout>
+		</div>
 	);
-
-	// return (
-	// 	<div className={styles.Articles}>
-
-	// 	</div >
-	// );
 }
 
-export default Articles;
+export default withNavigation(withRouter(Articles));

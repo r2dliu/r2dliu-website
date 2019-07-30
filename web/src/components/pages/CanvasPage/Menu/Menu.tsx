@@ -1,6 +1,6 @@
 import React, { SyntheticEvent } from "react";
-import Button from "@material-ui/core/Button";
 import cn from "classnames";
+
 import { RouteComponentProps } from "react-router-dom";
 import { withRouter } from "react-router";
 // import {
@@ -12,12 +12,14 @@ import { withRouter } from "react-router";
 // 	ContactSupportOutlined,
 // } from "@material-ui/icons";
 
+import Button from "@material-ui/core/Button";
+import Link from "@material-ui/core/Link";
 import HomeOutlined from "@material-ui/icons/HomeOutlined";
 import InfoOutlined from "@material-ui/icons/InfoOutlined";
 import WorkOutline from "@material-ui/icons/WorkOutline";
 import FeaturedPlayListOutlined from "@material-ui/icons/FeaturedPlayListOutlined";
 import VideogameAssetOutlined from "@material-ui/icons/VideogameAssetOutlined";
-import ContactSupportOutlined from "@material-ui/icons/ContactSupportOutlined";
+import LibraryBooksOutlined from "@material-ui/icons/LibraryBooksOutlined";
 
 import withNavigation from "components/helpers/withNavigation";
 import NavigatingContextInterface from "components/helpers/NavigatingContextInterface";
@@ -44,7 +46,7 @@ function Menu(props: Props) {
 				closeMenu();
 			}
 			setIsNavigating(true);
-			setTimeout(() => props.history.push(`/${buttonName}`), 800);
+			setTimeout(() => props.history.push(`/${buttonName}`), 300);
 		}
 	};
 
@@ -95,7 +97,7 @@ function Menu(props: Props) {
 				onClick={redirect}
 			>
 				<div>
-					<FeaturedPlayListOutlined className={styles.icon} />
+					<LibraryBooksOutlined className={styles.icon} />
 				</div>
 				<div className={styles.iconText}>Articles</div>
 			</Button>
@@ -113,18 +115,24 @@ function Menu(props: Props) {
 				<div className={styles.iconText}>Melee</div>
 			</Button>
 			<Spacer size="md" />
-			<Button
-				id="contact"
-				className={cn(styles.menuItem, styles.sixthItem, {
-					[styles.highlight]: page === "contact"
-				})}
-				onClick={redirect}
+			<Link
+				href="https://s3.r2dliu.com/assets/resume.pdf"
+				className={styles.resume}
+				target="_blank"
 			>
-				<div>
-					<ContactSupportOutlined className={styles.icon} />
-				</div>
-				<div className={styles.iconText}>Contact</div>
-			</Button>
+				<Button
+					id="contact"
+					className={cn(styles.menuItem, styles.sixthItem, {
+						[styles.highlight]: page === "contact"
+					})}
+					onClick={redirect}
+				>
+					<div>
+						<FeaturedPlayListOutlined className={styles.icon} />
+					</div>
+					<div className={styles.iconText}>Resume</div>
+				</Button>
+			</Link>
 		</div>
 	);
 }

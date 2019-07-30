@@ -32,7 +32,6 @@ function App() {
 							<Route path="/:id" component={CanvasPage} />
 						</Switch>
 					</BrowserRouter>
-					<div id="mobileNav" />
 				</div>
 			</NavigationProvider>
 		</BreakpointProvider>
