@@ -71,7 +71,10 @@ function About() {
 								</Link>
 							</div>
 							<div className={styles.resume}>
-								<Link href="https://s3.r2dliu.com/assets/resume.pdf">
+								<Link
+									href="https://s3.r2dliu.com/assets/resume.pdf"
+									target="_blank"
+								>
 									<Button className={styles.button}>
 										Resume
 									</Button>

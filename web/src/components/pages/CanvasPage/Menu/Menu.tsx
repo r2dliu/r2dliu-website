@@ -118,7 +118,6 @@ function Menu(props: Props) {
 			<Link
 				href="https://s3.r2dliu.com/assets/resume.pdf"
 				className={styles.resume}
-				target="_blank"
 			>
 				<Button
 					id="contact"
