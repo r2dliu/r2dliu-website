@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import React, { SyntheticEvent } from "react";
-import GridLayout from "react-grid-layout";
+import RGL, { WidthProvider } from "react-grid-layout";
 import ProjectCard from "components/ProjectCard";
 import { withRouter } from "react-router";
 import { RouteComponentProps } from "react-router-dom";
@@ -10,18 +10,20 @@ import NavigatingContextInterface from "components/helpers/NavigatingContextInte
 import styles from "./Projects.module.scss";
 import Link from "@material-ui/core/Link";
 
-function Articles(props: NavigatingContextInterface & RouteComponentProps) {
+function Projects(props: NavigatingContextInterface & RouteComponentProps) {
 	// const redirect = (e: SyntheticEvent) => {
 	// 	const article = (e.currentTarget as HTMLElement).id;
 	// 	props.setIsNavigating(true);
 	// 	setTimeout(() => props.history.push(`/articles/${article}`), 300);
 	// };
 
+	const GridLayout = WidthProvider(RGL);
+
 	const layout = [
-		{ i: "hangman", x: 0, y: 0, w: 9, h: 3, static: true },
-		{ i: "website", x: 0, y: 3, w: 9, h: 3, static: true },
-		{ i: "scoreboard", x: 0, y: 6, w: 9, h: 3, static: true },
-		{ i: "tableone", x: 0, y: 9, w: 9, h: 3, static: true }
+		{ i: "hangman", x: 1, y: 0, w: 22, h: 5, static: true },
+		{ i: "website", x: 1, y: 5, w: 22, h: 5, static: true },
+		{ i: "scoreboard", x: 1, y: 10, w: 22, h: 5, static: true },
+		{ i: "tableone", x: 1, y: 15, w: 22, h: 5, static: true }
 	];
 	return (
 		<div className={styles.Projects}>
@@ -29,8 +31,8 @@ function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 				className="layout"
 				layout={layout}
 				cols={24}
-				rowHeight={50}
-				width={1200}
+				rowHeight={25}
+				width={400}
 			>
 				<div key="hangman">
 					<Link href="https://github.com/r2dliu/hangman">
@@ -53,7 +55,7 @@ function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 								"https://s3.r2dliu.com/assets/projects/website.jpg"
 							}
 							previewBackground="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMDAwMDAwMEBAMFBQQFBQcGBgYGBwoHCAcIBwoPCgsKCgsKDw4QDQwNEA4YExERExgcGBYYHCIeHiIrKSs4OEv/wgALCAAYADEBAREA/8QAGQABAAMBAQAAAAAAAAAAAAAAAQAEBgII/9oACAEBAAAAAPB8sdVEXSuXRlorSf/EACUQAAIBAwQCAQUAAAAAAAAAAAECBAADEQUQEiEGgTITMUFRYf/aAAgBAQABPwCu6j2RcuMrD8VJsra+mAc5H3/dYO3rZSBnr3XjszS4k248/TEmJwCoruyBWY/PKkV5LJ0qRdsiDptuMUL8zbdnVgfiByJ6Xf3vHuqpwxx/akXA3EBgcDsis7//2Q=="
-							title="This Website"
+							title="Website"
 							description="Progressive web app style website, created with React and Flask, hosted on AWS"
 							height={"170px"}
 							width={"436px"}
@@ -93,4 +95,4 @@ function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 	);
 }
 
-export default withNavigation(withRouter(Articles));
+export default withNavigation(withRouter(Projects));

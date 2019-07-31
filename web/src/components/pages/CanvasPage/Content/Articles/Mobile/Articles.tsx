@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import React, { SyntheticEvent } from "react";
-import GridLayout from "react-grid-layout";
+import RGL, { WidthProvider } from "react-grid-layout";
 import ArticleCard from "components/ArticleCard";
 import { withRouter } from "react-router";
 import { RouteComponentProps } from "react-router-dom";
@@ -17,9 +17,11 @@ function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 		setTimeout(() => props.history.push(`/articles/${article}`), 300);
 	};
 
+	const GridLayout = WidthProvider(RGL);
+
 	const layout = [
-		{ i: "ledgedash", x: 0, y: 0, w: 9, h: 6, static: true },
-		{ i: "nim", x: 0, y: 6, w: 7, h: 5, static: true }
+		{ i: "ledgedash", x: 0, y: 0, w: 24, h: 9, static: true },
+		{ i: "nim", x: 0, y: 9, w: 22, h: 7, static: true }
 	];
 	return (
 		<div className={styles.Articles}>
@@ -27,8 +29,8 @@ function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 				className="layout"
 				layout={layout}
 				cols={24}
-				rowHeight={50}
-				width={1200}
+				rowHeight={25}
+				width={400}
 			>
 				<div key="ledgedash" id="ledgedash" onClick={redirect}>
 					<ArticleCard

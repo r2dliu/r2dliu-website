@@ -279,8 +279,10 @@ $hamburger-active-hover-opacity: $hamburger-hover-opacity !default;
 		}
 
 		.canvas {
+			position: fixed;
+			top: 44px;
 			opacity: 0;
-			height: 100%;
+			height: calc(100% - 44px);
 			width: 100%;
 			overflow-y: scroll;
 			transition: all 0.2s ease-in, filter 0.2s ease-in;
