@@ -81,8 +81,8 @@ function Melee() {
 						<iframe
 							title="twitch-embed"
 							src="https://player.twitch.tv/?allowfullscreen&amp;playsinline&amp;player=twitch_everywhere&amp;targetOrigin=https%3A%2F%2Fembed.twitch.tv&amp;channel=r2dliu&amp;origin=https%3A%2F%2Fembed.twitch.tv"
-							width="450"
-							height="300"
+							width="280px"
+							height="280px"
 							scrolling="no"
 							allow="autoplay; fullscreen"
 						/>

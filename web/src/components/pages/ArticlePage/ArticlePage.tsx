@@ -67,9 +67,11 @@ function ArticlePage(props: Props) {
 				only={true}
 			>
 				<div className={cn(styles.titleContainer, styles.mobile)}>
+					<div className={styles.left} />
 					<div className={cn(styles.title)}>
 						{getArticleTitle(article)}
 					</div>
+					<div className={styles.right} />
 				</div>
 				{getArticleEl(article, true)}
 			</Breakpoint>
