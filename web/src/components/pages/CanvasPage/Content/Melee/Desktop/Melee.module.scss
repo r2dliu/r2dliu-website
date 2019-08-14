@@ -5,10 +5,10 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	min-width: 650px;
 	height: 100%;
 
 	.cardContainer {
-		width: 100%;
 		padding: 25px;
 		display: flex;
 	}
@@ -31,8 +31,8 @@
 	}
 
 	.descriptionContainer {
-		width: 100%;
-		padding: 25px;
+		align-self: flex-start;
+		padding: 50px;
 		display: flex;
 		flex-direction: column;
 
