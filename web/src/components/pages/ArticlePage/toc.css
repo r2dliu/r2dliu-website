@@ -1,0 +1,12 @@
+.toc {
+	margin-top: 66px;
+	margin-left: 25px;
+	width: 250px;
+	height: 100%;
+	background-color: red;
+}
+
+ol li {
+	list-style-type: none;
+	text-align: left;
+}

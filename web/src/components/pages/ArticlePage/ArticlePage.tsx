@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { get } from "lodash";
 import cn from "classnames";
+import tocbot from "tocbot";
 import { RouteComponentProps } from "react-router-dom";
 import { withRouter } from "react-router";
 import Breakpoint from "react-socks";
@@ -9,6 +10,7 @@ import withTracking from "components/helpers/withTracking";
 
 import Ledgedash from "./Articles/Ledgedash";
 import styles from "./ArticlePage.module.scss";
+import "./toc.css";
 
 interface Props extends RouteComponentProps {
 	isNavigating: boolean;
@@ -22,6 +24,16 @@ function ArticlePage(props: Props) {
 	useEffect(() => {
 		setIsLoaded(true);
 		setIsNavigating(false);
+		tocbot.init({
+			// Where to render the table of contents.
+			tocSelector: ".toc",
+			// Where to grab the headings to build the table of contents.
+			contentSelector: ".tocContent",
+			// Which headings to grab inside of the contentSelector element.
+			headingSelector: "h1, h2, h3",
+			// For headings inside relative or absolute positioned containers within content.
+			hasInnerContainers: true
+		});
 		return () => setIsLoaded(false);
 	}, [props.match, setIsNavigating]);
 
@@ -48,7 +60,7 @@ function ArticlePage(props: Props) {
 
 		return (
 			<div
-				className={cn(styles.canvas, {
+				className={cn("tocContent", styles.canvas, {
 					[styles.mobile]: isMobile
 				})}
 			>
@@ -76,20 +88,21 @@ function ArticlePage(props: Props) {
 				</div>
 				{getArticleEl(article, true)}
 			</Breakpoint>
-			<Breakpoint
-				className={cn(styles.ArticlePage, {
-					[styles.loaded]: isLoaded,
-					[styles.navigating]: isNavigating
-				})}
-				s={true}
-				up={true}
-			>
-				<div className={styles.titleContainer}>
-					<div className={styles.title}>
-						{getArticleTitle(article)}
+			<Breakpoint className={styles.page} s={true} up={true}>
+				<div className="toc">test</div>
+				<div
+					className={cn(styles.ArticlePage, {
+						[styles.loaded]: isLoaded,
+						[styles.navigating]: isNavigating
+					})}
+				>
+					<div className={styles.titleContainer}>
+						<div className={styles.title}>
+							{getArticleTitle(article)}
+						</div>
 					</div>
+					{getArticleEl(article, false)}
 				</div>
-				{getArticleEl(article, false)}
 			</Breakpoint>
 		</Fragment>
 	);
