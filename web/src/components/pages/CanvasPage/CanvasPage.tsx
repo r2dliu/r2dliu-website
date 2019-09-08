@@ -5,7 +5,9 @@ import { RouteComponentProps } from "react-router-dom";
 import { withRouter } from "react-router";
 import Breakpoint from "react-socks";
 
+import withTracking from "components/helpers/withTracking";
 import withNavigation from "components/helpers/withNavigation";
+
 import About from "./Content/About";
 import Melee from "./Content/Melee";
 import Articles from "./Content/Articles";
@@ -117,4 +119,4 @@ function CanvasPage(props: Props) {
 	);
 }
 
-export default withNavigation(withRouter(CanvasPage));
+export default withTracking(withNavigation(withRouter(CanvasPage)));

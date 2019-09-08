@@ -21,7 +21,8 @@ function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 
 	const layout = [
 		{ i: "ledgedash", x: 0, y: 0, w: 14, h: 6, static: true },
-		{ i: "nim", x: 14, y: 0, w: 10, h: 5, static: true }
+		{ i: "kirigami", x: 0, y: 6, w: 14, h: 4, static: true },
+		{ i: "nim", x: 14, y: 0, w: 10, h: 4, static: true }
 	];
 	return (
 		<div className={styles.Articles}>
@@ -43,6 +44,20 @@ function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 						height={"400px"}
 						width={"600px"}
 					/>
+				</div>
+				<div key="kirigami">
+					<Link href="https://s3.r2dliu.com/assets/articles/kirigami/kirigami.pdf">
+						<ArticleCard
+							background={
+								"https://s3.r2dliu.com/assets/articles/kirigami/background.jpg"
+							}
+							previewBackground="data:image/jpeg;base64,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"
+							title="Kirigami"
+							description="Origami and kirigami are exciting concepts. They start with flat, 2D surfaces, and result in complex 3D geometries, all without changing the intrinsic geometry of the original material..."
+							height={"300px"}
+							width={"600px"}
+						/>
+					</Link>
 				</div>
 				<div key="nim">
 					<Link href="https://s3.r2dliu.com/assets/articles/nim/nim.pdf">

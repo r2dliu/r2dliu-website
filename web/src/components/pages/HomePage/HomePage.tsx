@@ -3,6 +3,8 @@ import Button from "@material-ui/core/Button";
 import cn from "classnames";
 import { Redirect } from "react-router-dom";
 
+import withTracking from "components/helpers/withTracking";
+
 import styles from "./HomePage.module.scss";
 
 function HomePage() {
@@ -24,9 +26,10 @@ function HomePage() {
 		setIsClicked(true);
 	};
 
-	const getClickedClassNames = (classNames: string) => cn(classNames, {
-		[styles.clicked]: isClicked,
-	});
+	const getClickedClassNames = (classNames: string) =>
+		cn(classNames, {
+			[styles.clicked]: isClicked
+		});
 
 	if (isAnimationDone) {
 		return <Redirect to="/about" />;
@@ -36,27 +39,33 @@ function HomePage() {
 		// @ts-ignore
 		<div onAnimationEnd={markAnimationFinished} className={styles.Home}>
 			<div
-				className={cn(getClickedClassNames(styles.title), { [styles.loaded]: isLoaded })}
+				className={cn(getClickedClassNames(styles.title), {
+					[styles.loaded]: isLoaded
+				})}
 			>
 				David Liu
 			</div>
 			<div
 				className={cn(getClickedClassNames(styles.description), {
-					[styles.loaded]: isLoaded,
+					[styles.loaded]: isLoaded
 				})}
 			>
 				Software | Design | Bouldering | Melee
 			</div>
 			<Button
-				className={cn(getClickedClassNames(styles.button), { [styles.loaded]: isLoaded })}
+				className={cn(getClickedClassNames(styles.button), {
+					[styles.loaded]: isLoaded
+				})}
 				variant="outlined"
 				onClick={markClicked}
 				disabled={isClicked}
 			>
-				<div className={styles.buttonContent}><b>{"About Me"}</b></div>
+				<div className={styles.buttonContent}>
+					<b>{"About Me"}</b>
+				</div>
 			</Button>
-		</div >
+		</div>
 	);
 }
 
-export default HomePage;
+export default withTracking(HomePage);

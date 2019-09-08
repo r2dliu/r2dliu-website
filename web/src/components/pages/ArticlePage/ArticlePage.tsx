@@ -5,6 +5,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { withRouter } from "react-router";
 import Breakpoint from "react-socks";
 import withNavigation from "components/helpers/withNavigation";
+import withTracking from "components/helpers/withTracking";
 
 import Ledgedash from "./Articles/Ledgedash";
 import styles from "./ArticlePage.module.scss";
@@ -94,4 +95,4 @@ function ArticlePage(props: Props) {
 	);
 }
 
-export default withNavigation(withRouter(ArticlePage));
+export default withTracking(withNavigation(withRouter(ArticlePage)));
