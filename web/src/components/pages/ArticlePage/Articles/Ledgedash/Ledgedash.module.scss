@@ -15,6 +15,16 @@
 		.link {
 			@include link;
 		}
+
+		.podeImage {
+			width: 600px;
+			height: 178px;
+		}
+
+		.ledgedashImage {
+			width: 200px;
+			height: 200px;
+		}
 	}
 
 	h1,
