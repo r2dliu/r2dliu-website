@@ -15,7 +15,7 @@
 		"react-grid-layout": "^0.16.6",
 		"react-router-dom": "^5.0.1",
 		"react-scripts": "^3.0.1",
-		"react-socks": "^1.0.1",
+		"react-socks": "^2.0.2",
 		"tocbot": "^4.8.0",
 		"tslint": "^5.18.0",
 		"tslint-react": "^4.0.0"

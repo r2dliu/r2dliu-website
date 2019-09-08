@@ -10,7 +10,7 @@ function Ledgedash() {
 		<Fragment>
 			<p>April 16th, 2018, by David "R2DLiu" Liu</p>
 
-			<h1>{"Introduction"}</h1>
+			<h1 id="introduction">{"Introduction"}</h1>
 			<p>
 				Ledgedashing has become a staple in the modern era of Melee. It
 				stands as the objectively best option from ledge for nearly
@@ -39,7 +39,7 @@ function Ledgedash() {
 				interesting phenomenon and realizations on why my inputs did
 				what they did.
 			</p>
-			<h1>PODE</h1>
+			<h1 id="pode">PODE</h1>
 			<p>
 				<span>
 					<Link
@@ -202,7 +202,7 @@ function Ledgedash() {
 					</figcaption>
 				</figure>
 			</p>
-			<h1>Optimizing Ledgedash</h1>
+			<h1 id="optimizing">Optimizing Ledgedash</h1>
 			<p>
 				Armed with this new information, we can apply it to our
 				advantage and modify the method by which we ledgedash to best
@@ -267,7 +267,7 @@ function Ledgedash() {
 				happens afterward, reducing the distance and intangibility of
 				the ledgedash.
 			</p>
-			<h1>Ledgedash Breakdown</h1>
+			<h1 id="breakdown">Ledgedash Breakdown</h1>
 			<p>
 				Let’s do a breakdown to see exactly where the problems are. The
 				timing and frame data varies from character to character, so for
@@ -384,7 +384,7 @@ function Ledgedash() {
 				worst. This also prevents tournament winners from pressing the
 				double jump a frame too early.
 			</p>
-			<h1>Conclusion/TL;DR</h1>
+			<h1 id="conclusion">Conclusion/TL;DR</h1>
 			<p>Main takeaways:</p>
 			<p>
 				1. PODE affects which ledgedash method you should use! Both

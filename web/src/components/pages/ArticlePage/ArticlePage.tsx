@@ -4,13 +4,13 @@ import cn from "classnames";
 import tocbot from "tocbot";
 import { RouteComponentProps } from "react-router-dom";
 import { withRouter } from "react-router";
-import Breakpoint from "react-socks";
+import Breakpoint, { useCurrentWidth } from "react-socks";
 import withNavigation from "components/helpers/withNavigation";
 import withTracking from "components/helpers/withTracking";
 
 import Ledgedash from "./Articles/Ledgedash";
 import styles from "./ArticlePage.module.scss";
-import "./toc.css";
+import "./toc.scss";
 
 interface Props extends RouteComponentProps {
 	isNavigating: boolean;
@@ -21,21 +21,24 @@ function ArticlePage(props: Props) {
 	const { isNavigating, setIsNavigating } = props;
 	const [isLoaded, setIsLoaded] = useState(false);
 
+	const currentWidth = useCurrentWidth();
+
+	tocbot.init({
+		// Where to render the table of contents.
+		tocSelector: ".toc",
+		// Where to grab the headings to build the table of contents.
+		contentSelector: ".tocContent",
+		// Which headings to grab inside of the contentSelector element.
+		headingSelector: ".title, h1, h2, h3",
+		// For headings inside relative or absolute positioned containers within content.
+		hasInnerContainers: true
+	});
+
 	useEffect(() => {
 		setIsLoaded(true);
 		setIsNavigating(false);
-		tocbot.init({
-			// Where to render the table of contents.
-			tocSelector: ".toc",
-			// Where to grab the headings to build the table of contents.
-			contentSelector: ".tocContent",
-			// Which headings to grab inside of the contentSelector element.
-			headingSelector: "h1, h2, h3",
-			// For headings inside relative or absolute positioned containers within content.
-			hasInnerContainers: true
-		});
 		return () => setIsLoaded(false);
-	}, [props.match, setIsNavigating]);
+	}, [props.match, setIsNavigating, currentWidth]);
 
 	const article = get(props.match, ["params", "id"], "");
 
@@ -60,7 +63,7 @@ function ArticlePage(props: Props) {
 
 		return (
 			<div
-				className={cn("tocContent", styles.canvas, {
+				className={cn(styles.canvas, {
 					[styles.mobile]: isMobile
 				})}
 			>
@@ -76,8 +79,8 @@ function ArticlePage(props: Props) {
 					[styles.loaded]: isLoaded,
 					[styles.navigating]: isNavigating
 				})}
-				xs={true}
-				only={true}
+				s={true}
+				down={true}
 			>
 				<div className={cn(styles.titleContainer, styles.mobile)}>
 					<div className={styles.left} />
@@ -88,16 +91,18 @@ function ArticlePage(props: Props) {
 				</div>
 				{getArticleEl(article, true)}
 			</Breakpoint>
-			<Breakpoint className={styles.page} s={true} up={true}>
-				<div className="toc">test</div>
+			<Breakpoint className={styles.page} m={true} up={true}>
+				<div className={styles.sidebar}>
+					<div className="toc"></div>
+				</div>
 				<div
-					className={cn(styles.ArticlePage, {
+					className={cn(styles.ArticlePage, "tocContent", {
 						[styles.loaded]: isLoaded,
 						[styles.navigating]: isNavigating
 					})}
 				>
 					<div className={styles.titleContainer}>
-						<div className={styles.title}>
+						<div className={cn("title", styles.title)}>
 							{getArticleTitle(article)}
 						</div>
 					</div>
