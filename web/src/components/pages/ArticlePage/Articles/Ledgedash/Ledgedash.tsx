@@ -424,13 +424,21 @@ function Ledgedash() {
 	return (
 		<Fragment>
 			<Breakpoint
-				className={cn(styles.Ledgedash, styles.mobile)}
+				className={cn(
+					"scrollContainer",
+					styles.Ledgedash,
+					styles.mobile
+				)}
 				xs={true}
 				only={true}
 			>
 				{articleBody}
 			</Breakpoint>
-			<Breakpoint className={styles.Ledgedash} s={true} up={true}>
+			<Breakpoint
+				className={cn("scrollContainer", styles.Ledgedash)}
+				s={true}
+				up={true}
+			>
 				{articleBody}
 			</Breakpoint>
 		</Fragment>

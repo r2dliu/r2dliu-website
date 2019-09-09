@@ -4,6 +4,16 @@
 
 	.sidebar {
 		flex-shrink: 2;
+
+		.tocWrapper {
+			display: flex;
+			flex-direction: column;
+			margin-top: 66px;
+			margin-left: 40px;
+			width: 250px;
+			border: 2px solid white;
+			background-color: rgba(0, 0, 0, 0.4);
+		}
 	}
 }
 

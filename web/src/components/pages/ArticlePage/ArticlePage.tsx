@@ -27,11 +27,12 @@ function ArticlePage(props: Props) {
 		// Where to render the table of contents.
 		tocSelector: ".toc",
 		// Where to grab the headings to build the table of contents.
-		contentSelector: ".tocContent",
+		contentSelector: ".scrollContainer",
 		// Which headings to grab inside of the contentSelector element.
-		headingSelector: ".title, h1, h2, h3",
+		headingSelector: "h1, h2, h3",
 		// For headings inside relative or absolute positioned containers within content.
-		hasInnerContainers: true
+		hasInnerContainers: true,
+		scrollContainer: ".scrollContainer"
 	});
 
 	useEffect(() => {
@@ -50,6 +51,8 @@ function ArticlePage(props: Props) {
 				return null;
 		}
 	};
+
+	const articleTitle = getArticleTitle(article);
 
 	const getArticleEl = (article: string, isMobile: boolean) => {
 		let element;
@@ -84,16 +87,16 @@ function ArticlePage(props: Props) {
 			>
 				<div className={cn(styles.titleContainer, styles.mobile)}>
 					<div className={styles.left} />
-					<div className={cn(styles.title)}>
-						{getArticleTitle(article)}
-					</div>
+					<div className={cn(styles.title)}>{articleTitle}</div>
 					<div className={styles.right} />
 				</div>
 				{getArticleEl(article, true)}
 			</Breakpoint>
 			<Breakpoint className={styles.page} m={true} up={true}>
 				<div className={styles.sidebar}>
-					<div className="toc"></div>
+					<div className={styles.tocWrapper}>
+						<div className="toc"></div>
+					</div>
 				</div>
 				<div
 					className={cn(styles.ArticlePage, "tocContent", {
@@ -103,7 +106,7 @@ function ArticlePage(props: Props) {
 				>
 					<div className={styles.titleContainer}>
 						<div className={cn("title", styles.title)}>
-							{getArticleTitle(article)}
+							{articleTitle}
 						</div>
 					</div>
 					{getArticleEl(article, false)}
