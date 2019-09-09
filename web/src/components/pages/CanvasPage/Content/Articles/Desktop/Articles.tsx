@@ -2,13 +2,15 @@
 
 import React, { SyntheticEvent } from "react";
 import RGL, { WidthProvider } from "react-grid-layout";
-import ArticleCard from "components/ArticleCard";
 import { withRouter } from "react-router";
 import { RouteComponentProps } from "react-router-dom";
+import Link from "@material-ui/core/Link";
+
+import ArticleCard from "components/ArticleCard";
+import Chiclet from "components/Chiclet";
 import withNavigation from "components/helpers/withNavigation";
 import NavigatingContextInterface from "components/helpers/NavigatingContextInterface";
 import styles from "./Articles.module.scss";
-import Link from "@material-ui/core/Link";
 
 function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 	const redirect = (e: SyntheticEvent) => {
@@ -24,6 +26,10 @@ function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 		{ i: "kirigami", x: 0, y: 6, w: 14, h: 4, static: true },
 		{ i: "nim", x: 14, y: 0, w: 10, h: 4, static: true }
 	];
+
+	const meleeChiclet = <Chiclet color="red" text="Melee" />;
+	const mathChiclet = <Chiclet color="green" text="Math" />;
+
 	return (
 		<div className={styles.Articles}>
 			<GridLayout
@@ -43,6 +49,7 @@ function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 						description="Ledgedashing has become a staple in the modern era of Melee. It stands as the objectively best option from ledge for nearly every character in the game, but failure to execute often results in..."
 						height={"400px"}
 						width={"600px"}
+						chiclet={meleeChiclet}
 					/>
 				</div>
 				<div key="kirigami">
@@ -56,6 +63,7 @@ function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 							description="Origami and kirigami are exciting concepts. They start with flat, 2D surfaces, and result in complex 3D geometries, all without changing the intrinsic geometry of the original material..."
 							height={"300px"}
 							width={"600px"}
+							chiclet={mathChiclet}
 						/>
 					</Link>
 				</div>
@@ -70,6 +78,7 @@ function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 							description="Nim is a simple but fascinating strategy and logic game. The game revolves around two players and piles of objects, known as..."
 							height={"300px"}
 							width={"400px"}
+							chiclet={mathChiclet}
 						/>
 					</Link>
 				</div>

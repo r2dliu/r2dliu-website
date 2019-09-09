@@ -1,0 +1,27 @@
+@import "src/textStyles.scss";
+
+.Chiclet {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.text {
+		font-family: "Bebas Bold";
+		font-size: 16px;
+		color: white;
+		padding: 2px 4px;
+		border-radius: 3px;
+
+		&.red {
+			background-color: red;
+		}
+
+		&.green {
+			background-color: green;
+		}
+
+		&.blue {
+			background-color: blue;
+		}
+	}
+}
