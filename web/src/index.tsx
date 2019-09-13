@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import ReactGA from "react-ga";
 
 import App from "./App";
-import "./index.css";
+import "./index.scss";
 import * as serviceWorker from "./serviceWorker";
 
 const trackingId = "UA-117671460-1";

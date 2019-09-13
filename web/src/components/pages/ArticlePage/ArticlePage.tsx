@@ -9,6 +9,7 @@ import withNavigation from "components/helpers/withNavigation";
 import withTracking from "components/helpers/withTracking";
 
 import Ledgedash from "./Articles/Ledgedash";
+import Autocancel from "./Articles/Autocancel";
 import styles from "./ArticlePage.module.scss";
 import "./toc.scss";
 
@@ -47,6 +48,8 @@ function ArticlePage(props: Props) {
 		switch (article) {
 			case "ledgedash":
 				return "Optimal Ledgedashing";
+			case "autocancel":
+				return "Fox Autocancel Aerials";
 			default:
 				return null;
 		}
@@ -59,6 +62,9 @@ function ArticlePage(props: Props) {
 		switch (article) {
 			case "ledgedash":
 				element = <Ledgedash />;
+				break;
+			case "autocancel":
+				element = <Autocancel />;
 				break;
 			default:
 				return null;
