@@ -42,13 +42,12 @@ function Ledgedash() {
 			<h1 id="pode">PODE</h1>
 			<p>
 				<span>
-					<Link
-						className={styles.link}
+					<a
 						href="https://twitter.com/kadano/status/952672880512372736"
 						target="_blank"
 					>
 						PODE,
-					</Link>{" "}
+					</a>{" "}
 					or the potentiometer oddity degradation effect, is a
 					phenomenon which causes control stick inputs to be read in a
 					delayed fashion, meaning some inputs are “skipped” if you
@@ -57,12 +56,9 @@ function Ledgedash() {
 					which did not, I noticed that they had an incredibly
 					tangible effect on my ledgedashing. I first learned to
 					ledgedash with the “optimal ledgedash angle”, described{" "}
-					<Link
-						className={styles.link}
-						href="https://smashboards.com/threads/how-pre-ledgegrab-body-states-affect-your-ledgedash-timing.346128/page-2#post-16761783"
-					>
+					<a href="https://smashboards.com/threads/how-pre-ledgegrab-body-states-affect-your-ledgedash-timing.346128/page-2#post-16761783">
 						here
-					</Link>{" "}
+					</a>{" "}
 					by Kadano. As I tested this method on various controllers, I
 					was struck that some controllers kept doing regular get up,
 					while one controller in particular never failed to let go of
@@ -77,7 +73,7 @@ function Ledgedash() {
 				<figure>
 					<iframe
 						title="diagonal"
-						src="https://gfycat.com/ifr/DelayedEmbellishedBull"
+						src="https://gfycat.com/ifr/DelayedEmbellishedBull?hd=1"
 						className={styles.iframe}
 						frameBorder="0"
 						scrolling="no"
@@ -139,7 +135,7 @@ function Ledgedash() {
 				<figure>
 					<iframe
 						title={"podeDashDance"}
-						src="https://gfycat.com/ifr/DarlingVioletChimpanzee"
+						src="https://gfycat.com/ifr/DarlingVioletChimpanzee?hd=1"
 						className={styles.iframe}
 						frameBorder="0"
 						scrolling="no"
@@ -154,7 +150,7 @@ function Ledgedash() {
 				<figure>
 					<iframe
 						title="noPodeDashDance"
-						src="https://gfycat.com/ifr/FrayedYawningAvocet"
+						src="https://gfycat.com/ifr/FrayedYawningAvocet?hd=1"
 						className={styles.iframe}
 						frameBorder="0"
 						scrolling="no"
@@ -174,7 +170,7 @@ function Ledgedash() {
 				<figure>
 					<iframe
 						title="podeCircle"
-						src="https://gfycat.com/ifr/BogusIncredibleBaboon"
+						src="https://gfycat.com/ifr/BogusIncredibleBaboon?hd=1"
 						className={styles.iframe}
 						frameBorder="0"
 						scrolling="no"
@@ -189,7 +185,7 @@ function Ledgedash() {
 				<figure>
 					<iframe
 						title="noPodeCircle"
-						src="https://gfycat.com/ifr/ImportantGrotesqueArabianoryx"
+						src="https://gfycat.com/ifr/ImportantGrotesqueArabianoryx?hd=1"
 						className={styles.iframe}
 						frameBorder="0"
 						scrolling="no"
@@ -324,7 +320,7 @@ function Ledgedash() {
 				<figure>
 					<iframe
 						title="back"
-						src="https://gfycat.com/ifr/ExhaustedCloudyBluebreastedkookaburra"
+						src="https://gfycat.com/ifr/ExhaustedCloudyBluebreastedkookaburra?hd=1"
 						className={styles.iframe}
 						frameBorder="0"
 						scrolling="no"
@@ -339,7 +335,7 @@ function Ledgedash() {
 				<figure>
 					<iframe
 						title="forward"
-						src="https://gfycat.com/ifr/HomelyNimbleGroundbeetle"
+						src="https://gfycat.com/ifr/HomelyNimbleGroundbeetle?hd=1"
 						className={styles.iframe}
 						frameBorder="0"
 						scrolling="no"
@@ -354,7 +350,7 @@ function Ledgedash() {
 				<figure>
 					<iframe
 						title="overlaid"
-						src="https://gfycat.com/ifr/YellowishLegitimateGartersnake"
+						src="https://gfycat.com/ifr/YellowishLegitimateGartersnake?hd=1"
 						className={styles.iframe}
 						frameBorder="0"
 						scrolling="no"
