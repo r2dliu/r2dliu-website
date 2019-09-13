@@ -1,15 +1,17 @@
 import React, { Fragment } from "react";
 import Breakpoint from "react-socks";
 import cn from "classnames";
-import Link from "@material-ui/core/Link";
-import Image from "components/Image";
 import styles from "./Autocancel.module.scss";
 
 function Autocancel() {
 	const articleBody = (
 		<Fragment>
-			<p>September 12th, 2019, by David "R2DLiu" Liu</p>
-
+			<p>September 13th, 2019, by David "R2DLiu" Liu</p>
+			{/* TODO: remove */}
+			<p>- Article is a WIP -</p>
+			<p>
+				<i>If you pause Gfycat, you can advance frame by frame!</i>
+			</p>
 			<h1 id="introduction">{"Introduction"}</h1>
 			<p>
 				Fox is one of the best and most versatile characters in the
@@ -46,9 +48,9 @@ function Autocancel() {
 				faster while landing from an aerial, opening the door for all
 				kind of mix-ups and techniques.
 			</p>
-			<h1 id="breakdown">Autocancel Up-air</h1>
+			<h1 id="breakdown">Autocancel Up-Air</h1>
 			<p>
-				Up air is a fantastic tool for Fox. It kills, combos, looks
+				Up-air is a fantastic tool for Fox. It kills, combos, looks
 				swaggy, it does it all. It lasts a total of 39 frames, hitting
 				on frames 8-9 and 11-14. It autocancels before frame 7 and after
 				frame 26, with 9 frames of L-cancelled lag.
@@ -107,7 +109,7 @@ function Autocancel() {
 				This piece of tech utilizes what is known as an aerial
 				interrupt. The simplified explanation is that by dropping low
 				from ledge, double jumping, and uairing barely above the ledge,
-				Fox can land during the uair, autocancelling it, and leaving him
+				Fox can land during the uair, autocancelling it and leaving him
 				actionable four frames afterward. This is an unreactable mixup
 				because it looks almost exactly like refreshing near the ledge,
 				and is dangerous for the opponent to contest because they would
@@ -211,23 +213,14 @@ function Autocancel() {
 				where he pulls out the gun. The laser also has an easily
 				distinguishable audio cue, whereas early AC uair has none.
 			</p>
+			<h1 id="bair">Autocancel Back-Air</h1>
 			<p>
-				The only difference between these two examples is the jump
-				direction; everything else is the same. You lose a significant
-				amount of distance, and it only worsens when other factors
-				compound, such as bad timing or suboptimal airdodge angles. Even
-				without PODE, this is a pretty important factor that a lot of
-				players don’t take into account while ledgedashing. As a result,
-				I’ve begun skewing my input for my double jump towards being one
-				frame late, while holding forward to get the direction right
-				during the first frame. Empirical testing shows me that I’m 90%+
-				consistent on aiming for two frame windows, so I’ll aim for
-				double jumping either frame perfect or one frame late, which
-				sacrificies only two frames of actionable intangibility at
-				worst. This also prevents tournament winners from pressing the
-				double jump a frame too early.
+				Back-air is an absolutely ridiculous move. It, too, can kill,
+				combo, and look swaggy. It has an enormous hitbox and stays
+				active forever. It lasts a total of 39 frames, hitting on frames
+				4-19(!). It autocancels before frame 3 and after frame 24, with
+				10 frames of L-cancelled lag.
 			</p>
-			<h1 id="bair">Autocancel Bair</h1>
 			<h2 id="walling">Center Stage Walling</h2>
 			<p>
 				Like the sharking uair mentioned earlier, full hop instant
@@ -238,8 +231,8 @@ function Autocancel() {
 			<p>
 				<figure>
 					<iframe
-						title="techchase"
-						src="https://gfycat.com/ifr/illancientilladopsis?hd=1"
+						title="walling"
+						src="https://gfycat.com/ifr/linearsizzlingafricanharrierhawk?hd=1"
 						className={styles.iframe}
 						frameBorder="0"
 						scrolling="no"
@@ -259,8 +252,8 @@ function Autocancel() {
 			<p>
 				<figure>
 					<iframe
-						title="techchase"
-						src="https://gfycat.com/ifr/imaginativefragrantirukandjijellyfish?hd=1"
+						title="weakhit"
+						src="https://gfycat.com/ifr/amazingrelievedgossamerwingedbutterfly?hd=1"
 						className={styles.iframe}
 						frameBorder="0"
 						scrolling="no"
@@ -276,18 +269,18 @@ function Autocancel() {
 			<h2 id="shieldpressure">Shield Pressure</h2>
 			<p>
 				Like Falco, Fox can set up shield pressure with a AC bair. Note
-				that neither Fox nor Falco AC bair are as safe as late aerials
-				and have plenty of counterplay, but when set up correctly
-				they’re only slightly negative on block and can catch people
-				pressing a button given the speed of frame one shine. But Unlike
-				Falco, Fox cannot auto cancel his bair out of short hop.
-				Instead, he can only setup this AC pressure in a few select
-				situations with full hop. Here’s some toy examples.
+				that neither Fox nor Falco AC bair are quite as safe as late
+				aerials and have plenty of counterplay, but when set up
+				correctly they’re only slightly negative on block and can catch
+				people pressing buttons. But unlike Falco, Fox cannot auto
+				cancel his bair out of short hop. Instead, he can only setup
+				this AC pressure in a few select situations with full hop.
+				Here’s some toy examples.
 			</p>
 			<p>
 				<figure>
 					<iframe
-						title="techchase"
+						title="pressure"
 						src="https://gfycat.com/ifr/shamefulmessydrake?hd=1"
 						className={styles.iframe}
 						frameBorder="0"
@@ -323,8 +316,8 @@ function Autocancel() {
 			<p>
 				<figure>
 					<iframe
-						title="techchase"
-						src="https://gfycat.com/ifr/shamefulmessydrake?hd=1"
+						title="grounded"
+						src="https://gfycat.com/ifr/anxiouslongcormorant?hd=1"
 						className={styles.iframe}
 						frameBorder="0"
 						scrolling="no"
@@ -333,15 +326,76 @@ function Autocancel() {
 						allowFullScreen
 					/>
 					<figcaption className={styles.caption}>
-						<p>AC bair platform shield pressure</p>
+						<p>AC bair ground shield pressure</p>
 					</figcaption>
 				</figure>
 			</p>
 
-			<p>Happy ledgedashing!</p>
+			<p>
+				Overall though, these are unusual patterns that most players
+				aren't used to seeing from Fox, and bair is usually one of Fox's
+				laggier moves that people can whiff punish best. The AC shield
+				pressure can be as good as only -1 on block.
+			</p>
+
+			<h2>Edgeguarding</h2>
 
 			<p>
-				<i>Last edited April 16th, 2018</i>
+				Autocancelling bair plays a large role in edgeguarding. There
+				are a couple different timings for this, but done correctly,
+				rising bair from ledge can autocancel with a pretty lenient
+				window, even if you drop low enough to cover low/horizontal
+				recoveries. The low lag of autocancel ensures you’ll have time
+				to cover a high recovery onto stage or a drift back to ledge
+				afterward. This is particularly good vs spacies, and is probably
+				the best default edgeguard for opponents you don’t have a read
+				on. It doesn't cover 100% of options, but covers maybe 80+% of
+				them, and sets you up for future reads for the other 20%.
+			</p>
+
+			<p>
+				<figure>
+					<iframe
+						title="grounded"
+						src="https://gfycat.com/ifr/limpspryfrillneckedlizard?hd=1"
+						className={styles.iframe}
+						frameBorder="0"
+						scrolling="no"
+						width="640px"
+						height="480px"
+						allowFullScreen
+					/>
+					<figcaption className={styles.caption}>
+						<p>AC bair ground shield pressure</p>
+					</figcaption>
+				</figure>
+			</p>
+
+			<h1>Other Aerials/Conclusion</h1>
+			<p>
+				Fox's other aerials don't have a lot of use for their
+				autocancels. Nair and fair don't autocancel even out of
+				fullhops. Dair has some extremely use niches where a full hop
+				instant drill can auto cancel without a fast fall, taking on
+				kind of a similar role as a full hop pull back nair that can't
+				be crouch cancelled, but it's easily reactable and can be
+				punished by jumping into it.
+			</p>
+			<p>
+				<span>
+					Many of the situations I covered today are pretty well
+					known, while some might be a little more unusual. Try
+					incorporating them and discovering usages for your own
+					variations. If you have a more unique scenario I didn't
+					cover, you can DM or tweet at me on{" "}
+					<a href="https://twitter.com/R2_DLiu" target="_blank">
+						Twitter.
+					</a>{" "}
+					Thanks for reading!
+				</span>
+			</p>
+			<p>
+				<i>Last edited September 13th, 2019</i>
 			</p>
 		</Fragment>
 	);

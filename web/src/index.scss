@@ -69,6 +69,10 @@ a {
 	@include link;
 }
 
+ol {
+	padding-inline-start: 30px;
+}
+
 :focus {
 	outline: none;
 }
