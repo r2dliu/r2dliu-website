@@ -7,20 +7,19 @@ function Autocancel() {
 	const articleBody = (
 		<Fragment>
 			<p>September 13th, 2019, by David "R2DLiu" Liu</p>
-			{/* TODO: remove */}
-			<p>- Article is a WIP -</p>
 			<p>
 				<i>If you pause Gfycat, you can advance frame by frame!</i>
 			</p>
 			<h1 id="introduction">{"Introduction"}</h1>
 			<p>
 				Fox is one of the best and most versatile characters in the
-				game. However, he definitely isn’t a character that’s known for
-				the usage of autocancel aerials, compared to say, Falco or Sheik
-				However I’ve found a lot of effective ways to use them on Fox in
-				all kinds of situations, ranging from pretty niche to fairly
-				common. In this article, I'll go through and describe and
-				evaluate some of these situations.
+				game. One often overlooked aspect of his gameplay is his
+				effective use of autocancels in various scenarios. Though not as
+				obstrusive as those of say, Sheik or Falco, they still come up
+				quite often and are often instrumental, though some of these are
+				admittedly a bit niche. In this article, I'll go through and
+				describe and evaluate some of these situations, and hopefully
+				impart some useful information.
 			</p>
 			<h1 id="whatisit">What is Autocancelling?</h1>
 			<p>
@@ -71,17 +70,19 @@ function Autocancel() {
 				hop. On stages like Battlefield or Dreamland, you can still
 				accomplish something similar by rolling both jump buttons or
 				using tap jump with a jump button to get an instant double jump,
-				allowing you to reach top platform and fall into an autocancel
-				afterwards
+				allowing you to poke top platform with an uair and fall into an
+				autocancel afterwards.
 			</p>
 			<p>
-				Some useful scenarios to watch out for include, catching shield
+				Some useful scenarios to watch out for include: catching shield
 				drops, catching attempts to escape to the side platforms, and
 				shield pokes/pushoffs. These are just a few of many situations,
 				but generally the idea is that this is a very advantageous
 				situation for Fox, with little likelihood of getting reversal’d,
-				and lots of opportunities for reads and mixups after the
-				autocancel leaves you so actionable.
+				with lots of opportunities for reads and mixups after the
+				autocancel leaves you so actionable. Even getting hit out of it
+				usually leaves the opponent with little chance to followup and
+				permits you to safely reset to neutral.
 			</p>
 			<p>
 				<figure>
@@ -302,13 +303,14 @@ function Autocancel() {
 			</p>
 			<p>
 				You can set this kind of pressure up on the ground also. This
-				often leads to bad attempts to move out of shield and results in
-				them getting shined. You can also react and punish rolls. Watch
-				out though: this grounded version is{" "}
+				often baits the opponent into move out of shield after what
+				appears to be a laggy early bair and results in them getting
+				shined. You can also react and punish rolls. Watch out though:
+				this grounded version is{" "}
 			</p>
 			<p>1. Much more difficult to time than the platform version</p>
 			<p>
-				2. Doesn't work as well vs shorter characters or dash dancing
+				2. Can sometimes miss shorter characters or dash dancing
 				opponents, and
 			</p>
 			<p>3. Is much easier to react to and crouch cancel.</p>
@@ -338,7 +340,7 @@ function Autocancel() {
 				pressure can be as good as only -1 on block.
 			</p>
 
-			<h2>Edgeguarding</h2>
+			<h2 id="edgeguarding">Edgeguarding</h2>
 
 			<p>
 				Autocancelling bair plays a large role in edgeguarding. There
@@ -371,23 +373,23 @@ function Autocancel() {
 				</figure>
 			</p>
 
-			<h1>Other Aerials/Conclusion</h1>
+			<h1 id="other">Other Aerials/Conclusion</h1>
 			<p>
-				Fox's other aerials don't have a lot of use for their
-				autocancels. Nair and fair don't autocancel even out of
-				fullhops. Dair has some extremely use niches where a full hop
-				instant drill can auto cancel without a fast fall, taking on
-				kind of a similar role as a full hop pull back nair that can't
-				be crouch cancelled, but it's easily reactable and can be
-				punished by jumping into it.
+				Nair and fair don't autocancel even out of fullhops. Dair has
+				some extremely use niches where a full hop instant drill can
+				auto cancel without a fast fall, taking on kind of a similar
+				role as a full hop pull back nair that can't be crouch
+				cancelled, but it's easily reactable and can be punished by
+				jumping into it. I don't personally use these moves in
+				situations that I feel are as useful as the others.
 			</p>
 			<p>
 				<span>
-					Many of the situations I covered today are pretty well
-					known, while some might be a little more unusual. Try
-					incorporating them and discovering usages for your own
-					variations. If you have a more unique scenario I didn't
-					cover, you can DM or tweet at me on{" "}
+					Many of the situations I covered are pretty well known,
+					while some might be a little more unusual. Try incorporating
+					them and discovering usages for your own variations. If you
+					have a more unique scenario I didn't cover, I'd love to hear
+					about it; you can DM or tweet at me on{" "}
 					<a href="https://twitter.com/R2_DLiu" target="_blank">
 						Twitter.
 					</a>{" "}
