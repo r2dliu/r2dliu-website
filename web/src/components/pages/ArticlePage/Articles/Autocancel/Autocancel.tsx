@@ -105,7 +105,7 @@ function Autocancel() {
 					</figcaption>
 				</figure>
 			</p>
-			<h2>KJH Aerial Interrupt</h2>
+			<h2 id="kjh">KJH Aerial Interrupt</h2>
 			<p>
 				This piece of tech utilizes what is known as an aerial
 				interrupt. The simplified explanation is that by dropping low
@@ -156,7 +156,7 @@ function Autocancel() {
 					</figcaption>
 				</figure>
 			</p>
-			<h2>Platform Techchasing</h2>
+			<h2 id="techchasing">Platform Techchasing</h2>
 			<p>
 				Similarly to KJH's tech, you can also take advantage of uair's
 				early autocancel window to tech chase. By performing an uair
@@ -376,7 +376,7 @@ function Autocancel() {
 			<h1 id="other">Other Aerials/Conclusion</h1>
 			<p>
 				Nair and fair don't autocancel even out of fullhops. Dair has
-				some extremely use niches where a full hop instant drill can
+				some extremely niches uses where a full hop instant drill can
 				auto cancel without a fast fall, taking on kind of a similar
 				role as a full hop pull back nair that can't be crouch
 				cancelled, but it's easily reactable and can be punished by
