@@ -4,6 +4,7 @@ import Link from "@material-ui/core/Link";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import Button from "@material-ui/core/Button";
 
+import Spacer from "components/Spacer";
 import Image from "../../../../../Image";
 import styles from "./About.module.scss";
 
@@ -24,6 +25,7 @@ function About() {
 								<Link
 									href="https://www.facebook.com/david.liu.1213986"
 									target="_blank"
+									rel="noopener"
 								>
 									<SvgIcon
 										xmlns="http://www.w3.org/2000/svg"
@@ -36,6 +38,7 @@ function About() {
 								<Link
 									href="https://linkedin.com/in/r2dliu"
 									target="_blank"
+									rel="noopener"
 								>
 									<SvgIcon
 										xmlns="http://www.w3.org/2000/svg"
@@ -48,6 +51,7 @@ function About() {
 								<Link
 									href="https://twitter.com/R2_DLiu"
 									target="_blank"
+									rel="noopener"
 								>
 									<SvgIcon
 										xmlns="http://www.w3.org/2000/svg"
@@ -60,6 +64,7 @@ function About() {
 								<Link
 									href="https://twitch.tv/r2dliu"
 									target="_blank"
+									rel="noopener"
 								>
 									<SvgIcon
 										xmlns="http://www.w3.org/2000/svg"
@@ -71,14 +76,15 @@ function About() {
 								</Link>
 							</div>
 							<div className={styles.resume}>
-								<Link
-									href="https://s3.r2dliu.com/assets/resume.pdf"
-									target="_blank"
+								<Button
+									onClick={() =>
+										(window.location.href =
+											"https://s3.r2dliu.com/assets/resume.pdf")
+									}
+									className={styles.button}
 								>
-									<Button className={styles.button}>
-										Resume
-									</Button>
-								</Link>
+									<b>Resume</b>
+								</Button>
 							</div>
 						</div>
 						<div className={styles.descriptionContainer}>
@@ -94,7 +100,7 @@ function About() {
 									<div>Email: zliu3301@gmail.com</div>
 									<div>Phone: (302) 824-5107</div>
 									<div>
-										Skilled in: Javascript, Python, C++, PHP
+										Skilled in: C++, Javascript, Python, PHP
 									</div>
 									<div>
 										Hobbies: Melee, Bouldering, Tennis,
@@ -107,18 +113,40 @@ function About() {
 								<div className={styles.body}>
 									<Link
 										className={styles.link}
+										href="https://www.jhuapl.edu/"
+										target="_blank"
+										rel="noopener"
+									>
+										{
+											"JHU Applied Physics Laboratory: August 2019 - Present"
+										}
+									</Link>
+									<div>
+										APL, the nation's largest university
+										affliciated research center, solves
+										complex research, engineering, and
+										analytical problems that present
+										critical challenges to our nation.
+									</div>
+									<div>
+										Group: Tactical Intelligence Systems,
+										Asymmetric Operations Sector
+									</div>
+									<Spacer size="md" />
+									<Link
+										className={styles.link}
 										href="https://smash.gg"
 										target="_blank"
+										rel="noopener"
 									>
 										{"smash.gg: May 2018 - July 2019"}
 									</Link>
-									{
-										"A powerful platform designed to empower esports "
-									}
-									{
-										"communites through competitive structure and enabling easy, intuitive event "
-									}
-									{"organization"}
+									<div>
+										A powerful platform designed to empower
+										esports communities through competitive
+										structure and enabling easy, intuitive
+										event organization.
+									</div>
 								</div>
 							</div>
 						</div>

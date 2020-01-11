@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import React, { SyntheticEvent } from "react";
+import React from "react";
 import RGL, { WidthProvider } from "react-grid-layout";
 import ProjectCard from "components/ProjectCard";
 import { withRouter } from "react-router";

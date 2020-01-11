@@ -45,6 +45,7 @@ function Ledgedash() {
 					<a
 						href="https://twitter.com/kadano/status/952672880512372736"
 						target="_blank"
+						rel="noopener"
 					>
 						PODE,
 					</a>{" "}

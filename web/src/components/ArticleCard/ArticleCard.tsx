@@ -4,9 +4,7 @@ import { withRouter } from "react-router";
 import { RouteComponentProps } from "react-router-dom";
 import withNavigation from "components/helpers/withNavigation";
 import NavigatingContextInterface from "components/helpers/NavigatingContextInterface";
-import Chiclet from "components/Chiclet";
 import styles from "./ArticleCard.module.scss";
-import { nullLiteral } from "@babel/types";
 
 interface Props extends RouteComponentProps, NavigatingContextInterface {
 	background: string;

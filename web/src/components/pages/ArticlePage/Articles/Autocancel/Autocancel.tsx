@@ -37,6 +37,7 @@ function Autocancel() {
 					<a
 						href="https://www.ssbwiki.com/Auto-canceling"
 						target="_blank"
+						rel="noopener"
 					>
 						here.
 					</a>
@@ -122,6 +123,7 @@ function Autocancel() {
 					<a
 						href="https://www.youtube.com/watch?v=66KCwTJLtj8"
 						target="_blank"
+						rel="noopener"
 					>
 						here
 					</a>
@@ -148,6 +150,7 @@ function Autocancel() {
 								<a
 									href="https://www.youtube.com/watch?v=66KCwTJLtj8"
 									target="_blank"
+									rel="noopener"
 								>
 									watch
 								</a>
@@ -196,6 +199,7 @@ function Autocancel() {
 					<a
 						href="https://www.youtube.com/watch?v=NNmaaFCFtLo"
 						target="_blank"
+						rel="noopener"
 					>
 						Laser landing
 					</a>{" "}
@@ -390,7 +394,11 @@ function Autocancel() {
 					them and discovering usages for your own variations. If you
 					have a more unique scenario I didn't cover, I'd love to hear
 					about it; you can DM or tweet at me on{" "}
-					<a href="https://twitter.com/R2_DLiu" target="_blank">
+					<a
+						href="https://twitter.com/R2_DLiu"
+						target="_blank"
+						rel="noopener"
+					>
 						Twitter.
 					</a>{" "}
 					Thanks for reading!
