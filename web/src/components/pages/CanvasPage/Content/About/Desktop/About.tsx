@@ -95,7 +95,7 @@ function About() {
 										Name: David / Zhiyuan Liu. Chinese:
 										刘致远
 									</div>
-									<div>Age: 23</div>
+									<div>Age: 24</div>
 									<div>DOB: February 29th, 1996</div>
 									<div>Email: zliu3301@gmail.com</div>
 									<div>Phone: (302) 824-5107</div>
