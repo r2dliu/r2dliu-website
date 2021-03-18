@@ -15,7 +15,7 @@ const defaultProps = {
 	width: null,
 };
 
-function Image(props: Props) {
+function Image(props: Props): React.ReactElement<Props> {
 	const [isLoaded, setIsLoaded] = useState(false);
 	const {
 		preview,
@@ -46,7 +46,7 @@ function Image(props: Props) {
 			/>}
 		</div>
 	);
-};
+}
 
 Image.defaultProps = defaultProps;
 

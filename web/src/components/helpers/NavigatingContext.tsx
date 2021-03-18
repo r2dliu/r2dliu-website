@@ -7,7 +7,7 @@ interface NavigatingContextInterface {
 
 const NavigatingContext = createContext<NavigatingContextInterface>({
 	isNavigating: false,
-	setIsNavigating: () => {}
+	setIsNavigating: () => undefined
 });
 
 export default NavigatingContext;

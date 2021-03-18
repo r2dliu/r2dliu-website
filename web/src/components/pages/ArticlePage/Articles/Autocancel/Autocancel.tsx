@@ -37,7 +37,7 @@ function Autocancel() {
 					<a
 						href="https://www.ssbwiki.com/Auto-canceling"
 						target="_blank"
-						rel="noopener"
+						rel="noreferrer"
 					>
 						here.
 					</a>
@@ -115,7 +115,7 @@ function Autocancel() {
 				actionable four frames afterward. This is an unreactable mixup
 				because it looks almost exactly like refreshing near the ledge,
 				and is dangerous for the opponent to contest because they would
-				be in ledgedash -> attack range.
+				be in ledgedash -&gt; attack range.
 			</p>
 			<p>
 				<span>
@@ -123,7 +123,7 @@ function Autocancel() {
 					<a
 						href="https://www.youtube.com/watch?v=66KCwTJLtj8"
 						target="_blank"
-						rel="noopener"
+						rel="noreferrer"
 					>
 						here
 					</a>
@@ -150,7 +150,7 @@ function Autocancel() {
 								<a
 									href="https://www.youtube.com/watch?v=66KCwTJLtj8"
 									target="_blank"
-									rel="noopener"
+									rel="noreferrer"
 								>
 									watch
 								</a>
@@ -199,7 +199,7 @@ function Autocancel() {
 					<a
 						href="https://www.youtube.com/watch?v=NNmaaFCFtLo"
 						target="_blank"
-						rel="noopener"
+						rel="noreferrer"
 					>
 						Laser landing
 					</a>{" "}
@@ -397,7 +397,7 @@ function Autocancel() {
 					<a
 						href="https://twitter.com/R2_DLiu"
 						target="_blank"
-						rel="noopener"
+						rel="noreferrer"
 					>
 						Twitter.
 					</a>{" "}

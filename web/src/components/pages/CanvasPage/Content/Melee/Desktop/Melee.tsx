@@ -17,7 +17,7 @@ function Melee() {
 			const script = document.createElement("script");
 			script.setAttribute("src", EMBED_URL);
 			script.addEventListener("load", () => {
-				// @ts-ignore-line
+				// @ts-ignore
 				embed = new window.Twitch.Embed("twitch-embed", {
 					channel: "R2DLiu",
 					height: 480,

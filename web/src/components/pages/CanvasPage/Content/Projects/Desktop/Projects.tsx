@@ -1,22 +1,13 @@
 // @ts-nocheck
 
-import React from "react";
 import RGL, { WidthProvider } from "react-grid-layout";
 import ProjectCard from "components/ProjectCard";
 import { withRouter } from "react-router";
-import { RouteComponentProps } from "react-router-dom";
 import withNavigation from "components/helpers/withNavigation";
-import NavigatingContextInterface from "components/helpers/NavigatingContextInterface";
 import styles from "./Projects.module.scss";
 import Link from "@material-ui/core/Link";
 
-function Projects(props: NavigatingContextInterface & RouteComponentProps) {
-	// const redirect = (e: SyntheticEvent) => {
-	// 	const article = (e.currentTarget as HTMLElement).id;
-	// 	props.setIsNavigating(true);
-	// 	setTimeout(() => props.history.push(`/articles/${article}`), 300);
-	// };
-
+function Projects() {
 	const GridLayout = WidthProvider(RGL);
 
 	const layout = [
@@ -36,7 +27,7 @@ function Projects(props: NavigatingContextInterface & RouteComponentProps) {
 				width={1200}
 			>
 				<div key="slippi">
-					<Link href="https://slippi.gg/faq">
+					<Link href="https://slippi.gg/about">
 						<ProjectCard
 							background={
 								"https://s3.r2dliu.com/assets/projects/slippi.jpg"

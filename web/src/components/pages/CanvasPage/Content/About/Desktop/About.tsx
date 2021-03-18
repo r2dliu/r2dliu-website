@@ -8,7 +8,8 @@ import Spacer from "components/Spacer";
 import Image from "../../../../../Image";
 import styles from "./About.module.scss";
 
-function About() {
+function About(): React.ReactElement {
+	const age = Math.round(Math.abs(Date.now() - new Date("02/29/1996").getTime()) / (1000 * 60 * 60 * 24 * 365));
 	return (
 		<div className={styles.About}>
 			<div className={styles.cardContainer}>
@@ -95,7 +96,7 @@ function About() {
 										Name: David / Zhiyuan Liu. Chinese:
 										刘致远
 									</div>
-									<div>Age: 24</div>
+									<div>Age: {age}</div>
 									<div>DOB: February 29th, 1996</div>
 									<div>Email: zliu3301@gmail.com</div>
 									<div>Phone: (302) 824-5107</div>
@@ -129,7 +130,6 @@ function About() {
 										critical challenges to our nation.
 									</div>
 									<div>
-										Group: Tactical Intelligence Systems,
 										Asymmetric Operations Sector
 									</div>
 									<Spacer size="md" />

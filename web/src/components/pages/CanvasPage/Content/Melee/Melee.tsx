@@ -6,7 +6,7 @@ import Mobile from "./Mobile";
 
 // this should really just be a component that takes in desktop and mobile as props
 // TODO: cleanup
-function Melee() {
+function Melee(): React.ReactElement {
 	return (
 		<Fragment>
 			<Breakpoint xs={true} only={true}>

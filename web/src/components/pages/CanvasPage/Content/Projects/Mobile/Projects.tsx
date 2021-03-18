@@ -1,16 +1,13 @@
 // @ts-nocheck
 
-import React from "react";
 import RGL, { WidthProvider } from "react-grid-layout";
 import ProjectCard from "components/ProjectCard";
 import { withRouter } from "react-router";
-import { RouteComponentProps } from "react-router-dom";
 import withNavigation from "components/helpers/withNavigation";
-import NavigatingContextInterface from "components/helpers/NavigatingContextInterface";
 import styles from "./Projects.module.scss";
 import Link from "@material-ui/core/Link";
 
-function Projects(props: NavigatingContextInterface & RouteComponentProps) {
+function Projects() {
 	// const redirect = (e: SyntheticEvent) => {
 	// 	const article = (e.currentTarget as HTMLElement).id;
 	// 	props.setIsNavigating(true);
@@ -20,10 +17,11 @@ function Projects(props: NavigatingContextInterface & RouteComponentProps) {
 	const GridLayout = WidthProvider(RGL);
 
 	const layout = [
-		{ i: "hangman", x: 1, y: 0, w: 22, h: 5, static: true },
+		{ i: "slippi", x: 1, y: 0, w: 22, h: 5, static: true },
 		{ i: "website", x: 1, y: 5, w: 22, h: 5, static: true },
-		{ i: "scoreboard", x: 1, y: 10, w: 22, h: 5, static: true },
-		{ i: "tableone", x: 1, y: 15, w: 22, h: 5, static: true }
+		{ i: "hangman", x: 1, y: 10, w: 22, h: 5, static: true },
+		{ i: "scoreboard", x: 1, y: 15, w: 22, h: 5, static: true },
+		{ i: "tableone", x: 1, y: 20, w: 22, h: 5, static: true }
 	];
 	return (
 		<div className={styles.Projects}>
@@ -34,15 +32,15 @@ function Projects(props: NavigatingContextInterface & RouteComponentProps) {
 				rowHeight={25}
 				width={400}
 			>
-				<div key="hangman">
-					<Link href="https://github.com/r2dliu/hangman">
+				<div key="slippi">
+					<Link href="https://slippi.gg/about">
 						<ProjectCard
 							background={
-								"https://s3.r2dliu.com/assets/projects/hangman.jpg"
+								"https://s3.r2dliu.com/assets/projects/slippi.jpg"
 							}
-							previewBackground="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAAQABAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAALCAAaAD4BAREA/8QAGwABAAEFAQAAAAAAAAAAAAAAAAgCAwQHCQb/xAA4EAABAwQAAwMEEwAAAAAAAAACAQMEAAUGBwgREhMhQQkUJCYVFiMxMjhGUVJWV2RxdpKWt9HU/9oACAEBAAA/AJEUqA+Ia0w7avEzxcBsCBcciaxa+aZg47GdybKrfEs0S5argXC4MQYdovVvisjMm+lSFRlScfVXCLmq89L8X7vDtwr3vSd1uWp89zhnO71l2LMa/wBeZPmN0yfIbmtstL9slsWqTmUd6VHtK+dkRRlM0flNNdC9qhBPHCNE6jxudY8zxvC59ivbUVqdCW4ZFl8iZbiuEJRdjTbdcshnwUlNMyXI0ll5l8WXkNAXrATTd9KUpUQtHfGa41/zPov+IIFRq3nrANm+U/4XZUzM5FhXVOlch2pYLMxCC4t32bac5WzXu2SOubG9hxn268xHBuIMzDeG3EwjHuaGPVKlKUqnrD6Q/qT+6iHo4hTia41uZCnrPovxT7IIFSCXWuvy2KG2yxm1FshvGiw5vMFR1bs3i5yvPjsoGr3YBCKX6QQiyhk53qa+9XuuoV7kIVX8UqqlKxLgInb54kKEJQpYkJIiiQrHcRRJF5oqKi8lRe5U7lrjeeA4L1n6lYl8Ivk5Z/nX7nVgNa66Yceks4DhTMmaoFMkNYrYm35ZMD2LBSXQgI4+TLKI00rpGrbaIAchTlV32g4J9SsS/bln/wAdbH1DheHQdnYRMhYnjUOXHyCC7HlRbFa48hh0TXpcZfZig604PgYEJJ4LXValK//Z"
-							title="Hangman Game"
-							description="Multithreaded, multiplayer hangman game, coded entirely in C++. Handcoded HTTP server that serves dynamically generated HTML/CSS to a browser."
+							previewBackground="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAUFBQUFBQYGBgYICQgJCAwLCgoLDBINDg0ODRIbERQRERQRGxgdGBYYHRgrIh4eIisyKigqMjw2NjxMSExkZIYBBQUFBQUFBgYGBggJCAkIDAsKCgsMEg0ODQ4NEhsRFBERFBEbGB0YFhgdGCsiHh4iKzIqKCoyPDY2PExITGRkhv/CABEIABEALAMBIgACEQEDEQH/xAAZAAACAwEAAAAAAAAAAAAAAAAABAEDBgX/2gAIAQEAAAAAV6iMrUs7XMSokAB//8QAFgEBAQEAAAAAAAAAAAAAAAAAAAIF/9oACAECEAAAAMNI/8QAGAEAAgMAAAAAAAAAAAAAAAAAAAIDBAf/2gAIAQMQAAAAwuOqgf/EACkQAAICAQMCAwkAAAAAAAAAAAECAxEEAAUhEkEGIjEQExQjMFFhgYL/2gAIAQEAAT8AxcaTMyI4I6DOas8AdyT+BqPZDLlSYsedimVLsWwHHYEitDbNxZUdcOcq10QhINGtLte5OGrDnPSAT5DYB1NBNjsEmidGIumBBr9+zFyXxZRIqo3BBRxasD6gjWZ4w23I2tMaLw5tqT1TSe4TSbvMnU3R8xr6nEkik2b9FIGl3iRHLrEQTXImlvj+tZmZ8YQ7R0/dy7uSPt5ifof/xAAbEQACAQUAAAAAAAAAAAAAAAAAAQIREiAiUf/aAAgBAgEBPwCKhR3M06PD/8QAIBEAAgIBAwUAAAAAAAAAAAAAAQIDEQQAICEiQVFh8P/aAAgBAwEBPwDETBeNzPKFZeaIPUPArQTC4uRvf1akCByEa17HZ//Z"
+							title="Project Slippi"
+							description="A 'Melee Data FrameWork', an open source project. Contributed mostly work on Dolphin, the open source Wii/Gamecube emulator written in C++, to add infrastructure and improve the playback system for Slippi replays."
 							height={"170px"}
 							width={"436px"}
 						/>
@@ -57,6 +55,20 @@ function Projects(props: NavigatingContextInterface & RouteComponentProps) {
 							previewBackground="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMDAwMDAwMEBAMFBQQFBQcGBgYGBwoHCAcIBwoPCgsKCgsKDw4QDQwNEA4YExERExgcGBYYHCIeHiIrKSs4OEv/wgALCAAYADEBAREA/8QAGQABAAMBAQAAAAAAAAAAAAAAAQAEBgII/9oACAEBAAAAAPB8sdVEXSuXRlorSf/EACUQAAIBAwQCAQUAAAAAAAAAAAECBAADEQUQEiEGgTITMUFRYf/aAAgBAQABPwCu6j2RcuMrD8VJsra+mAc5H3/dYO3rZSBnr3XjszS4k248/TEmJwCoruyBWY/PKkV5LJ0qRdsiDptuMUL8zbdnVgfiByJ6Xf3vHuqpwxx/akXA3EBgcDsis7//2Q=="
 							title="Website"
 							description="Progressive web app style website, created with React and Flask, hosted on AWS"
+							height={"170px"}
+							width={"436px"}
+						/>
+					</Link>
+				</div>
+				<div key="hangman">
+					<Link href="https://github.com/r2dliu/hangman">
+						<ProjectCard
+							background={
+								"https://s3.r2dliu.com/assets/projects/hangman.jpg"
+							}
+							previewBackground="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAAQABAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAALCAAaAD4BAREA/8QAGwABAAEFAQAAAAAAAAAAAAAAAAgCAwQHCQb/xAA4EAABAwQAAwMEEwAAAAAAAAACAQMEAAUGBwgREhMhQQkUJCYVFiMxMjhGUVJWV2RxdpKWt9HU/9oACAEBAAA/AJEUqA+Ia0w7avEzxcBsCBcciaxa+aZg47GdybKrfEs0S5argXC4MQYdovVvisjMm+lSFRlScfVXCLmq89L8X7vDtwr3vSd1uWp89zhnO71l2LMa/wBeZPmN0yfIbmtstL9slsWqTmUd6VHtK+dkRRlM0flNNdC9qhBPHCNE6jxudY8zxvC59ivbUVqdCW4ZFl8iZbiuEJRdjTbdcshnwUlNMyXI0ll5l8WXkNAXrATTd9KUpUQtHfGa41/zPov+IIFRq3nrANm+U/4XZUzM5FhXVOlch2pYLMxCC4t32bac5WzXu2SOubG9hxn268xHBuIMzDeG3EwjHuaGPVKlKUqnrD6Q/qT+6iHo4hTia41uZCnrPovxT7IIFSCXWuvy2KG2yxm1FshvGiw5vMFR1bs3i5yvPjsoGr3YBCKX6QQiyhk53qa+9XuuoV7kIVX8UqqlKxLgInb54kKEJQpYkJIiiQrHcRRJF5oqKi8lRe5U7lrjeeA4L1n6lYl8Ivk5Z/nX7nVgNa66Yceks4DhTMmaoFMkNYrYm35ZMD2LBSXQgI4+TLKI00rpGrbaIAchTlV32g4J9SsS/bln/wAdbH1DheHQdnYRMhYnjUOXHyCC7HlRbFa48hh0TXpcZfZig604PgYEJJ4LXValK//Z"
+							title="Hangman Game"
+							description="Multithreaded, multiplayer hangman game, coded entirely in C++. Handcoded HTTP server that serves dynamically generated HTML/CSS to a browser."
 							height={"170px"}
 							width={"436px"}
 						/>

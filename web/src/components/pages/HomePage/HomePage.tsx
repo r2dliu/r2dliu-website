@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+// @ts-nocheck
+
+import { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import cn from "classnames";
 import { Redirect } from "react-router-dom";
@@ -36,7 +38,6 @@ function HomePage() {
 	}
 
 	return (
-		// @ts-ignore
 		<div onAnimationEnd={markAnimationFinished} className={styles.Home}>
 			<div
 				className={cn(getClickedClassNames(styles.title), {

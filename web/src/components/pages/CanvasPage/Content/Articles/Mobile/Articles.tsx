@@ -1,5 +1,4 @@
-// @ts-nocheck
-import React, { SyntheticEvent } from "react";
+import { SyntheticEvent } from "react";
 import RGL, { WidthProvider } from "react-grid-layout";
 import { withRouter } from "react-router";
 import { RouteComponentProps } from "react-router-dom";
