@@ -24,7 +24,7 @@
 	flex-direction: column;
 
 	.titleContainer {
-		padding-top: 16px;
+		padding-top: 8px;
 		position: relative;
 		display: flex;
 		flex-direction: row;
@@ -42,7 +42,7 @@
 			&:after {
 				position: absolute;
 				height: 2px;
-				top: 36px;
+				top: 32px;
 				width: 0;
 				background: white;
 				content: "";

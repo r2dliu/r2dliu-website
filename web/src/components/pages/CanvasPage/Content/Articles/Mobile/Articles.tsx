@@ -20,14 +20,16 @@ function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 	const GridLayout = WidthProvider(RGL);
 
 	const layout = [
-		{ i: "ledgedash", x: 0, y: 0, w: 24, h: 7, static: true },
-		{ i: "kirigami", x: 0, y: 7, w: 24, h: 7, static: true },
-		{ i: "nim", x: 0, y: 14, w: 16, h: 7, static: true },
-		{ i: "autocancel", x: 0, y: 21, w: 20, h: 9, static: true }
+		{ i: "pulley", x: 0, y: 0, w: 24, h: 6, static: true },
+		{ i: "ledgedash", x: 0, y: 6, w: 24, h: 7, static: true },
+		{ i: "kirigami", x: 0, y: 13, w: 24, h: 7, static: true },
+		{ i: "nim", x: 0, y: 20, w: 22, h: 7, static: true },
+		{ i: "autocancel", x: 0, y: 27, w: 20, h: 9, static: true }
 	];
 
 	const meleeChiclet = <Chiclet color="red" text="Melee" />;
 	const mathChiclet = <Chiclet color="green" text="Math" />;
+	const climbingChiclet = <Chiclet color="blue" text="Climbing" />;
 
 	return (
 		<div className={styles.Articles}>
@@ -35,9 +37,22 @@ function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 				className="layout"
 				layout={layout}
 				cols={24}
-				rowHeight={25}
+				rowHeight={36}
 				width={400}
 			>
+				<div key="pulley" id="pulley" onClick={redirect}>
+					<ArticleCard
+						background={
+							"https://s3.r2dliu.com/assets/articles/autocancel/background.jpg"
+						}
+						previewBackground="data:image/jpeg;base64,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"
+						title="Pulley Injury"
+						description="bleh blah blah insert stuff here for description..."
+						height={"400px"}
+						width={"600px"}
+						chiclet={climbingChiclet}
+					/>
+				</div>
 				<div key="ledgedash" id="ledgedash" onClick={redirect}>
 					<ArticleCard
 						background={
