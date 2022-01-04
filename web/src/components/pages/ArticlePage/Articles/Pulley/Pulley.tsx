@@ -506,6 +506,20 @@ function Pulley(): React.ReactElement {
 					</li>
 				</ul> 
 			</p>
+			<p>
+				Conclusion to come. Currently still healing and rehabbing. Currently around V4-V5
+				climbing level. If you have any questions, comments, or suggestions, please feel
+				free to reach out to me on
+				on{" "}
+					<a
+						href="https://twitter.com/R2_DLiu"
+						target="_blank"
+						rel="noreferrer"
+					>
+						Twitter.
+					</a>{" "} 
+				Thanks for reading if you've made it down this far!
+			</p>
 			<h1 id="references">References</h1>
 			<p>
 				1. Behringer M, Willberg C. Application of Blood Flow Restriction to Optimize 
@@ -559,7 +573,7 @@ function Pulley(): React.ReactElement {
 			</p>
 			
 			<p>
-				<i>Last edited September 13th, 2019</i>
+				<i>Last edited January 3rd, 2022</i>
 			</p>
 		</Fragment>
 	);
