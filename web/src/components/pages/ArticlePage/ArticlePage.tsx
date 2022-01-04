@@ -10,6 +10,8 @@ import withTracking from "components/helpers/withTracking";
 
 import Ledgedash from "./Articles/Ledgedash";
 import Autocancel from "./Articles/Autocancel";
+import Pulley from "./Articles/Pulley";
+
 import styles from "./ArticlePage.module.scss";
 import "./toc.scss";
 
@@ -50,6 +52,8 @@ function ArticlePage(props: Props) {
 				return "Optimal Ledgedashing";
 			case "autocancel":
 				return "Fox Autocancel Aerials";
+			case "pulley":
+				return "Pulley Injury";
 			default:
 				return null;
 		}
@@ -65,6 +69,9 @@ function ArticlePage(props: Props) {
 				break;
 			case "autocancel":
 				element = <Autocancel />;
+				break;
+			case "pulley":
+				element = <Pulley />;
 				break;
 			default:
 				return null;

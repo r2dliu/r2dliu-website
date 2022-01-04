@@ -1,6 +1,8 @@
 .Autocancel {
-	width: 100%;
+	width: calc(100% - 20px);
+	padding-right: 20px;
 	overflow-y: scroll;
+	overflow-x: hidden;
 
 	h1 {
 		padding-top: 8px;

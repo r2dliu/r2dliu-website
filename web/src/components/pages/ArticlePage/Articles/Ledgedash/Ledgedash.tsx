@@ -1,11 +1,10 @@
 import React, { Fragment } from "react";
 import Breakpoint from "react-socks";
 import cn from "classnames";
-import Link from "@material-ui/core/Link";
 import Image from "components/Image";
 import styles from "./Ledgedash.module.scss";
 
-function Ledgedash() {
+function Ledgedash(): React.ReactElement {
 	const articleBody = (
 		<Fragment>
 			<p>April 16th, 2018, by David "R2DLiu" Liu</p>
