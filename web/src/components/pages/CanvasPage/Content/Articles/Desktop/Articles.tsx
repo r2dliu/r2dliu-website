@@ -22,6 +22,7 @@ function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 	const GridLayout = WidthProvider(RGL);
 
 	const layout = [
+		{ i: "pulley", x: 24, y: 0, w: 14, h: 6, static: true },
 		{ i: "ledgedash", x: 0, y: 0, w: 14, h: 6, static: true },
 		{ i: "kirigami", x: 0, y: 6, w: 14, h: 4, static: true },
 		{ i: "nim", x: 14, y: 0, w: 10, h: 4, static: true },
@@ -30,16 +31,29 @@ function Articles(props: NavigatingContextInterface & RouteComponentProps) {
 
 	const meleeChiclet = <Chiclet color="red" text="Melee" />;
 	const mathChiclet = <Chiclet color="green" text="Math" />;
+	const climbingChiclet = <Chiclet color="blue" text="Climbing" />;
 
 	return (
 		<div className={styles.Articles}>
 			<GridLayout
 				className="layout"
 				layout={layout}
-				cols={24}
+				cols={38}
 				rowHeight={50}
-				width={400}
 			>
+				<div key="pulley" id="pulley" onClick={redirect}>
+					<ArticleCard
+						background={
+							"https://s3.r2dliu.com/assets/articles/pulley/hand.png"
+						}
+						previewBackground="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAMDAwMDAwMEBAMFBQQFBQcGBgYGBwoHCAcIBwoPCgsKCgsKDw4QDQwNEA4YExERExgcGBYYHCIeHiIrKSs4OEsBAwMDAwMDAwQEAwUFBAUFBwYGBgYHCgcIBwgHCg8KCwoKCwoPDhANDA0QDhgTERETGBwYFhgcIh4eIispKzg4S//CABEIAB4AKQMBIgACEQEDEQH/xAAaAAACAwEBAAAAAAAAAAAAAAAHCAQGCQUD/9oACAEBAAAAANJ+WKBQqpH0aFXqngvuGpYFir/Z6toMmBuK3dmf/8QAGAEAAgMAAAAAAAAAAAAAAAAAAAMCBAX/2gAIAQIQAAAAnUSk1P/EABcBAAMBAAAAAAAAAAAAAAAAAAIEBQb/2gAIAQMQAAAAJ1a2Wb//xAA0EAACAgAFAgQDBAsAAAAAAAABAgMEAAUGERIhQQcTIjEWI1IyVWGBEBQXM1FXcZKU0uL/2gAIAQEAAT8AzrMbte5xhMHAb/vLHkkEdx6Tvi1qDMcvoSWLMe0pPGKOOXmsjn7K7kL/AFPYDFjXEta1HDezU8HWXyp2LANNsOfl7HcKAfSdseItCpYvy36c0Iex810hm80OqcSxBHY4z7Ps1hzyhIPkyZe/yIx7r5Tcjv8AxJPucftuvfc6YzjKqdu6slmssjROwUN1X1deqno3548Q0tsBBVkSJeCJt1XiChkJG31bbY0fktQZZdnngimlt2JV3lAnZIUPGNCGB4t3YDvjUdH4goPW07mUdavVOzhG3sWXjHHaZejIg99j3xFoqapYqyW4pTEjbOUk3MncqH68Tt2OPhzKvuKb+z/vGZyO1hkbbih6AY1dntQahtUpiAgRQHJ2G6LxIxQ1FUqLYnOZpWcIWcuvNJeI6clHf8R1xd05e8U9W1r2W0Gy6+9iOSxbpowhgQH1SSdfcjr79TjPvCrxKywn9TiqagqSsDKkMRrzA/UQuPhLXX8uMy/yZf8AXGppIcuy25ejjJlUqq/TzchVJ/AE41RLJnNy7JJKwjrTLUrpsOrlvVJIe+5BOMj8DdPUkis5lZmvuUUmAny4dyO+3Vhinp+GnBBWrQV61YfZihTgi/kBiplbwjklpl3PZRsf0f/EAB8RAAIBBAIDAAAAAAAAAAAAAAECAwAEESESMQUTIv/aAAgBAgEBPwCZliiGwC2gaVZhFE3IFG3TnexXl7kCOGFdNnNWVndFY/bcEIDniD3TpHn56r//xAAfEQACAQQDAQEAAAAAAAAAAAABAgMABBESBSFBBiL/2gAIAQMBAT8Ato2mmxqWC/oge1ctbCSZAjbr1nzNKDivnrXeSaV+1A1q/wCR40GUQ2gkkYa7OMYoFq//2Q=="
+						title="Pulley Injury"
+						description="I blew out a pulley pretty recently..."
+						height={"400px"}
+						width={"600px"}
+						chiclet={climbingChiclet}
+					/>
+				</div>
 				<div key="ledgedash" id="ledgedash" onClick={redirect}>
 					<ArticleCard
 						background={

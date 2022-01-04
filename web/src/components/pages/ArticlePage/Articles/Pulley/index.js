@@ -1,3 +1,3 @@
-import Autocancel from "./Autocancel";
+import Pulley from "./Pulley";
 
-export default Autocancel;
+export default Pulley;

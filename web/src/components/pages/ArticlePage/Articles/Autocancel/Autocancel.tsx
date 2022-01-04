@@ -55,7 +55,7 @@ function Autocancel() {
 				on frames 8-9 and 11-14. It autocancels before frame 7 and after
 				frame 26, with 9 frames of L-cancelled lag.
 			</p>
-			<h2>Sharking Top Platform</h2>
+			<h2 id="sharking">Sharking Top Platform</h2>
 			<p>
 				Fox’s uair boasts decent range + disjoint, good combo potential
 				at lower percents, and high kill potential at higher percents.
