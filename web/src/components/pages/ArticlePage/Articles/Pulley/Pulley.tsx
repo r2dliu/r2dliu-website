@@ -29,7 +29,7 @@ function Pulley(): React.ReactElement {
 				is complex and nonlinear. Modelling of the system is basically nonexistent.
 				I'll attempt to piece together what I think are the most essential
 				pieces from the last few decades of literature, but feel free to skip
-				this session if you're mostly interested in my rehab and recovery process.	
+				this section if you're mostly interested in my rehab and recovery process.	
 			</p>
 			<h2 id="anatomy">{"Anatomy"}</h2>
 			<p>
@@ -403,7 +403,7 @@ function Pulley(): React.ReactElement {
 					<div>
 						<figcaption className={cn(styles.caption, styles.wide)}>
 							<p>
-								Common pulley reconstruction techniques
+								Common reconstruction techniques
 							</p>
 						</figcaption>
 					</div>
@@ -596,7 +596,7 @@ function Pulley(): React.ReactElement {
 				up={true}
 			>
 				{articleBody}
-			</Breakpoint>
+			</Breakpoint>``
 		</Fragment>
 	);
 }
