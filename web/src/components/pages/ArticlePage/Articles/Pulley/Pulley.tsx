@@ -236,6 +236,17 @@ function Pulley(): React.ReactElement {
 				a full, isolated A4 rupture with no other damage to the hand/finger.
 				Expected news, but still a heavy hit.
 			</p>
+			<p>	
+				Schöffl et al. was the first to write a comprehensive summary paper on finger pulley
+				injuries back in 2006. Alongside other useful information, they categorize 
+				the several of injuries into an easily parsable table:
+
+				<figure>
+					<Image
+						src="https://s3.r2dliu.com/assets/articles/pulley/schoffl.jpg"
+					/>
+				</figure>
+			</p>
 			<h1 id="treatment">Treatment</h1>
 			<p>
 				Treatment, as you might imagine, is not an incredibly well researched subject
@@ -298,7 +309,7 @@ function Pulley(): React.ReactElement {
 				patients. Finger range of motion (n = 42) and finger strength (n = 22) did
 				not differ significantly between treated and contralateral sides." p values for
 				both A4 and A2 pulleys were {"<"} 0.001. I showed this paper to my surgeon and he 
-				immediately seconded the protocol, as did Schöffl, who I actually reached out to 
+				immediately seconded the protocol, as did V. Schöffl, who I actually reached out to 
 				on Instagram (legend). This is the protocol I have been following to this day 
 				and what I feel is the best possible treatment one can do for a pulley injury.
 			</p>
