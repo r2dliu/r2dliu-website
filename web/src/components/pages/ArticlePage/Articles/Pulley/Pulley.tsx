@@ -252,7 +252,7 @@ function Pulley(): React.ReactElement {
 				Treatment, as you might imagine, is not an incredibly well researched subject
 				for an injury that is so uncommonly seen. The vast majority of papers on the 
 				subject comes from a few dedicated individuals who happen to be both hand
-				surgeons and climbers, a very small group of unique individuals. Many of
+				surgeons and climbers, a very small overlap. Many of
 				their ideas converge on the concept of what the papers call TPD, or tendon-phalanx 
 				distance. 
 			</p>
