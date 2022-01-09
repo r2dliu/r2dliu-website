@@ -46,7 +46,7 @@ function Pulley(): React.ReactElement {
 				through the tunnel according to muscle tension. When the muscles in the forearm
 				are contracted, the flexor tendons pull the tips of your fingers towards the arm,
 				causing the fingers to come with them and bend accordingly. However, if the
-				fingers encounter resistance, such as when grabbing an edge, the pulleys push
+				fingers encounter resistance, such as when grabbing an edge, the flexor tendons push
 				against the pulley system, which normally holds up quite well.
 
 				There are five "annular pulleys", labelled A1-A5, and three "cruciform pulleys", 
@@ -239,7 +239,7 @@ function Pulley(): React.ReactElement {
 			<p>	
 				Schöffl et al. was the first to write a comprehensive summary paper on finger pulley
 				injuries back in 2006. Alongside other useful information, they categorize 
-				the several of injuries into an easily parsable table:
+				the severity of injuries into an easily parsable table:
 
 				<figure>
 					<Image
