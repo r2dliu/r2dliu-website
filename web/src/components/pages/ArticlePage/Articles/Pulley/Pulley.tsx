@@ -596,7 +596,7 @@ function Pulley(): React.ReactElement {
 			</p>
 			
 			<p>
-				<i>Last edited January 3rd, 2022</i>
+				<i>Last edited February 23rd, 2022</i>
 			</p>
 		</Fragment>
 	);
@@ -619,7 +619,7 @@ function Pulley(): React.ReactElement {
 				up={true}
 			>
 				{articleBody}
-			</Breakpoint>``
+			</Breakpoint>
 		</Fragment>
 	);
 }
