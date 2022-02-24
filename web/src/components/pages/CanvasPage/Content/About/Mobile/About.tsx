@@ -9,6 +9,7 @@ import Spacer from "components/Spacer";
 import styles from "./About.module.scss";
 
 function About() {
+	const age = Math.round(Math.abs(Date.now() - new Date("02/29/1996").getTime()) / (1000 * 60 * 60 * 24 * 365));
 	return (
 		<div className={styles.About}>
 			<div className={styles.cardContainer}>
@@ -92,16 +93,14 @@ function About() {
 								<div className={styles.header}>About Me</div>
 								<div className={styles.body}>
 									<div>
-										Name: David / Zhiyuan Liu. Chinese:
-										刘致远
+										Name: David / Zhiyuan Liu / 刘致远
 									</div>
-									<div>Age: 24</div>
+									<div>Age: {age}</div>
 									<div>DOB: February 29th, 1996</div>
 									<div>Email: zliu3301@gmail.com</div>
 									<div>Phone: (302) 824-5107</div>
-									<div>
-										Skilled in: C++, Javascript, Python, PHP
-									</div>
+									<div>Position: Full Stack Software Engineer</div>
+									<div>Skilled in: C++, Javascript, Rust, Python</div>
 									<div>
 										Hobbies: Melee, Bouldering, Tennis,
 										Programming
@@ -127,10 +126,11 @@ function About() {
 										complex research, engineering, and
 										analytical problems that present
 										critical challenges to our nation.
+										
 									</div>
 									<div>
-										Group: Tactical Intelligence Systems,
-										Asymmetric Operations Sector
+										Role: Full stack software architect.
+										Machine learning, data fusion, autonomous systems
 									</div>
 									<Spacer size="sm" />
 									<Link
@@ -146,6 +146,9 @@ function About() {
 										esports communities through competitive
 										structure and enabling easy, intuitive
 										event organization.
+									</div>
+									<div>
+										Role: Full stack software engineer.
 									</div>
 								</div>
 							</div>

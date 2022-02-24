@@ -93,16 +93,14 @@ function About(): React.ReactElement {
 								<div className={styles.header}>About Me</div>
 								<div className={styles.body}>
 									<div>
-										Name: David / Zhiyuan Liu. Chinese:
-										刘致远
+										Name: David / Zhiyuan Liu / 刘致远
 									</div>
 									<div>Age: {age}</div>
 									<div>DOB: February 29th, 1996</div>
 									<div>Email: zliu3301@gmail.com</div>
 									<div>Phone: (302) 824-5107</div>
-									<div>
-										Skilled in: C++, Javascript, Python, PHP
-									</div>
+									<div>Position: Full Stack Software Engineer</div>
+									<div>Skilled in: C++, Javascript, Rust, Python</div>
 									<div>
 										Hobbies: Melee, Bouldering, Tennis,
 										Programming
@@ -130,7 +128,8 @@ function About(): React.ReactElement {
 										critical challenges to our nation.
 									</div>
 									<div>
-										Asymmetric Operations Sector
+										Role: Full stack software architect.
+										Machine learning, data fusion, autonomous systems
 									</div>
 									<Spacer size="md" />
 									<Link
@@ -146,6 +145,9 @@ function About(): React.ReactElement {
 										esports communities through competitive
 										structure and enabling easy, intuitive
 										event organization.
+									</div>
+									<div>
+										Role: Full stack software engineer.
 									</div>
 								</div>
 							</div>

@@ -53,6 +53,10 @@
 			max-width: 400px;
 		}
 
+		figure {
+			margin: 16px 0px;
+		}
+
 		p {
 			.embed {
 				width: 400px;
@@ -60,7 +64,7 @@
 
 			.vimeo {
 				height: 180px;
-				width: 320px;
+				max-width: 240px;
 			}
 		}
 	}

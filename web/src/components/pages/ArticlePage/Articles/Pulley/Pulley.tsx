@@ -29,7 +29,7 @@ function Pulley(): React.ReactElement {
 				is complex and nonlinear. Modelling of the system is basically nonexistent.
 				I'll attempt to piece together what I think are the most essential
 				pieces from the last few decades of literature, but feel free to skip
-				this session if you're mostly interested in my rehab and recovery process.	
+				this section if you're mostly interested in my rehab and recovery process.	
 			</p>
 			<h2 id="anatomy">{"Anatomy"}</h2>
 			<p>
@@ -46,7 +46,7 @@ function Pulley(): React.ReactElement {
 				through the tunnel according to muscle tension. When the muscles in the forearm
 				are contracted, the flexor tendons pull the tips of your fingers towards the arm,
 				causing the fingers to come with them and bend accordingly. However, if the
-				fingers encounter resistance, such as when grabbing an edge, the pulleys push
+				fingers encounter resistance, such as when grabbing an edge, the flexor tendons push
 				against the pulley system, which normally holds up quite well.
 
 				There are five "annular pulleys", labelled A1-A5, and three "cruciform pulleys", 
@@ -236,12 +236,23 @@ function Pulley(): React.ReactElement {
 				a full, isolated A4 rupture with no other damage to the hand/finger.
 				Expected news, but still a heavy hit.
 			</p>
+			<p>	
+				Schöffl et al. was the first to write a comprehensive summary paper on finger pulley
+				injuries back in 2006. Alongside other useful information, they categorize 
+				the severity of injuries into an easily parsable table:
+
+				<figure>
+					<Image
+						src="https://s3.r2dliu.com/assets/articles/pulley/schoffl.jpg"
+					/>
+				</figure>
+			</p>
 			<h1 id="treatment">Treatment</h1>
 			<p>
 				Treatment, as you might imagine, is not an incredibly well researched subject
 				for an injury that is so uncommonly seen. The vast majority of papers on the 
 				subject comes from a few dedicated individuals who happen to be both hand
-				surgeons and climbers, a very small group of unique individuals. Many of
+				surgeons and climbers, a very small overlap. Many of
 				their ideas converge on the concept of what the papers call TPD, or tendon-phalanx 
 				distance. 
 			</p>
@@ -298,7 +309,7 @@ function Pulley(): React.ReactElement {
 				patients. Finger range of motion (n = 42) and finger strength (n = 22) did
 				not differ significantly between treated and contralateral sides." p values for
 				both A4 and A2 pulleys were {"<"} 0.001. I showed this paper to my surgeon and he 
-				immediately seconded the protocol, as did Schöffl, who I actually reached out to 
+				immediately seconded the protocol, as did V. Schöffl, who I actually reached out to 
 				on Instagram (legend). This is the protocol I have been following to this day 
 				and what I feel is the best possible treatment one can do for a pulley injury.
 			</p>
@@ -403,7 +414,7 @@ function Pulley(): React.ReactElement {
 					<div>
 						<figcaption className={cn(styles.caption, styles.wide)}>
 							<p>
-								Common pulley reconstruction techniques
+								Common reconstruction techniques
 							</p>
 						</figcaption>
 					</div>
@@ -504,7 +515,33 @@ function Pulley(): React.ReactElement {
 						track finger strength. Numbers soon. Much greater stability in finger.
 						Crimp position still causes significant strain/pressure.
 					</li>
+					<li>
+						January 5, 2022 - 73.2 lbs on injured right hand on 14mm edge. 149 on left.
+					</li>
+					<li>
+						January 31, 2022 - 98.2 lbs on injured right hand on 14mm edges
+					</li>
+					<li>
+						February 11, 2022 - Ended Eva Lopez. Strength rose steadily 
+						throughout this time. Ended on 35 extra lbs + bodyweight on a 10mm edge.
+						Working strength around V7, V8ish. Small crimps still painful, 
+						especially if they involve more dynamic movement
+					</li>
 				</ul> 
+			</p>
+			<p>
+				Conclusion to come. Currently still healing and rehabbing. Currently around V7-V8
+				climbing level. If you have any questions, comments, or suggestions, please feel
+				free to reach out to me on
+				on{" "}
+					<a
+						href="https://twitter.com/R2_DLiu"
+						target="_blank"
+						rel="noreferrer"
+					>
+						Twitter.
+					</a>{" "} 
+				Thanks for reading if you've made it down this far!
 			</p>
 			<h1 id="references">References</h1>
 			<p>
@@ -559,7 +596,7 @@ function Pulley(): React.ReactElement {
 			</p>
 			
 			<p>
-				<i>Last edited September 13th, 2019</i>
+				<i>Last edited February 23rd, 2022</i>
 			</p>
 		</Fragment>
 	);
