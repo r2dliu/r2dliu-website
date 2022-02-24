@@ -515,10 +515,22 @@ function Pulley(): React.ReactElement {
 						track finger strength. Numbers soon. Much greater stability in finger.
 						Crimp position still causes significant strain/pressure.
 					</li>
+					<li>
+						January 5, 2022 - 73.2 lbs on injured right hand on 14mm edge. 149 on left.
+					</li>
+					<li>
+						January 31, 2022 - 98.2 lbs on injured right hand on 14mm edges
+					</li>
+					<li>
+						February 11, 2022 - Ended Eva Lopez. Strength rose steadily 
+						throughout this time. Ended on 35 extra lbs + bodyweight on a 10mm edge.
+						Working strength around V7, V8ish. Small crimps still painful, 
+						espcially if they involve more dynamic movement
+					</li>
 				</ul> 
 			</p>
 			<p>
-				Conclusion to come. Currently still healing and rehabbing. Currently around V4-V5
+				Conclusion to come. Currently still healing and rehabbing. Currently around V7-V8
 				climbing level. If you have any questions, comments, or suggestions, please feel
 				free to reach out to me on
 				on{" "}
