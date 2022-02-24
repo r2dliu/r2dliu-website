@@ -525,7 +525,7 @@ function Pulley(): React.ReactElement {
 						February 11, 2022 - Ended Eva Lopez. Strength rose steadily 
 						throughout this time. Ended on 35 extra lbs + bodyweight on a 10mm edge.
 						Working strength around V7, V8ish. Small crimps still painful, 
-						espcially if they involve more dynamic movement
+						especially if they involve more dynamic movement
 					</li>
 				</ul> 
 			</p>
