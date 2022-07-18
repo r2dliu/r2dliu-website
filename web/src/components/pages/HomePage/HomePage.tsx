@@ -1,11 +1,9 @@
-// @ts-nocheck
-
 import React, { useState, useEffect } from "react";
-import Button from "@material-ui/core/Button";
-import cn from "classnames";
-import { Redirect } from "react-router-dom";
+import { CSSTransition } from "react-transition-group";
 
-import withTracking from "components/helpers/withTracking";
+import Button from "@mui/material/Button";
+import cn from "classnames";
+import { Navigate } from "react-router-dom";
 
 import styles from "./HomePage.module.scss";
 
@@ -34,39 +32,41 @@ function HomePage() {
         });
 
     if (isAnimationDone) {
-        return <Redirect to="/about" />;
+        return <Navigate to="/about" />;
     }
 
     return (
-        <div onAnimationEnd={markAnimationFinished} className={styles.Home}>
-            <div
-                className={cn(getClickedClassNames(styles.title), {
-                    [styles.loaded]: isLoaded,
-                })}
-            >
-                David Liu
-            </div>
-            <div
-                className={cn(getClickedClassNames(styles.description), {
-                    [styles.loaded]: isLoaded,
-                })}
-            >
-                Software | Design | Bouldering | Melee
-            </div>
-            <Button
-                className={cn(getClickedClassNames(styles.button), {
-                    [styles.loaded]: isLoaded,
-                })}
-                variant="outlined"
-                onClick={markClicked}
-                disabled={isClicked}
-            >
-                <div className={styles.buttonContent}>
-                    <b>{"About Me"}</b>
+        <CSSTransition in={isClicked} timeout={200} classNames="my-node">
+            <div className={styles.Home}>
+                <div
+                    className={cn(getClickedClassNames(styles.title), {
+                        [styles.loaded]: isLoaded,
+                    })}
+                >
+                    David Liu
                 </div>
-            </Button>
-        </div>
+                <div
+                    className={cn(getClickedClassNames(styles.description), {
+                        [styles.loaded]: isLoaded,
+                    })}
+                >
+                    Software | Design | Bouldering | Melee
+                </div>
+                <Button
+                    className={cn(getClickedClassNames(styles.button), {
+                        [styles.loaded]: isLoaded,
+                    })}
+                    variant="outlined"
+                    onClick={markClicked}
+                    disabled={isClicked}
+                >
+                    <div className={styles.buttonContent}>
+                        <b>{"About Me"}</b>
+                    </div>
+                </Button>
+            </div>
+        </CSSTransition>
     );
 }
 
-export default withTracking(HomePage);
+export default HomePage;
