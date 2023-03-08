@@ -1,0 +1,136 @@
+.CanvasPage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+@media only screen and (max-width: 768px) {
+  .CanvasPage {
+    flex-direction: column;
+  }
+}
+.CanvasPage .divider {
+  border: 2px solid white;
+  height: calc(100% - 36px);
+}
+.CanvasPage .canvas {
+  height: 100%;
+  width: 100%;
+}
+@media only screen and (max-width: 768px) {
+  .CanvasPage .canvas {
+    height: calc(100% - 44px);
+  }
+}
+.CanvasPage .canvas.blur {
+  transition: all 0.2s ease-in;
+  opacity: 0.3;
+  filter: blur(8px);
+}
+.CanvasPage .navbar {
+  height: 44px;
+  width: 100%;
+}
+.CanvasPage .navbar .hamburger {
+  padding: 11px 11px;
+  display: flex;
+  cursor: pointer;
+  transition-property: opacity, filter;
+  transition-duration: 0.15s;
+  transition-timing-function: linear;
+  font: inherit;
+  color: inherit;
+  text-transform: none;
+  background-color: transparent;
+  border: 0;
+  margin: 0;
+  overflow: visible;
+}
+.CanvasPage .navbar .hamburger:hover {
+  opacity: 0.7;
+}
+.CanvasPage .navbar .hamburger.isActive:hover {
+  opacity: 0.7;
+}
+.CanvasPage .navbar .hamburger.isActive .hamburger-inner,
+.CanvasPage .navbar .hamburger.isActive .hamburger-inner::before,
+.CanvasPage .navbar .hamburger.isActive .hamburger-inner::after {
+  background-color: white;
+}
+.CanvasPage .navbar .hamburgerBox {
+  width: 30px;
+  height: 22px;
+  display: inline-block;
+  position: relative;
+}
+.CanvasPage .navbar .hamburgerInner {
+  display: block;
+  top: 50%;
+  margin-top: -2px;
+}
+.CanvasPage .navbar .hamburgerInner, .CanvasPage .navbar .hamburgerInner::before, .CanvasPage .navbar .hamburgerInner::after {
+  width: 30px;
+  height: 4px;
+  background-color: white;
+  border-radius: 4px;
+  position: absolute;
+  transition-property: transform;
+  transition-duration: 0.15s;
+  transition-timing-function: ease;
+}
+.CanvasPage .navbar .hamburgerInner::before, .CanvasPage .navbar .hamburgerInner::after {
+  content: "";
+  display: block;
+}
+.CanvasPage .navbar .hamburgerInner::before {
+  top: -9px;
+}
+.CanvasPage .navbar .hamburgerInner::after {
+  bottom: -9px;
+}
+.CanvasPage .navbar .hamburgerSlider .hamburgerInner {
+  top: 2px;
+}
+.CanvasPage .navbar .hamburgerSlider .hamburgerInner::before {
+  top: 9px;
+  transition-property: transform, opacity;
+  transition-timing-function: ease;
+  transition-duration: 0.15s;
+}
+.CanvasPage .navbar .hamburgerSlider .hamburgerInner::after {
+  top: 18px;
+}
+.CanvasPage .navbar .hamburgerSlider.isActive .hamburgerInner {
+  transform: translate3d(0, 9px, 0) rotate(45deg);
+}
+.CanvasPage .navbar .hamburgerSlider.isActive .hamburgerInner::before {
+  transform: rotate(-45deg) translate3d(-4.2857142857px, -5px, 0);
+  opacity: 0;
+}
+.CanvasPage .navbar .hamburgerSlider.isActive .hamburgerInner::after {
+  transform: translate3d(0, -18px, 0) rotate(-90deg);
+}
+.CanvasPage .navbar .hamburgerSlider .hamburgerInner {
+  top: 2px;
+}
+.CanvasPage .navbar .hamburgerSlider .hamburgerInner::before {
+  top: 9px;
+  transition-property: transform, opacity;
+  transition-timing-function: ease;
+  transition-duration: 0.15s;
+}
+.CanvasPage .navbar .hamburgerSlider .hamburgerInner::after {
+  top: 18px;
+}
+.CanvasPage .navbar .hamburgerSlider.isActive .hamburgerInner {
+  transform: translate3d(0, 9px, 0) rotate(45deg);
+}
+.CanvasPage .navbar .hamburgerSlider.isActive .hamburgerInner::before {
+  transform: rotate(-45deg) translate3d(-4.2857142857px, -5px, 0);
+  opacity: 0;
+}
+.CanvasPage .navbar .hamburgerSlider.isActive .hamburgerInner::after {
+  transform: translate3d(0, -18px, 0) rotate(-90deg);
+}
+
+/*# sourceMappingURL=CanvasPage.module.css.map */

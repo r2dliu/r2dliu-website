@@ -1,0 +1,89 @@
+html,
+body,
+main {
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  body {
+    background: black;
+    color: white;
+
+    /* Material-UI overrides */
+    .MuiButton-root {
+      border-radius: 0px;
+      border: 2px solid white;
+      color: white;
+    }
+
+    a {
+      color: grey;
+    }
+  }
+}
+
+@font-face {
+  font-family: "BebasNeue";
+  src: url("/_static/fonts/BebasNeue/Bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "HelveticaNeueBlack";
+  src: url("/_static/fonts/HelveticaNeue/Black.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "HelveticaNeueBold";
+  src: url("/_static/fonts/HelveticaNeue/Bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "HelveticaNeueMedium";
+  src: url("/_static/fonts/HelveticaNeue/Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "HelveticaNeueRegular";
+  src: url("/_static/fonts/HelveticaNeue/Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "HelveticaNeueLight";
+  src: url("/_static/fonts/HelveticaNeue/Light.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "HelveticaNeueThin";
+  src: url("/_static/fonts/HelveticaNeue/Thin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "HelveticaNeueUltralight";
+  src: url("/_static/fonts/HelveticaNeue/Ultralight.woff2") format("woff2");
+}
+
+/* for react-lazy-load-image-component. Remix is probably breaking the import,
+ * so manually duplicating it here for now
+ * https://github.com/Aljullu/react-lazy-load-image-component#using-effects
+ */
+
+.lazy-load-image-background.blur {
+  filter: blur(15px);
+}
+
+.lazy-load-image-background.blur.lazy-load-image-loaded {
+  filter: blur(0);
+  transition: filter 0.3s;
+}
+
+.lazy-load-image-background.blur > img {
+  opacity: 0;
+}
+
+.lazy-load-image-background.blur.lazy-load-image-loaded > img {
+  opacity: 1;
+  transition: opacity 0.3s;
+}

@@ -1,0 +1,69 @@
+@use "../../../styles/mixins" as *;
+
+.About {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 48px);
+  width: calc(100% - 48px);
+  padding: 24px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  .title {
+    width: 100%;
+    margin: 8%;
+    font-family: "HelveticaNeueBold";
+    font-size: 64px;
+
+    @include breakpoint(tablet) {
+      margin: 0;
+    }
+
+    .description {
+      font-family: "HelveticaNeueLight";
+      font-size: 20px;
+      width: 35%;
+      word-wrap: break-word;
+
+      @include breakpoint(tablet) {
+        width: 100%;
+      }
+    }
+  }
+
+  .wrapper {
+    opacity: 0.6;
+    height: 100%;
+    object-fit: cover;
+    left: 25%;
+    position: absolute;
+    z-index: -1;
+    overflow: hidden;
+
+    @include breakpoint(mobile) {
+      left: 0;
+    }
+
+    &:after {
+      font-size: 100vw;
+      box-shadow: inset 0.05em 0.05em 0.1em 0.1em black;
+      @include breakpoint(mobile) {
+        box-shadow: inset 0em 0em 0.3em 0.3em black;
+      }
+
+      content: "";
+      display: block;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+
+    .image {
+      z-index: -2;
+      position: relative;
+      height: 125%;
+      margin-bottom: 5%;
+    }
+  }
+}

@@ -1,0 +1,47 @@
+@use "../../styles/mixins" as *;
+
+.Menu {
+  background-color: transparent;
+  max-width: 300px;
+  min-width: 300px;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .logo {
+    padding-bottom: 24px;
+    width: 170px;
+    height: 163px;
+
+    @include breakpoint(tablet) {
+      display: none;
+    }
+  }
+
+  .links {
+    font-family: "HelveticaNeueBold";
+    font-size: 32px;
+    text-transform: uppercase;
+
+    .linkContainer {
+      display: flex;
+      padding-top: 18px;
+
+      .icon {
+        margin-left: -34px;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        font-size: 32px;
+      }
+
+      .link {
+        color: white;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
