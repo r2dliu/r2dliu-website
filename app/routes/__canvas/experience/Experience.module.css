@@ -1,75 +1,18 @@
 .Experience {
   display: flex;
   height: calc(100% - 48px);
-  width: calc(100% - 24px);
+  width: calc(100% - 48px);
   padding: 24px;
   overflow-y: scroll;
   overflow-x: hidden;
+  flex-direction: column;
 }
-.Experience .work {
-  width: 50%;
-}
-.Experience .work .timeline {
-  border: none;
-  margin-left: 7.5px;
-  background-color: #555555;
-  width: 1px;
-  height: 432px;
-  z-index: -1;
-  margin-bottom: -432px;
-}
-.Experience .work .content {
-  display: flex;
-}
-.Experience .work .content .entries {
-  min-width: 220px;
-}
-.Experience .work .content .entries .entry {
-  display: flex;
-  align-items: center;
-  padding-bottom: 120px;
-  color: #555555;
-}
-.Experience .work .content .entries .entry.active {
-  transition: all 0.15s ease-in;
-  color: white;
-}
-.Experience .work .content .entries .entry .diamond {
-  min-height: 16px;
-  min-width: 16px;
-  rotate: 45deg;
-  background-color: #555555;
-}
-.Experience .work .content .entries .entry .diamond.active {
-  transition: all 0.15s ease-in;
-  background-color: white;
-}
-.Experience .work .content .entries .entry .name {
-  padding-left: 8px;
-  font-family: "HelveticaNeueMedium";
-  font-size: 16px;
-}
-.Experience .work .content .details {
-  padding-left: 24px;
-}
-.Experience .work .content .details .name {
-  font-family: "HelveticaNeueMedium";
-  font-size: 20px;
-}
-.Experience .work .content .details .title {
-  font-family: "HelveticaNeueRegular";
-  font-size: 16px;
-}
-.Experience .work .content .details .range {
-  font-family: "HelveticaNeueRegular";
-  font-size: 16px;
-}
-.Experience .work .content .details .description {
-  font-family: "HelveticaNeueLight";
-  font-size: 16px;
-}
-.Experience .skills {
-  width: 50%;
+@media only screen and (max-width: 480px) {
+  .Experience {
+    padding: 0px;
+    height: 100%;
+    width: 100%;
+  }
 }
 .Experience .work,
 .Experience .skills {
@@ -81,40 +24,109 @@
   font-size: 32px;
   padding-bottom: 32px;
 }
-.Experience .wrapper {
-  opacity: 0.6;
-  height: 100%;
-  object-fit: cover;
-  left: 25%;
-  position: absolute;
-  z-index: -1;
-  overflow: hidden;
-}
-@media only screen and (max-width: 480px) {
-  .Experience .wrapper {
-    left: 0;
-  }
-}
-.Experience .wrapper:after {
-  font-size: 100vw;
-  box-shadow: inset 0.05em 0.05em 0.1em 0.1em black;
-  content: "";
-  display: block;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  width: 100%;
-}
-@media only screen and (max-width: 480px) {
-  .Experience .wrapper:after {
-    box-shadow: inset 0em 0em 0.3em 0.3em black;
-  }
-}
-.Experience .wrapper .image {
-  z-index: -2;
+.Experience .work .content {
   position: relative;
-  height: 125%;
-  margin-bottom: 5%;
+  display: flex;
+}
+@media only screen and (max-width: 768px) {
+  .Experience .work .content {
+    max-height: 450px;
+    overflow-y: scroll;
+  }
+}
+.Experience .work .content .timeline {
+  position: absolute;
+  border: none;
+  background-color: gray;
+  width: 1px;
+  height: 444px;
+  left: 7.5px;
+  z-index: -1;
+}
+@media only screen and (max-width: 768px) {
+  .Experience .work .content .timeline {
+    height: 500px;
+    left: 11.5px;
+  }
+}
+.Experience .work .content .entries {
+  min-width: 240px;
+}
+@media only screen and (max-width: 768px) {
+  .Experience .work .content .entries {
+    min-width: 30%;
+  }
+}
+.Experience .work .content .entries .entry {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: gray;
+}
+@media only screen and (max-width: 768px) {
+  .Experience .work .content .entries .entry {
+    padding-left: 4px;
+  }
+}
+.Experience .work .content .entries .entry:hover, .Experience .work .content .entries .entry.active {
+  transition: all 0.15s ease-in;
+  color: white;
+}
+.Experience .work .content .entries .entry:hover .diamond, .Experience .work .content .entries .entry.active .diamond {
+  transition: all 0.15s ease-in;
+  background-color: white;
+}
+.Experience .work .content .entries .entry .diamond {
+  min-height: 16px;
+  min-width: 16px;
+  rotate: 45deg;
+  background-color: gray;
+}
+.Experience .work .content .entries .entry .name {
+  padding-left: 8px;
+  font-family: "HelveticaNeueMedium";
+  font-size: 18px;
+}
+.Experience .work .content .entries .entry:not(:last-child) {
+  margin-bottom: 120px;
+}
+.Experience .work .content .details {
+  padding-left: 24px;
+}
+.Experience .work .content .details .name {
+  font-family: "HelveticaNeueMedium";
+  font-size: 24px;
+}
+.Experience .work .content .details .title {
+  font-family: "HelveticaNeueRegular";
+  font-size: 16px;
+  color: gray;
+}
+.Experience .work .content .details .range {
+  font-family: "HelveticaNeueRegular";
+  font-size: 16px;
+  color: gray;
+}
+.Experience .work .content .details .description {
+  font-family: "HelveticaNeueLight";
+  font-size: 16px;
+}
+.Experience .skills .content {
+  display: flex;
+}
+.Experience .skills .content .column {
+  display: flex;
+  flex-direction: column;
+}
+.Experience .skills .content .column .skill {
+  font-family: "HelveticaNeueLight";
+  font-size: 16px;
+}
+.Experience .skills .content .column .skill:not(:last-child) {
+  padding-bottom: 12px;
+}
+.Experience .skills .content .column:not(:last-child) {
+  padding-right: 48px;
 }
 
 /*# sourceMappingURL=Experience.module.css.map */

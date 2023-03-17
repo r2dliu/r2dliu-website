@@ -12,6 +12,25 @@ html {
     background: black;
     color: white;
 
+    div {
+      // For Chrome & Safari
+      ::-webkit-scrollbar {
+        width: 1px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: white;
+      }
+      ::-webkit-scrollbar-track {
+        width: 1px;
+        background: transparent;
+      }
+
+      // firefox only
+      scrollbar-color: white transparent;
+      scrollbar-width: thin;
+    }
+
     /* Material-UI overrides */
     .MuiButton-root {
       border-radius: 0px;
@@ -19,8 +38,13 @@ html {
       color: white;
     }
 
+    .MuiChip-label {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
     a {
-      color: grey;
+      color: gray;
     }
   }
 }
@@ -69,7 +93,6 @@ html {
  * so manually duplicating it here for now
  * https://github.com/Aljullu/react-lazy-load-image-component#using-effects
  */
-
 .lazy-load-image-background.blur {
   filter: blur(15px);
 }

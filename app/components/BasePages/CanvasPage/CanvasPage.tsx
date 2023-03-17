@@ -1,14 +1,18 @@
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import cn from "classnames";
 import Menu from "~/components/Menu";
 import { Divider, useMediaQuery, Button } from "@mui/material";
-
+import { useLocation } from "@remix-run/react";
 import { tabletQuery } from "helpers/breakpoints";
 import styles from "./CanvasPage.module.css";
 
 export default function CanvasPage(props: PropsWithChildren<unknown>) {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const isTablet = useMediaQuery(tabletQuery);
+  const location = useLocation();
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location]);
 
   return (
     <div className={styles.CanvasPage}>

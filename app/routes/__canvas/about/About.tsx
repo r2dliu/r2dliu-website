@@ -22,10 +22,10 @@ export default function About() {
           </p>
           <p>
             {
-              "This site is currently having a bit of an identity crisis: it’s simultaneously a passion project, a testbed, a portfolio, and a conglomerate of various types of content. That being said, it is my website, so I think it’s okay if it grows into a bit of a hodgepodge collection of my many interests."
+              "This site is currently having a bit of an identity crisis: it’s simultaneously a passion project, a testbed, a portfolio, and a conglomerate of various types of content. This is also the third time I've rebuilt it from scratch. That being said, it is my website, so I think it’s okay if it grows into a bit of a hodgepodge collection of my many interests."
             }
           </p>
-          <p>{"Check out my education and work experience below!"}</p>
+          <p>{"Thanks for visiting and checking out my site!"}</p>
         </div>
       </div>
 
@@ -37,6 +37,10 @@ export default function About() {
         src={"https://s3.r2dliu.com/assets/about.jpg"}
         placeholderSrc={"https://s3.r2dliu.com/assets/about_small.jpg"}
       />
+      <div className={styles.credit}>
+        Photo by Bekah Wong |{" "}
+        <a href={"https://twitter.com/alonelychime"}>@alonelychime</a>
+      </div>
     </div>
   );
 }

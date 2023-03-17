@@ -12,13 +12,31 @@ html body {
   color: white;
   /* Material-UI overrides */
 }
+html body div {
+  scrollbar-color: white transparent;
+  scrollbar-width: thin;
+}
+html body div ::-webkit-scrollbar {
+  width: 1px;
+}
+html body div ::-webkit-scrollbar-thumb {
+  background: white;
+}
+html body div ::-webkit-scrollbar-track {
+  width: 1px;
+  background: transparent;
+}
 html body .MuiButton-root {
   border-radius: 0px;
   border: 2px solid white;
   color: white;
 }
+html body .MuiChip-label {
+  padding-left: 8px;
+  padding-right: 8px;
+}
 html body a {
-  color: grey;
+  color: gray;
 }
 
 @font-face {

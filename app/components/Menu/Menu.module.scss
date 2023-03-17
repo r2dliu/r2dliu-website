@@ -1,6 +1,8 @@
 @use "../../styles/mixins" as *;
 
 .Menu {
+  position: relative;
+  z-index: 10;
   background-color: transparent;
   max-width: 300px;
   min-width: 300px;
@@ -29,7 +31,7 @@
       padding-top: 18px;
 
       .icon {
-        margin-left: -34px;
+        margin-left: -32px;
         padding-top: 3px;
         padding-bottom: 3px;
         font-size: 32px;

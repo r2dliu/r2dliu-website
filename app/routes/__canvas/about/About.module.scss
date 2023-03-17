@@ -8,9 +8,9 @@
   padding: 24px;
   overflow-y: scroll;
   overflow-x: hidden;
+  align-items: center;
 
   .title {
-    width: 100%;
     margin: 8%;
     font-family: "HelveticaNeueBold";
     font-size: 64px;
@@ -32,7 +32,7 @@
   }
 
   .wrapper {
-    opacity: 0.6;
+    opacity: 0.7;
     height: 100%;
     object-fit: cover;
     left: 25%;
@@ -40,15 +40,16 @@
     z-index: -1;
     overflow: hidden;
 
-    @include breakpoint(mobile) {
+    @include breakpoint(tablet) {
       left: 0;
+      opacity: 0.4;
     }
 
     &:after {
       font-size: 100vw;
-      box-shadow: inset 0.05em 0.05em 0.1em 0.1em black;
+      box-shadow: inset 0 0 0.1em 0.1em black;
       @include breakpoint(mobile) {
-        box-shadow: inset 0em 0em 0.3em 0.3em black;
+        box-shadow: inset 0 0 0.3em 0.3em black;
       }
 
       content: "";
@@ -64,6 +65,19 @@
       position: relative;
       height: 125%;
       margin-bottom: 5%;
+    }
+  }
+
+  .credit {
+    font-family: "HelveticaNeueThin";
+    color: gray;
+    font-size: 14px;
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+
+    @include breakpoint(tablet) {
+      visibility: hidden;
     }
   }
 }

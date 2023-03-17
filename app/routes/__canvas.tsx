@@ -1,14 +1,19 @@
 import { useLocation, useOutlet } from "@remix-run/react";
 import CanvasPage from "components/BasePages/CanvasPage";
 import { AnimatePresence, motion } from "framer-motion";
+import { useMediaQuery } from "@mui/material";
+import { tabletQuery } from "helpers/breakpoints";
+
+import styles from "./__canvas/index.module.css";
 
 export default function Canvas() {
   const outlet = useOutlet();
-  console.log("canvas");
+  const isTablet = useMediaQuery(tabletQuery);
   return (
     <CanvasPage>
       <AnimatePresence mode="wait">
         <motion.div
+          className={styles.motion}
           key={useLocation().pathname}
           initial={{ y: "-5px", opacity: 0 }}
           animate={{ y: "0", opacity: 1 }}
@@ -16,7 +21,7 @@ export default function Canvas() {
             y: "5px",
             opacity: 0,
             transition: {
-              duration: "0.15",
+              duration: isTablet ? "0" : "0.15",
               ease: "easeOut",
             },
           }}

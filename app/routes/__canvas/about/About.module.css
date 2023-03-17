@@ -6,9 +6,9 @@
   padding: 24px;
   overflow-y: scroll;
   overflow-x: hidden;
+  align-items: center;
 }
 .About .title {
-  width: 100%;
   margin: 8%;
   font-family: "HelveticaNeueBold";
   font-size: 64px;
@@ -30,7 +30,7 @@
   }
 }
 .About .wrapper {
-  opacity: 0.6;
+  opacity: 0.7;
   height: 100%;
   object-fit: cover;
   left: 25%;
@@ -38,14 +38,15 @@
   z-index: -1;
   overflow: hidden;
 }
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .About .wrapper {
     left: 0;
+    opacity: 0.4;
   }
 }
 .About .wrapper:after {
   font-size: 100vw;
-  box-shadow: inset 0.05em 0.05em 0.1em 0.1em black;
+  box-shadow: inset 0 0 0.1em 0.1em black;
   content: "";
   display: block;
   height: 100%;
@@ -55,7 +56,7 @@
 }
 @media only screen and (max-width: 480px) {
   .About .wrapper:after {
-    box-shadow: inset 0em 0em 0.3em 0.3em black;
+    box-shadow: inset 0 0 0.3em 0.3em black;
   }
 }
 .About .wrapper .image {
@@ -63,6 +64,19 @@
   position: relative;
   height: 125%;
   margin-bottom: 5%;
+}
+.About .credit {
+  font-family: "HelveticaNeueThin";
+  color: gray;
+  font-size: 14px;
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+}
+@media only screen and (max-width: 768px) {
+  .About .credit {
+    visibility: hidden;
+  }
 }
 
 /*# sourceMappingURL=About.module.css.map */

@@ -1,0 +1,90 @@
+.Melee {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 48px);
+  width: calc(100% - 48px);
+  padding: 24px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.Melee .header {
+  font-family: "HelveticaNeueMedium";
+  font-size: 34px;
+}
+.Melee .details {
+  font-family: "HelveticaNeueLight";
+  color: grey;
+  font-size: 14px;
+}
+.Melee .name {
+  font-family: "BebasNeue";
+  font-size: 90px;
+  margin-top: -12px;
+}
+.Melee .bio1,
+.Melee .bio2 {
+  font-family: "HelveticaNeueLight";
+  font-size: 20px;
+  padding-bottom: 24px;
+}
+.Melee .bio1 {
+  padding-top: 24px;
+  width: 400px;
+}
+.Melee .bio2 {
+  max-width: 800px;
+}
+.Melee .fox {
+  position: absolute;
+  left: 400px;
+  top: 24px;
+}
+@media only screen and (max-width: 1024px) {
+  .Melee .fox {
+    visibility: hidden;
+  }
+}
+.Melee .wrapper {
+  opacity: 1;
+  height: 100%;
+  right: 0;
+  object-fit: cover;
+  position: absolute;
+  z-index: -1;
+  overflow: hidden;
+}
+@media only screen and (max-width: 1400px) {
+  .Melee .wrapper {
+    visibility: hidden;
+  }
+}
+.Melee .wrapper:after {
+  font-size: 100vw;
+  background: linear-gradient(to right, black 0%, rgba(0, 0, 0, 0.8) 40%, rgba(0, 0, 0, 0.4) 70%, transparent 100%);
+  content: "";
+  display: block;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+.Melee .wrapper .image {
+  z-index: -2;
+  position: relative;
+  height: 100%;
+}
+.Melee .credit {
+  font-family: "HelveticaNeueThin";
+  color: gray;
+  font-size: 14px;
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+}
+@media only screen and (max-width: 1400px) {
+  .Melee .credit {
+    visibility: hidden;
+  }
+}
+
+/*# sourceMappingURL=Melee.module.css.map */
