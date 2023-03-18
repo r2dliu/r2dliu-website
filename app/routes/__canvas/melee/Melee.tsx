@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import cn from "classnames";
 import CanvasPage from "~/components/BasePages/CanvasPage";
 
 import styles from "./Melee.module.css";
@@ -13,21 +14,22 @@ export default function Melee() {
         After picking up the game competitively back in late 2014, David
         “R2DLiu” Liu quickly rose to prominence, consolidating a spot as a top
         player within the greater Philadelphia region. In October 2016, with a
-        slew of top 100 wins under his belt, he achieved his best result yet: a
-        33rd out of 1,563 at the Big House 6, including an incredible upset over
-        a perennial top 10 player: the indomitable Pikachu player{" "}
+        slew of top 100 wins under his belt, he achieved his best result yet at
+        the Big House 6: an incredible upset over a perennial top 10 player, the
+        indomitable Pikachu master{" "}
         <a href={"https://en.wikipedia.org/wiki/Axe_(gamer)"}>Axe</a>.
+        <LazyLoadImage
+          wrapperClassName={styles.fox}
+          className={styles.image}
+          alt={
+            "Picture of Fox from Super Smash Bros. Melee performing a down-aerial"
+          }
+          effect="blur"
+          src={"https://s3.r2dliu.com/assets/fox_drill.png"}
+          placeholderSrc={"https://s3.r2dliu.com/assets/fox_drill_small.png"}
+        />
       </div>
-      <LazyLoadImage
-        wrapperClassName={styles.fox}
-        // className={styles.fox}
-        alt={
-          "Picture of Fox from Super Smash Bros. Melee performing a down-aerial"
-        }
-        effect="blur"
-        src={"https://s3.r2dliu.com/assets/fox_drill.png"}
-        placeholderSrc={"https://s3.r2dliu.com/assets/fox_drill_small.png"}
-      />
+
       <div className={styles.bio2}>
         Since then, R2DLiu has continued to compete on and off throughout the
         years, fading slowly into inactivity, but continuing to remain a threat
@@ -52,6 +54,66 @@ export default function Melee() {
       </div>
 
       <div className={styles.header}>{"Achievements"}</div>
+      <div className={styles.achievements}>
+        <div className={styles.achievement}>
+          <div className={styles.tournament}>The Big House 6</div>
+          <div className={styles.placement}>
+            <div className={styles.text}>
+              <span className={styles.number}>33</span>
+              <span className={styles.suffix}>rd</span>
+            </div>
+            <div className={styles.circle}>
+              <div className={styles.arc}></div>
+            </div>
+            <div className={styles.circle}>
+              <div className={cn(styles.arc, styles.second)}></div>
+            </div>
+          </div>
+          <div className={styles.total}>
+            <span className={styles.text}>out of </span>
+            <span>1564</span>
+          </div>
+        </div>
+        <div className={styles.achievement}>
+          <div className={styles.tournament}>Genesis 4</div>
+          <div className={styles.placement}>
+            <div className={styles.text}>
+              <span className={styles.number}>49</span>
+              <span className={styles.suffix}>th</span>
+            </div>
+            <div className={styles.circle}>
+              <div className={styles.arc}></div>
+            </div>
+            <div className={styles.circle}>
+              <div className={cn(styles.arc, styles.second)}></div>
+            </div>
+          </div>
+          <div className={styles.total}>
+            <span className={styles.text}>out of </span>
+            <span>1704</span>
+          </div>
+        </div>
+        <div className={styles.achievement}>
+          <div className={styles.tournament}>Genesis 9</div>
+          <div className={styles.placement}>
+            <div className={styles.text}>
+              <span className={styles.number}>49</span>
+              <span className={styles.suffix}>th</span>
+            </div>
+            <div className={styles.circle}>
+              <div className={styles.arc}></div>
+            </div>
+            <div className={styles.circle}>
+              <div className={cn(styles.arc, styles.second)}></div>
+            </div>
+          </div>
+          <div className={styles.total}>
+            <span className={styles.text}>out of </span>
+            <span>1251</span>
+          </div>
+        </div>
+      </div>
+      <div className={styles.header}>{"Matches"}</div>
     </div>
   );
 }
