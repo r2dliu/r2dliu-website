@@ -11,6 +11,7 @@ import {
   useOutlet,
 } from "@remix-run/react";
 import { AnimatePresence, motion } from "framer-motion";
+import { createHead } from 'remix-island';
 
 import "react-lazy-load-image-component/src/effects/opacity.css";
 import styles from "styles/index.css";
@@ -30,16 +31,22 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
+
+export const Head = createHead(() => (
+    <>
+      <Meta />
+      <Links />
+    </>
+  ));
+
 export default function App() {
   const outlet = useOutlet();
 
   return (
-    <html lang="en">
-      <head>
-        <Meta />
-        <Links />
-      </head>
-      <body>
+    <>
+    {/* <html lang="en"> */}
+      <Head />
+      {/* <body> */}
         {/* <Outlet /> */}
         <AnimatePresence mode="wait">
           <motion.main
@@ -62,7 +69,8 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
-      </body>
-    </html>
+      {/* </body> */}
+    {/* </html> */}
+    </>
   );
 }

@@ -4,6 +4,8 @@ import { Response } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
+import { renderHeadToString } from 'remix-island';
+import { Head } from './root';
 
 const ABORT_DELAY = 5000;
 
@@ -24,6 +26,7 @@ export default function handleRequest(
       <RemixServer context={remixContext} url={request.url} />,
       {
         [callbackName]: () => {
+          const head = renderHeadToString({ request, remixContext, Head });
           const body = new PassThrough();
 
           responseHeaders.set("Content-Type", "text/html");
@@ -35,7 +38,11 @@ export default function handleRequest(
             })
           );
 
+          body.write(
+            `<!DOCTYPE html><html><head>${head}</head><body><div id="root">`,
+          );
           pipe(body);
+          body.write(`</div></body></html>`);
         },
         onShellError: (err: unknown) => {
           reject(err);
