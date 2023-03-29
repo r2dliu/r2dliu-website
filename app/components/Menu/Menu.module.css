@@ -9,15 +9,15 @@
   flex-direction: column;
   align-items: center;
 }
-.Menu .logo {
+@media only screen and (max-width: 768px) {
+  .Menu .home {
+    display: none;
+  }
+}
+.Menu .home .logo {
   padding-bottom: 24px;
   width: 170px;
   height: 163px;
-}
-@media only screen and (max-width: 768px) {
-  .Menu .logo {
-    display: none;
-  }
 }
 .Menu .links {
   font-family: "HelveticaNeueBold";
@@ -40,6 +40,16 @@
 }
 .Menu .links .linkContainer .link:hover {
   text-decoration: underline;
+}
+.Menu .icons {
+  padding-top: 36px;
+}
+.Menu .icons .link:not(:last-child) {
+  padding-right: 12px;
+}
+.Menu .icons .link .icon {
+  height: 40px;
+  width: 40px;
 }
 
 /*# sourceMappingURL=Menu.module.css.map */

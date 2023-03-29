@@ -39,7 +39,9 @@ export default function About() {
       />
       <div className={styles.credit}>
         Photo by Bekah Wong |{" "}
-        <a href={"https://twitter.com/alonelychime"}>@alonelychime</a>
+        <a className={styles.url} href={"https://twitter.com/alonelychime"}>
+          @alonelychime
+        </a>
       </div>
     </div>
   );

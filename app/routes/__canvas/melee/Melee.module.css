@@ -50,6 +50,11 @@
   max-width: 800px;
   padding-bottom: 32px;
 }
+@media only screen and (max-width: 1024px) {
+  .Melee .bio2 {
+    max-width: 400px;
+  }
+}
 .Melee .wrapper {
   opacity: 1;
   height: 100%;
@@ -89,6 +94,12 @@
   justify-content: center;
   align-items: center;
   width: 180px;
+}
+@media only screen and (max-width: 1024px) {
+  .Melee .achievements .achievement {
+    flex-grow: 1;
+    width: fit-content;
+  }
 }
 .Melee .achievements .achievement .tournament {
   font-family: "HelveticaNeueRegular";
@@ -157,13 +168,38 @@
 .Melee .achievements .achievement .total .text {
   color: grey;
 }
+.Melee .matches {
+  display: flex;
+  flex-wrap: wrap;
+}
+.Melee .matches .video:not(:last-child) {
+  margin-right: 40px;
+}
+.Melee .matches .video {
+  max-width: calc((100% - 80px) / 3);
+}
+@media only screen and (max-width: 1024px) {
+  .Melee .matches {
+    flex-direction: column;
+  }
+  .Melee .matches .video {
+    max-width: 100%;
+  }
+  .Melee .matches .video:not(:last-child) {
+    margin-right: 0px;
+    margin-bottom: 20px;
+  }
+}
 .Melee .credit {
   font-family: "HelveticaNeueThin";
   color: gray;
   font-size: 14px;
   position: absolute;
-  right: 4px;
+  right: 16px;
   bottom: 4px;
+}
+.Melee .credit .url {
+  text-decoration: none;
 }
 @media only screen and (max-width: 1400px) {
   .Melee .credit {

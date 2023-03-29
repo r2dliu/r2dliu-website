@@ -12,6 +12,7 @@
 .CanvasPage .divider {
   border: 2px solid white;
   height: calc(100% - 36px);
+  z-index: 1;
 }
 .CanvasPage .canvas {
   height: 100%;

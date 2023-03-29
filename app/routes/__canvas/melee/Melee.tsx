@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import cn from "classnames";
-import CanvasPage from "~/components/BasePages/CanvasPage";
+import ReactPlayer from "react-player/youtube";
 
 import styles from "./Melee.module.css";
 
@@ -50,7 +50,9 @@ export default function Melee() {
       />
       <div className={styles.credit}>
         Photo by Lilian Chen |{" "}
-        <a href={"https://twitter.com/_lilchen"}>@_lilchen</a>
+        <a className={styles.url} href={"https://twitter.com/_lilchen"}>
+          @_lilchen
+        </a>
       </div>
 
       <div className={styles.header}>{"Achievements"}</div>
@@ -113,7 +115,30 @@ export default function Melee() {
           </div>
         </div>
       </div>
-      <div className={styles.header}>{"Matches"}</div>
+      <div className={styles.header}>{"Gameplay"}</div>
+      <div className={styles.matches}>
+        <ReactPlayer
+          className={styles.video}
+          width={300}
+          height={200}
+          controls={true}
+          url="https://www.youtube.com/watch?v=IbImG0x4hD4"
+        />
+        <ReactPlayer
+          className={styles.video}
+          width={300}
+          height={200}
+          controls={true}
+          url="https://www.youtube.com/watch?v=q_qxSYaAk7w"
+        />
+        <ReactPlayer
+          className={styles.video}
+          width={300}
+          height={200}
+          controls={true}
+          url="https://www.youtube.com/watch?v=Nc8gFTz2irw"
+        />
+      </div>
     </div>
   );
 }

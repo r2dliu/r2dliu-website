@@ -24,6 +24,7 @@ $hamburger-active-hover-opacity: $hamburger-hover-opacity !default;
   .divider {
     border: 2px solid white;
     height: calc(100% - 36px);
+    z-index: 1;
   }
 
   .canvas {

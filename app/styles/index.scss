@@ -1,6 +1,7 @@
 html,
 body,
-main {
+main,
+#root {
   height: 100%;
   overflow: hidden;
   margin: 0;
@@ -45,6 +46,10 @@ html {
 
     a {
       color: gray;
+      &:hover {
+        color: white;
+      }
+      transition: color 0.05s ease-in;
     }
   }
 }

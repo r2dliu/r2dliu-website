@@ -11,13 +11,15 @@
   flex-direction: column;
   align-items: center;
 
-  .logo {
-    padding-bottom: 24px;
-    width: 170px;
-    height: 163px;
-
+  .home {
     @include breakpoint(tablet) {
       display: none;
+    }
+
+    .logo {
+      padding-bottom: 24px;
+      width: 170px;
+      height: 163px;
     }
   }
 
@@ -43,6 +45,21 @@
         &:hover {
           text-decoration: underline;
         }
+      }
+    }
+  }
+
+  .icons {
+    padding-top: 36px;
+
+    .link {
+      &:not(:last-child) {
+        padding-right: 12px;
+      }
+
+      .icon {
+        height: 40px;
+        width: 40px;
       }
     }
   }

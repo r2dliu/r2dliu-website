@@ -1,0 +1,57 @@
+.Climbing {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 48px);
+  width: calc(100% - 48px);
+  padding: 40px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.Climbing .quote {
+  font-family: "HelveticaNeueBold";
+  font-size: 48px;
+  padding-bottom: 16px;
+}
+@media only screen and (max-width: 768px) {
+  .Climbing .quote {
+    font-size: 32px;
+  }
+}
+.Climbing .header {
+  font-family: "HelveticaNeueMedium";
+  font-size: 32px;
+  padding-bottom: 32px;
+}
+.Climbing .attribution {
+  font-family: "HelveticaNeueLight";
+  font-size: 24px;
+  align-self: flex-end;
+  padding-bottom: 16px;
+  padding-right: 16px;
+}
+.Climbing .bio {
+  max-width: 800px;
+  font-family: "HelveticaNeueLight";
+  font-size: 20px;
+}
+.Climbing .wrapper {
+  opacity: 1;
+  height: 100%;
+  right: 0;
+  object-fit: cover;
+  position: absolute;
+  z-index: -1;
+  overflow: hidden;
+}
+@media only screen and (max-width: 768px) {
+  .Climbing .wrapper {
+    right: -64px;
+  }
+}
+.Climbing .wrapper .image {
+  z-index: -2;
+  position: relative;
+  height: 100%;
+}
+
+/*# sourceMappingURL=Climbing.module.css.map */

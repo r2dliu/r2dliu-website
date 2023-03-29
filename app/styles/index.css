@@ -1,6 +1,7 @@
 html,
 body,
-main {
+main,
+#root {
   height: 100%;
   overflow: hidden;
   margin: 0;
@@ -37,6 +38,10 @@ html body .MuiChip-label {
 }
 html body a {
   color: gray;
+  transition: color 0.05s ease-in;
+}
+html body a:hover {
+  color: white;
 }
 
 @font-face {
