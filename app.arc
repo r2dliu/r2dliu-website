@@ -1,5 +1,5 @@
 @app
-my-remix-app-c4a6
+r2dliu
 
 @http
 /*
@@ -9,12 +9,8 @@ my-remix-app-c4a6
 @static
 
 @tables
-user
-  pk *String
-
-password
-  pk *String # userId
-
-note
-  pk *String  # userId
-  sk **String # noteId
+article
+  title *String
+  timestamp **Number
+  author **String
+  markdown **String

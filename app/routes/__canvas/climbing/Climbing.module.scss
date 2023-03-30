@@ -19,9 +19,10 @@
   }
 
   .header {
+    padding-top: 24px;
     font-family: "HelveticaNeueMedium";
     font-size: 32px;
-    padding-bottom: 32px;
+    padding-bottom: 24px;
   }
 
   .attribution {
@@ -42,6 +43,7 @@
     opacity: 1;
     height: 100%;
     right: 0;
+    opacity: 0.5;
     @include breakpoint(tablet) {
       right: -64px;
     }

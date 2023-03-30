@@ -1,0 +1,10 @@
+.Article .divider {
+  height: 2px;
+  color: white;
+}
+.Article .title {
+  font-size: 64px;
+  font-family: "HelveticaNeueBold";
+}
+
+/*# sourceMappingURL=article.module.css.map */
