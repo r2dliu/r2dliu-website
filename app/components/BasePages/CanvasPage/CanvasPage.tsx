@@ -20,7 +20,7 @@ export default function CanvasPage(props: PropsWithChildren<unknown>) {
       {!isTablet && (
         <>
           <Menu />
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             <motion.div
               className={styles.motion}
               initial={{ height: "calc(0% + 0px)" }}

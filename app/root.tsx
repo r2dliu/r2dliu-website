@@ -66,11 +66,11 @@ export default function App() {
             y: "5px",
             opacity: 0,
             transition: {
-              duration: "0.5",
+              duration: "0.15",
               ease: "easeOut",
             },
           }}
-          transition={{ duration: "0.5", ease: "easeIn" }}
+          transition={{ duration: "0.15", ease: "easeIn" }}
         >
           {outlet}
         </motion.main>

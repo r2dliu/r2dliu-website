@@ -11,10 +11,7 @@ import styles from "./Menu.module.css";
 export default function Menu() {
   const matches = useMatches();
   console.log("matches:", matches);
-  if (!matches[2]) {
-    return null;
-  }
-  const currPage = matches[2].pathname.substring(1);
+  const currPage = matches[2]?.pathname.substring(1);
 
   const pages = {
     about: "About Me",
