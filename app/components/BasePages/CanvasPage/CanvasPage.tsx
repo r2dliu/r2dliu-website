@@ -5,6 +5,7 @@ import { Divider, useMediaQuery, Button } from "@mui/material";
 import { useLocation } from "@remix-run/react";
 import { tabletQuery } from "helpers/breakpoints";
 import styles from "./CanvasPage.module.css";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function CanvasPage(props: PropsWithChildren<unknown>) {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -19,7 +20,16 @@ export default function CanvasPage(props: PropsWithChildren<unknown>) {
       {!isTablet && (
         <>
           <Menu />
-          <Divider className={styles.divider} orientation="vertical" />
+          <AnimatePresence mode="wait">
+            <motion.div
+              className={styles.motion}
+              initial={{ height: "calc(0% + 0px)" }}
+              animate={{ height: "calc(100% - 36px)" }}
+              transition={{ duration: 0.5, ease: "easeIn", delay: 0.15 }}
+            >
+              <Divider className={styles.divider} orientation="vertical" />
+            </motion.div>
+          </AnimatePresence>
         </>
       )}
       {isTablet && (

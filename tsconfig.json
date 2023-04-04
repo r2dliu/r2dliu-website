@@ -18,7 +18,8 @@
       "~/*": ["./app/*"],
       "components/*": ["./app/components/*"],
       "styles/*": ["./app/styles/*"],
-      "helpers/*": ["./app/helpers/*"]
+      "helpers/*": ["./app/helpers/*"],
+      "data/*": ["./app/data/*"]
     },
     "skipLibCheck": true,
 

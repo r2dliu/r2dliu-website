@@ -4,14 +4,13 @@ import {
   Links,
   LiveReload,
   Meta,
-  Outlet,
   Scripts,
   ScrollRestoration,
   useLocation,
   useOutlet,
 } from "@remix-run/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { createHead } from 'remix-island';
+import { createHead } from "remix-island";
 
 import "react-lazy-load-image-component/src/effects/opacity.css";
 import styles from "styles/index.css";
@@ -31,46 +30,56 @@ export const meta: MetaFunction = () => ({
   viewport: "width=device-width,initial-scale=1",
 });
 
-
 export const Head = createHead(() => (
-    <>
-      <Meta />
-      <Links />
-    </>
-  ));
+  <>
+    <Meta />
+    <Links />
+  </>
+));
 
 export default function App() {
   const outlet = useOutlet();
+  const getKey = () => {
+    const path = useLocation().pathname;
+    const splitPath = useLocation().pathname.split("/");
+    if (splitPath.length === 2 && splitPath[1] !== "") {
+      return "main";
+    } else {
+      return path;
+    }
+  };
+
+  console.log(getKey());
 
   return (
     <>
-    {/* <html lang="en"> */}
+      {/* <html lang="en"> */}
       <Head />
       {/* <body> */}
-        {/* <Outlet /> */}
-        <AnimatePresence mode="wait">
-          <motion.main
-            // key={useLocation().pathname}
-            initial={{ y: "-5px", opacity: 0 }}
-            animate={{ y: "0", opacity: 1 }}
-            exit={{
-              y: "5px",
-              opacity: 0,
-              transition: {
-                duration: "0.15",
-                ease: "easeOut",
-              },
-            }}
-            transition={{ duration: "0.15", ease: "easeIn" }}
-          >
-            {outlet}
-          </motion.main>
-        </AnimatePresence>
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
+      {/* <Outlet /> */}
+      <AnimatePresence mode="wait">
+        <motion.main
+          key={getKey()}
+          initial={{ y: "-5px", opacity: 0 }}
+          animate={{ y: "0", opacity: 1 }}
+          exit={{
+            y: "5px",
+            opacity: 0,
+            transition: {
+              duration: "0.5",
+              ease: "easeOut",
+            },
+          }}
+          transition={{ duration: "0.5", ease: "easeIn" }}
+        >
+          {outlet}
+        </motion.main>
+      </AnimatePresence>
+      <ScrollRestoration />
+      <Scripts />
+      <LiveReload />
       {/* </body> */}
-    {/* </html> */}
+      {/* </html> */}
     </>
   );
 }

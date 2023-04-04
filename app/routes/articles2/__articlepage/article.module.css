@@ -1,0 +1,56 @@
+.Article {
+  display: flex;
+  height: 100%;
+}
+.Article .divider {
+  margin-top: 32px;
+  z-index: -1;
+  height: 2px;
+  width: 100%;
+  background-color: white;
+}
+.Article .sidebar {
+  width: 300px;
+}
+@media only screen and (max-width: 1024px) {
+  .Article .sidebar {
+    visibility: hidden;
+    width: 0px;
+  }
+}
+.Article .container {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 300px);
+  position: relative;
+}
+@media only screen and (max-width: 1024px) {
+  .Article .container {
+    width: 100%;
+  }
+}
+.Article .container .title {
+  z-index: 12;
+  background-color: black;
+  padding-left: 10px;
+  padding-right: 10px;
+  left: calc((100% - 300px) * 0.1);
+  position: absolute;
+  padding-top: 8px;
+  font-size: 48px;
+  font-family: "BebasNeue";
+}
+@media only screen and (max-width: 1024px) {
+  .Article .container .title {
+    left: 40px;
+    font-size: 40px;
+    padding-top: 12px;
+  }
+}
+.Article .container .markdown {
+  margin-top: 24px;
+  overflow-y: scroll;
+  padding-right: 12px;
+}
+
+/*# sourceMappingURL=article.module.css.map */

@@ -9,6 +9,7 @@ module.exports = {
   serverBuildTarget: "arc",
   server: "./server.ts",
   ignoredRouteFiles: ["**/.*", "**/*.css", "**/*.css.map", "**/*.scss", "**/*.test.{js,jsx,ts,tsx}"],
+  serverDependenciesToBundle: "all",
   future: {
     unstable_cssModules: true,
   },

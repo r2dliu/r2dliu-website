@@ -22,8 +22,8 @@ $hamburger-active-hover-opacity: $hamburger-hover-opacity !default;
   }
 
   .divider {
-    border: 2px solid white;
-    height: calc(100% - 36px);
+    width: 2px;
+    background-color: white;
     z-index: 1;
   }
 
