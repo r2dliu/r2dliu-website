@@ -25,7 +25,7 @@ export default function CanvasPage(props: PropsWithChildren<unknown>) {
               className={styles.motion}
               initial={{ height: "calc(0% + 0px)" }}
               animate={{ height: "calc(100% - 36px)" }}
-              transition={{ duration: 0.5, ease: "easeIn", delay: 0.15 }}
+              transition={{ duration: 0.4, ease: "easeIn", delay: 0.15 }}
             >
               <Divider className={styles.divider} orientation="vertical" />
             </motion.div>

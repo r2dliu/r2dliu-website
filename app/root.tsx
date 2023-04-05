@@ -7,6 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLocation,
+  useMatches,
   useOutlet,
 } from "@remix-run/react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -48,8 +49,6 @@ export default function App() {
       return path;
     }
   };
-
-  console.log(getKey());
 
   return (
     <>

@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import {
   useParams,
   useLoaderData,
@@ -15,7 +16,7 @@ import ReactMarkdown from "react-markdown";
 import { AnimatePresence, motion } from "framer-motion";
 
 export const loader = async ({ params }: LoaderArgs) => {
-  return articleData[params.article as keyof typeof articleData];
+  return articleData[params.article as keyof typeof articleData] || null;
 };
 
 const generateSlug = (str: string) => {
@@ -37,45 +38,24 @@ const generateSlug = (str: string) => {
 };
 
 export default function Articles() {
-  const data = useLoaderData<typeof loader>();
-  if (!data) {
-    return null;
-  }
+  const lastData = useRef({});
+  const data = useLoaderData<typeof loader>() || lastData.current;
+  useEffect(() => {
+    if (data) {
+      lastData.current = data;
+    }
+  }, [data]);
 
   return (
-    // <AnimatePresence mode="wait">
-    //   <motion.div
-    //     key={useLocation().pathname}
-    //     className={styles.Article}
-    //     initial={{ y: "-5px", opacity: 0 }}
-    //     animate={{ y: "0", opacity: 1 }}
-    //     exit={{
-    //       y: "5px",
-    //       opacity: 0,
-    //       transition: {
-    //         duration: "2",
-    //         ease: "easeOut",
-    //       },
-    //     }}
-    //     transition={{ duration: "2", ease: "easeIn" }}
-    //   >
-    <>
+    <div className={styles.Article}>
       <div className={styles.sidebar}>
-        <Link to="/">bleh</Link>
+        <Link to="/articles">bleh</Link>
       </div>
       <div className={styles.container}>
         <motion.div
           initial={{ width: "0%" }}
           animate={{ width: "100%" }}
-          exit={{
-            y: "5px",
-            opacity: 0,
-            transition: {
-              duration: "2",
-              ease: "easeOut",
-            },
-          }}
-          transition={{ duration: 0.5, ease: "easeIn", delay: 0.15 }}
+          transition={{ duration: 0.4, ease: "easeIn", delay: 0.15 }}
         >
           <Divider className={styles.divider} />
         </motion.div>
@@ -97,8 +77,6 @@ export default function Articles() {
           </ReactMarkdown>
         </div>
       </div>
-    </>
-    //   </motion.div>
-    // </AnimatePresence>
+    </div>
   );
 }
