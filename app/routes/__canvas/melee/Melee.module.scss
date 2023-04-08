@@ -127,6 +127,7 @@
         height: 120px;
         width: 120px;
         border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.05);
         border: 2px solid grey;
 
         .text {
@@ -167,7 +168,7 @@
           &::before {
             box-sizing: border-box;
             display: block;
-            border: solid 2px white;
+            border: solid 2px grey;
             width: 200%;
             height: 200%;
             border-radius: 50%;

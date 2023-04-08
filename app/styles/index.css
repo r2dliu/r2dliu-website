@@ -64,9 +64,17 @@ html body .article h2 {
   font-size: 24px;
   font-weight: normal;
 }
+html body .article ol,
 html body .article p {
   font-family: "HelveticaNeueLight";
   font-size: 20px;
+}
+html body .article p span {
+  width: 100%;
+}
+html body .article p span img {
+  display: block;
+  margin: auto;
 }
 html body .article iframe {
   max-width: 100%;
@@ -75,6 +83,7 @@ html body .article iframe {
 }
 html body .article figcaption {
   padding-top: 8px;
+  padding-bottom: 8px;
   font-family: "HelveticaNeueLight";
   font-size: 14px;
   align-self: center;

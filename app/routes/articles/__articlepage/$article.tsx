@@ -14,6 +14,7 @@ import { articleData } from "~/data/articles";
 import styles from "./article.module.css";
 import ReactMarkdown from "react-markdown";
 import { AnimatePresence, motion } from "framer-motion";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export const loader = async ({ params }: LoaderArgs) => {
   return articleData[params.article as keyof typeof articleData] || null;
@@ -69,6 +70,10 @@ export default function Articles() {
                   id={generateSlug(props.children[0] as string)}
                   {...props}
                 ></h1>
+              ),
+              img: ({ node, ...props }) => (
+                // @ts-ignore
+                <LazyLoadImage effect="blur" {...props} />
               ),
             }}
             rehypePlugins={[rehypeRaw]}
