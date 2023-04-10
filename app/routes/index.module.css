@@ -6,6 +6,16 @@
   align-items: center;
   justify-content: center;
 }
+.Home .name {
+  font-family: "BebasNeue";
+  font-size: 90px;
+}
+.Home .description {
+  padding-top: 6px;
+  font-family: "HelveticaNeueRegular";
+  font-size: 20px;
+  padding-bottom: 18px;
+}
 .Home .button {
   font-family: "HelveticaNeueMedium";
   opacity: 1;

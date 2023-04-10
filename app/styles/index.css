@@ -8,10 +8,12 @@ main,
   padding: 0;
 }
 
+html {
+  /* Material-UI overrides */
+}
 html body {
   background: black;
   color: white;
-  /* Material-UI overrides */
 }
 html body div {
   scrollbar-color: white transparent;
@@ -26,15 +28,6 @@ html body div ::-webkit-scrollbar-thumb {
 html body div ::-webkit-scrollbar-track {
   width: 1px;
   background: transparent;
-}
-html body .MuiButton-root {
-  border-radius: 0px;
-  border: 2px solid white;
-  color: white;
-}
-html body .MuiChip-label {
-  padding-left: 8px;
-  padding-right: 8px;
 }
 html body a {
   color: gray;
@@ -65,6 +58,7 @@ html body .article h2 {
   font-weight: normal;
 }
 html body .article ol,
+html body .article ul,
 html body .article p {
   font-family: "HelveticaNeueLight";
   font-size: 20px;
@@ -87,6 +81,18 @@ html body .article figcaption {
   font-family: "HelveticaNeueLight";
   font-size: 14px;
   align-self: center;
+}
+html .MuiButton-root {
+  border-radius: 0px;
+  border: 2px solid white;
+  color: white;
+}
+html .MuiButton-root:hover {
+  border: 2px solid white;
+}
+html .MuiChip-label {
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 @font-face {

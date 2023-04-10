@@ -1,8 +1,7 @@
 import { Button } from "@mui/material";
 import { useNavigate } from "@remix-run/react";
-import { redirect } from "@remix-run/server-runtime";
 import cn from "classnames";
-import { AnimationEventHandler, useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./index.module.css";
 
 export default function Index() {
@@ -11,6 +10,8 @@ export default function Index() {
 
   return (
     <div className={styles.Home}>
+      <div className={styles.name}>David Liu</div>
+      <div className={styles.description}>Software | Climbing | Melee</div>
       <Button
         onTransitionEnd={(e) => {
           if (e.propertyName === "width" && e.pseudoElement === "::before") {

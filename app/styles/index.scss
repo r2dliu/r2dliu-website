@@ -32,18 +32,6 @@ html {
       scrollbar-width: thin;
     }
 
-    /* Material-UI overrides */
-    .MuiButton-root {
-      border-radius: 0px;
-      border: 2px solid white;
-      color: white;
-    }
-
-    .MuiChip-label {
-      padding-left: 8px;
-      padding-right: 8px;
-    }
-
     a {
       color: gray;
       &:hover {
@@ -77,6 +65,7 @@ html {
       }
 
       ol,
+      ul,
       p {
         font-family: "HelveticaNeueLight";
         font-size: 20px;
@@ -106,6 +95,22 @@ html {
         align-self: center;
       }
     }
+  }
+
+  /* Material-UI overrides */
+  .MuiButton-root {
+    border-radius: 0px;
+    border: 2px solid white;
+    color: white;
+
+    &:hover {
+      border: 2px solid white;
+    }
+  }
+
+  .MuiChip-label {
+    padding-left: 8px;
+    padding-right: 8px;
   }
 }
 

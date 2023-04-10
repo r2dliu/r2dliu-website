@@ -6,8 +6,8 @@ import {
   Meta,
   Scripts,
   ScrollRestoration,
+  useCatch,
   useLocation,
-  useMatches,
   useOutlet,
 } from "@remix-run/react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -15,6 +15,7 @@ import { createHead } from "remix-island";
 
 import "react-lazy-load-image-component/src/effects/opacity.css";
 import styles from "styles/index.css";
+import NotFoundPage from "./components/BasePages/NotFoundPage";
 
 export const links: LinksFunction = () => {
   return [
@@ -37,6 +38,23 @@ export const Head = createHead(() => (
     <Links />
   </>
 ));
+
+export function CatchBoundary() {
+  const caught = useCatch();
+  return (
+    <html>
+      <head>
+        <title>Oops!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <NotFoundPage />
+        <Scripts />
+      </body>
+    </html>
+  );
+}
 
 export default function App() {
   const outlet = useOutlet();

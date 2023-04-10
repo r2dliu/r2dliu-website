@@ -1,23 +1,24 @@
-import { useRef, useEffect } from "react";
-import {
-  useParams,
-  useLoaderData,
-  useRouteLoaderData,
-  useLocation,
-  Link,
-} from "@remix-run/react";
-import type { LoaderArgs } from "@remix-run/node";
+import { useRef, useEffect, createElement, PropsWithChildren } from "react";
+import { useLoaderData } from "@remix-run/react";
+import { LoaderArgs } from "@remix-run/node";
 import { Divider } from "@mui/material";
 import rehypeRaw from "rehype-raw";
-import { articleData } from "~/data/articles";
-
-import styles from "./article.module.css";
 import ReactMarkdown from "react-markdown";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import tocbot from "tocbot";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { articleData } from "~/data/articles";
+import styles from "./article.module.css";
+import { HeadingProps } from "react-markdown/lib/ast-to-react";
 
 export const loader = async ({ params }: LoaderArgs) => {
-  return articleData[params.article as keyof typeof articleData] || null;
+  const data = articleData[params.article as keyof typeof articleData];
+  if (!data) {
+    throw new Response("Not found", {
+      status: 404,
+    });
+  }
+  return data;
 };
 
 const generateSlug = (str: string) => {
@@ -47,11 +48,29 @@ export default function Articles() {
     }
   }, [data]);
 
+  useEffect(() => {
+    tocbot.init({
+      // Where to render the table of contents.
+      tocSelector: ".toc",
+      // Where to grab the headings to build the table of contents.
+      contentSelector: ".article",
+      // Which headings to grab inside of the contentSelector element.
+      headingSelector: "h1, h2",
+      // For headings inside relative or absolute positioned containers within content.
+      hasInnerContainers: true,
+      scrollContainer: `.${styles.markdown}`,
+      onClick: async (e) => {
+        // Minor hack to fix active link highlighting
+        await new Promise((r) => setTimeout(r, 50));
+        // @ts-ignore
+        tocbot.refresh({ ...tocbot.options });
+      },
+      headingsOffset: 90,
+    });
+  }, []);
+
   return (
     <div className={styles.Article}>
-      <div className={styles.sidebar}>
-        <Link to="/articles">bleh</Link>
-      </div>
       <div className={styles.container}>
         <motion.div
           initial={{ width: "0%" }}
@@ -71,6 +90,12 @@ export default function Articles() {
                   {...props}
                 ></h1>
               ),
+              h2: ({ node, ...props }) => (
+                <h2
+                  id={generateSlug(props.children[0] as string)}
+                  {...props}
+                ></h2>
+              ),
               img: ({ node, ...props }) => (
                 // @ts-ignore
                 <LazyLoadImage effect="blur" {...props} />
@@ -80,6 +105,11 @@ export default function Articles() {
           >
             {data.markdown}
           </ReactMarkdown>
+        </div>
+      </div>
+      <div className={styles.sidebar}>
+        <div className={styles.inner}>
+          <div className="toc"></div>
         </div>
       </div>
     </div>

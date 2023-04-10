@@ -6,6 +6,18 @@
   align-items: center;
   justify-content: center;
 
+  .name {
+    font-family: "BebasNeue";
+    font-size: 90px;
+  }
+
+  .description {
+    padding-top: 6px;
+    font-family: "HelveticaNeueRegular";
+    font-size: 20px;
+    padding-bottom: 18px;
+  }
+
   .button {
     font-family: "HelveticaNeueMedium";
     opacity: 1;
