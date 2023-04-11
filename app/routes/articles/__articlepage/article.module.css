@@ -10,6 +10,11 @@
   width: 100%;
   background-color: white;
 }
+@media only screen and (max-width: 1024px) {
+  .Article .divider {
+    margin-top: 20px;
+  }
+}
 .Article .sidebar {
   display: flex;
   flex-direction: column;
@@ -79,7 +84,7 @@
   .Article .container .title {
     left: 40px;
     font-size: 40px;
-    padding-top: 12px;
+    padding-top: 0;
   }
 }
 .Article .container .markdown {

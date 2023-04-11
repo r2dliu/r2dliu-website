@@ -7,6 +7,9 @@
 
   .divider {
     margin-top: 32px;
+    @include breakpoint(laptop) {
+      margin-top: 20px;
+    }
     z-index: -1;
     height: 2px;
     width: 100%;
@@ -94,7 +97,7 @@
       @include breakpoint(laptop) {
         left: 40px;
         font-size: 40px;
-        padding-top: 12px;
+        padding-top: 0;
       }
       font-family: "BebasNeue";
     }

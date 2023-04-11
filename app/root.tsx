@@ -32,6 +32,10 @@ export const meta: V2_MetaFunction = () => {
       property: "og:title",
       content: "R2DLiu.com",
     },
+    {
+      name: "viewport",
+      content: "width=device-width,initial-scale=1.0",
+    },
     { charSet: "utf-8" },
   ];
 };
@@ -49,6 +53,7 @@ export function CatchBoundary() {
       <head>
         <title>Oops!</title>
         <Meta />
+
         <Links />
       </head>
       <body>

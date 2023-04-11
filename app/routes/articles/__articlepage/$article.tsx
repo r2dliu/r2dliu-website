@@ -27,6 +27,11 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data, location }) => {
     },
     { property: "og:url", content: location.pathname },
     { property: "article:author", content: "https://r2dliu.com" },
+    {
+      name: "viewport",
+      content: "width=device-width,initial-scale=1.0",
+    },
+    { charSet: "utf-8" },
   ];
 };
 

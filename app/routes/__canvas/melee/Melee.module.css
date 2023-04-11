@@ -27,6 +27,7 @@
   font-family: "HelveticaNeueLight";
   font-size: 16px;
   padding-bottom: 16px;
+  max-width: 100%;
 }
 .Melee .bio1 {
   position: relative;
@@ -117,8 +118,19 @@
   background-color: rgba(255, 255, 255, 0.05);
   border: 2px solid grey;
 }
+@media only screen and (max-width: 768px) {
+  .Melee .achievements .achievement .placement {
+    height: 100px;
+    width: 100px;
+  }
+}
 .Melee .achievements .achievement .placement .text {
   font-size: 36px;
+}
+@media only screen and (max-width: 768px) {
+  .Melee .achievements .achievement .placement .text {
+    font-size: 32px;
+  }
 }
 .Melee .achievements .achievement .placement .text .number {
   font-family: "HelveticaNeueBold";
@@ -132,6 +144,12 @@
   height: 120px;
   border-radius: 50%;
   background: transparent;
+}
+@media only screen and (max-width: 768px) {
+  .Melee .achievements .achievement .placement .circle {
+    height: 100px;
+    width: 100px;
+  }
 }
 .Melee .achievements .achievement .placement .arc {
   overflow: hidden;
