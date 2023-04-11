@@ -25,6 +25,7 @@ $hamburger-active-hover-opacity: $hamburger-hover-opacity !default;
     width: 2px;
     background-color: white;
     z-index: 1;
+    position: relative;
   }
 
   .canvas {

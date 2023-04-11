@@ -13,7 +13,7 @@ export default function CanvasPage(props: PropsWithChildren<unknown>) {
   const location = useLocation();
   useEffect(() => {
     setMenuOpen(false);
-  }, [location]);
+  }, [location, isTablet]);
 
   return (
     <div className={styles.CanvasPage}>

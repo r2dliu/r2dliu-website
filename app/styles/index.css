@@ -40,6 +40,10 @@ html body .article {
   display: flex;
   flex-direction: column;
 }
+html body .article h1,
+html body .article h2 {
+  margin-bottom: 0;
+}
 html body .article h1 {
   font-family: "HelveticaNeueBold";
   font-size: 28px;
@@ -60,20 +64,28 @@ html body .article h2 {
 html body .article ol,
 html body .article ul,
 html body .article p {
-  font-family: "HelveticaNeueLight";
+  font-family: "HelveticaNeueRegular";
   font-size: 20px;
+}
+html body .article p {
+  margin-bottom: 0;
 }
 html body .article p span {
   width: 100%;
 }
 html body .article p span img {
+  padding-top: 20px;
   display: block;
   margin: auto;
+  max-width: 100%;
 }
 html body .article iframe {
   max-width: 100%;
   max-height: 100%;
   align-self: center;
+}
+html body .article p + iframe {
+  margin-top: 20px;
 }
 html body .article figcaption {
   padding-top: 8px;
