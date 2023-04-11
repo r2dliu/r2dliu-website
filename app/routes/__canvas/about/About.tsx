@@ -1,8 +1,17 @@
-import { Link } from "@remix-run/react";
+import { V2_MetaFunction } from "@remix-run/node";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import CanvasPage from "~/components/BasePages/CanvasPage";
 
 import styles from "./About.module.css";
+
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "About" },
+    {
+      property: "og:title",
+      content: "About",
+    },
+  ];
+};
 
 export default function About() {
   return (

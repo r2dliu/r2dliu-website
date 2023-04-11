@@ -12,5 +12,6 @@ module.exports = {
   serverDependenciesToBundle: "all",
   future: {
     unstable_cssModules: true,
+    v2_meta: true
   },
 };

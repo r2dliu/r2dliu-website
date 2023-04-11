@@ -7,6 +7,13 @@
   overflow-y: scroll;
   overflow-x: hidden;
 }
+@media only screen and (max-width: 768px) {
+  .Climbing {
+    height: calc(100% - 32px);
+    width: initial;
+    padding: 16px;
+  }
+}
 .Climbing .quote {
   font-family: "HelveticaNeueBold";
   font-size: 48px;

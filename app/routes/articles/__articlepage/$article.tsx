@@ -1,6 +1,6 @@
 import { useRef, useEffect, createElement, PropsWithChildren } from "react";
 import { useLoaderData } from "@remix-run/react";
-import { LoaderArgs } from "@remix-run/node";
+import { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { Divider } from "@mui/material";
 import rehypeRaw from "rehype-raw";
 import ReactMarkdown from "react-markdown";
@@ -9,7 +9,26 @@ import tocbot from "tocbot";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { articleData } from "~/data/articles";
 import styles from "./article.module.css";
-import { HeadingProps } from "react-markdown/lib/ast-to-react";
+
+export const meta: V2_MetaFunction<typeof loader> = ({ data, location }) => {
+  return [
+    { title: data.title },
+    {
+      property: "og:title",
+      content: data.title,
+    },
+    {
+      name: "description",
+      content: data.description,
+    },
+    {
+      property: "og:image",
+      content: data.image,
+    },
+    { property: "og:url", content: location.pathname },
+    { property: "article:author", content: "https://r2dliu.com" },
+  ];
+};
 
 export const loader = async ({ params }: LoaderArgs) => {
   const data = articleData[params.article as keyof typeof articleData];

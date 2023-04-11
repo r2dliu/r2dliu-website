@@ -1,4 +1,4 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import type { LinksFunction, V2_MetaFunction } from "@remix-run/node";
 import { cssBundleHref } from "@remix-run/css-bundle";
 import {
   Links,
@@ -26,11 +26,30 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  title: "R2DLiu.com",
-  viewport: "width=device-width,initial-scale=1",
-});
+// export const meta: V2_MetaFunction = () => {
+//   return [
+//     { title: "R2DLiu.com" },
+//     {
+//       property: "og:title",
+//       content: "R2DLiu.com",
+//     },
+//     {
+//       charset: "utf-8",
+//     },
+//     { viewport: "width=device-width,initial-scale=1" },
+//   ];
+// };
+
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "R2DLiu.com" },
+    {
+      property: "og:title",
+      content: "R2DLiu.com",
+    },
+    { charSet: "utf-8" },
+  ];
+};
 
 export const Head = createHead(() => (
   <>

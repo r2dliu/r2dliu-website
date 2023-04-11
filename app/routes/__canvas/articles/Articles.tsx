@@ -8,6 +8,16 @@ import { Chip } from "@mui/material";
 
 import styles from "./Articles.module.css";
 
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "Articles" },
+    {
+      property: "og:title",
+      content: "Articles",
+    },
+  ];
+};
+
 export default function Articles() {
   return (
     <div className={styles.Articles}>

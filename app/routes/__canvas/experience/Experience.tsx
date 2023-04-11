@@ -1,4 +1,5 @@
 import { Divider } from "@mui/material";
+import { V2_MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import cn from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
@@ -15,6 +16,16 @@ type entriesType = {
     range: string;
     description: ReactNode[];
   };
+};
+
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "Experience" },
+    {
+      property: "og:title",
+      content: "Experience",
+    },
+  ];
 };
 
 export default function Experience() {

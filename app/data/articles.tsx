@@ -11,13 +11,22 @@ export const articleData = {
   ledgedash: {
     title: "PODE & Ledgedashing",
     markdown: ledgedashMarkdown,
+    description:
+      "In-depth summary of the mechanics of PODE and how it affects ledgedashing. Highlights both theoretical and practical considerations for optimal execution",
+    image: "https://s3.r2dliu.com/assets/articles/ledgedash/background.jpg",
   },
   autocancel: {
     title: "Fox Autocancel Aerials",
     markdown: autocancelMarkdown,
+    description:
+      "Small piece on niche but practical situations for Fox's underutilized autocancel options",
+    image: "https://s3.r2dliu.com/assets/articles/autocancel/background.jpg",
   },
   pulley: {
     title: "Pulley Injuries",
     markdown: pulleyMarkdown,
+    description:
+      "Start to finish writeup on the entire process of fully rupturing an A4 pulley, reviewing a few decades of sparse research on the subject, and rehabbing it to full strength",
+    image: "https://s3.r2dliu.com/assets/articles/pulley/background.jpg",
   },
 };
