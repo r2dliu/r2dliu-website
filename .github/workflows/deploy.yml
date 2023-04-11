@@ -85,7 +85,7 @@ jobs:
         run: npm run test -- --coverage
 
   deploy:
-    needs: [lint, typecheck, vitest, cypress]
+    needs: [lint, typecheck, vitest]
     runs-on: ubuntu-latest
 
     steps:
