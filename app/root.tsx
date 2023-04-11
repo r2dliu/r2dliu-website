@@ -6,7 +6,6 @@ import {
   Meta,
   Scripts,
   ScrollRestoration,
-  useCatch,
   useLocation,
   useOutlet,
 } from "@remix-run/react";
@@ -25,20 +24,6 @@ export const links: LinksFunction = () => {
     { rel: "stylesheet", href: styles },
   ];
 };
-
-// export const meta: V2_MetaFunction = () => {
-//   return [
-//     { title: "R2DLiu.com" },
-//     {
-//       property: "og:title",
-//       content: "R2DLiu.com",
-//     },
-//     {
-//       charset: "utf-8",
-//     },
-//     { viewport: "width=device-width,initial-scale=1" },
-//   ];
-// };
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -59,7 +44,6 @@ export const Head = createHead(() => (
 ));
 
 export function CatchBoundary() {
-  const caught = useCatch();
   return (
     <html>
       <head>
@@ -77,9 +61,10 @@ export function CatchBoundary() {
 
 export default function App() {
   const outlet = useOutlet();
+  const location = useLocation();
   const getKey = () => {
-    const path = useLocation().pathname;
-    const splitPath = useLocation().pathname.split("/");
+    const path = location.pathname;
+    const splitPath = location.pathname.split("/");
     if (splitPath.length === 2 && splitPath[1] !== "") {
       return "main";
     } else {

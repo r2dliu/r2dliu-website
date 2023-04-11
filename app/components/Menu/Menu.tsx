@@ -62,6 +62,7 @@ export default function Menu() {
           className={styles.link}
           href={"https://www.linkedin.com/in/r2dliu/"}
           target={"_blank"}
+          rel="noreferrer"
         >
           <LinkedInIcon className={styles.icon} />
         </a>
@@ -69,6 +70,7 @@ export default function Menu() {
           className={styles.link}
           href={"https://instagram.com/r2dliu"}
           target={"_blank"}
+          rel="noreferrer"
         >
           <InstagramIcon className={styles.icon} />
         </a>
@@ -79,6 +81,7 @@ export default function Menu() {
           className={styles.link}
           href={"https://twitter.com/r2_dliu"}
           target={"_blank"}
+          rel="noreferrer"
         >
           <TwitterIcon className={styles.icon} />
         </a>

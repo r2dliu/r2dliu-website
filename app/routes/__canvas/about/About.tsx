@@ -1,4 +1,4 @@
-import { V2_MetaFunction } from "@remix-run/node";
+import type { V2_MetaFunction } from "@remix-run/node";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import styles from "./About.module.css";

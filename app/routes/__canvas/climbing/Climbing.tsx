@@ -1,10 +1,6 @@
-import { Link } from "@remix-run/react";
+import type { V2_MetaFunction } from "@remix-run/node";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import cn from "classnames";
-import ReactPlayer from "react-player/youtube";
-
 import styles from "./Climbing.module.css";
-import { V2_MetaFunction } from "@remix-run/node";
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -43,12 +39,16 @@ export default function Climbing() {
         I love teaching and have an extensive history of tutoring and coaching
         in various subjects, including academia and Melee. Most recently, I've
         been working towards an{" "}
-        <a href={"https://www.acsm.org/"} target={"_blank"}>
+        <a href={"https://www.acsm.org/"} target={"_blank"} rel="noreferrer">
           ACSM
         </a>{" "}
         personal training certification, and working with a handful of climbing
         athletes to improve their performance. Email me or message me on{" "}
-        <a href={"https://www.instagram.com/r2dliu/"} target={"_blank"}>
+        <a
+          href={"https://www.instagram.com/r2dliu/"}
+          target={"_blank"}
+          rel="noreferrer"
+        >
           Instagram
         </a>{" "}
         for information on rates and availability! Happy to work with both

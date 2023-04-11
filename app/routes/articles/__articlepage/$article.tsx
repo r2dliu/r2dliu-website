@@ -1,6 +1,6 @@
-import { useRef, useEffect, createElement, PropsWithChildren } from "react";
+import { useRef, useEffect } from "react";
 import { useLoaderData } from "@remix-run/react";
-import { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { Divider } from "@mui/material";
 import rehypeRaw from "rehype-raw";
 import ReactMarkdown from "react-markdown";

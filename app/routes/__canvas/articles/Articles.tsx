@@ -1,12 +1,11 @@
 import { Divider } from "@mui/material";
 import { Link } from "@remix-run/react";
 import cn from "classnames";
-import { AnimatePresence, motion } from "framer-motion";
-import { ReactNode, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Chip } from "@mui/material";
 
 import styles from "./Articles.module.css";
+import type { V2_MetaFunction } from "@remix-run/node";
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -129,6 +128,7 @@ export default function Articles() {
             className={styles.link}
             href={"https://s3.r2dliu.com/assets/articles/kirigami/kirigami.pdf"}
             target="_blank"
+            rel="noreferrer"
           >
             <div className={styles.article}>
               <div className={styles.info}>
@@ -161,6 +161,7 @@ export default function Articles() {
             className={styles.link}
             href={"https://s3.r2dliu.com/assets/articles/nim/nim.pdf"}
             target="_blank"
+            rel="noreferrer"
           >
             <div className={styles.article}>
               <div className={styles.info}>

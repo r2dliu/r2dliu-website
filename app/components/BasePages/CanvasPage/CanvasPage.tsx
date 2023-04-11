@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useState } from "react";
+import { type PropsWithChildren, useEffect, useState } from "react";
 import cn from "classnames";
 import Menu from "~/components/Menu";
 import { Divider, useMediaQuery, Button } from "@mui/material";

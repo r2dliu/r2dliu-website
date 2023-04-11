@@ -1,11 +1,8 @@
 import { Divider } from "@mui/material";
-import { V2_MetaFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import type { V2_MetaFunction } from "@remix-run/node";
 import cn from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
-import { ReactNode, useState } from "react";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import CanvasPage from "~/components/BasePages/CanvasPage";
+import { type ReactNode, useState } from "react";
 
 import styles from "./Experience.module.css";
 
@@ -37,7 +34,12 @@ export default function Experience() {
       description: [
         <br key={1} />,
         "At ",
-        <a key={"link"} href="https://www.jhuapl.edu/" target="_blank">
+        <a
+          key={"link"}
+          href="https://www.jhuapl.edu/"
+          target="_blank"
+          rel="noreferrer"
+        >
           APL
         </a>,
         ", I worked primarily as a software architect, while also taking on the roles of a full stack dev, team lead, mentor, and project manager.",
@@ -56,7 +58,12 @@ export default function Experience() {
       description: [
         <br key={1} />,
         "I worked as a full-stack software engineer at ",
-        <a key={"link"} href="https://start.gg/" target="_blank">
+        <a
+          key={"link"}
+          href="https://start.gg/"
+          target="_blank"
+          rel="noreferrer"
+        >
           Start.gg
         </a>,
         ", formerly known as Smash.gg prior to its acquisition by Microsoft. Start.gg is a esports platform designed to support and facilitate esports events. This focuses particularly on capabilities revolving around competition, such as constructing tournament brackets, reporting live results, alerting users of matches, providing admin and moderation tools, managing series and leagues, and driving the growth of passionate organizers around the world.",

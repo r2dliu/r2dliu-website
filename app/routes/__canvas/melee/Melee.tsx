@@ -1,9 +1,8 @@
-import { Link } from "@remix-run/react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import cn from "classnames";
 import ReactPlayer from "react-player/youtube";
 import styles from "./Melee.module.css";
-import { V2_MetaFunction } from "@remix-run/node";
+import type { V2_MetaFunction } from "@remix-run/node";
 
 export const meta: V2_MetaFunction = () => {
   return [
