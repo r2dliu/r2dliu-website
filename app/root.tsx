@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import type { LinksFunction, V2_MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { cssBundleHref } from "@remix-run/css-bundle";
 import {
   Links,
@@ -6,6 +8,7 @@ import {
   Meta,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
   useLocation,
   useOutlet,
 } from "@remix-run/react";
@@ -14,6 +17,7 @@ import { createHead } from "remix-island";
 
 import "react-lazy-load-image-component/src/effects/opacity.css";
 import styles from "styles/index.css";
+import * as gtag from "helpers/gtags.client";
 import NotFoundPage from "./components/BasePages/NotFoundPage";
 
 export const links: LinksFunction = () => {
@@ -53,7 +57,6 @@ export function CatchBoundary() {
       <head>
         <title>Oops!</title>
         <Meta />
-
         <Links />
       </head>
       <body>
@@ -64,9 +67,21 @@ export function CatchBoundary() {
   );
 }
 
+export const loader = async () => {
+  return json({ gaTrackingId: process.env.GA_TRACKING_ID });
+};
+
 export default function App() {
   const outlet = useOutlet();
   const location = useLocation();
+  const { gaTrackingId } = useLoaderData<typeof loader>();
+
+  useEffect(() => {
+    if (gaTrackingId?.length) {
+      gtag.pageview(location.pathname, gaTrackingId);
+    }
+  }, [location, gaTrackingId]);
+
   const getKey = () => {
     const path = location.pathname;
     const splitPath = location.pathname.split("/");
@@ -81,6 +96,28 @@ export default function App() {
     <>
       {/* <html lang="en"> */}
       <Head />
+      {process.env.NODE_ENV === "development" || !gaTrackingId ? null : (
+        <>
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaTrackingId}`}
+          />
+          <script
+            async
+            id="gtag-init"
+            dangerouslySetInnerHTML={{
+              __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${gaTrackingId}', {
+                    page_path: window.location.pathname,
+                  });
+                `,
+            }}
+          />
+        </>
+      )}
       {/* <body> */}
       {/* <Outlet /> */}
       <AnimatePresence mode="wait">
