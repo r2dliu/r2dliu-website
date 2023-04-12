@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { Divider } from "@mui/material";
 import rehypeRaw from "rehype-raw";
@@ -135,6 +135,12 @@ export default function Articles() {
         <div className={styles.inner}>
           <div className="toc"></div>
         </div>
+        <Link to="/articles" className={styles.return}>
+          <div className={styles.container}>
+            <div className={styles.text}>← Back to Articles</div>
+            <div className={styles.highlight} />
+          </div>
+        </Link>
       </div>
     </div>
   );

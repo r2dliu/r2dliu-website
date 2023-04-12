@@ -19,7 +19,6 @@ export const pageview = (url: string, trackingId: string) => {
     );
     return;
   }
-  console.log("test");
   window.gtag("config", trackingId, {
     page_path: url,
   });

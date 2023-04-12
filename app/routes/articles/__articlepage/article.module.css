@@ -19,6 +19,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   width: 300px;
   margin-top: 60px;
 }
@@ -57,6 +58,29 @@
     visibility: hidden;
     width: 0px;
   }
+}
+.Article .sidebar .return {
+  text-decoration: none;
+  align-self: flex-start;
+  width: auto;
+}
+.Article .sidebar .return .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  width: auto;
+}
+.Article .sidebar .return .container .text {
+  background-color: white;
+  padding: 10px 4px;
+  margin-bottom: 2px;
+  font-family: "HelveticaNeueMedium";
+}
+.Article .sidebar .return .container .highlight {
+  height: 2px;
+  background-color: white;
+  width: 100%;
 }
 .Article .container {
   display: flex;
