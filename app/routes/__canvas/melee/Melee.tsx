@@ -42,7 +42,7 @@ export default function Melee() {
       <div className={styles.bio2}>
         Since then, R2DLiu has continued to compete on and off throughout the
         years, fading slowly into inactivity, but continuing to remain a threat
-        in bracket at majors. Most recently, he achieving a top 64 finish at
+        in bracket at majors. Most recently, he achieved a top 64 finish at
         Genesis 9 after a nearly three year hiatus. Follow him along on his
         enduring Melee journey on{" "}
         <a href={"https://twitch.tv/r2dliu"}>Twitch</a> and{" "}
