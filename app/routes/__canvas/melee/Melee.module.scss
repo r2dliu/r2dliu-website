@@ -25,6 +25,9 @@
     font-family: "BebasNeue";
     font-size: 90px;
     margin-top: -12px;
+    @include breakpoint(laptop) {
+      margin-top: 0px;
+    }
   }
 
   .bio1,

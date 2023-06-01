@@ -36,14 +36,16 @@ export default function Climbing() {
       </div>
       <div className={styles.header}>Personal Training & Coaching</div>
       <div className={styles.bio}>
-        I love teaching and have an extensive history of tutoring and coaching
-        in various subjects, including academia and Melee. Most recently, I've
-        been working towards an{" "}
+        I am an{" "}
         <a href={"https://www.acsm.org/"} target={"_blank"} rel="noreferrer">
           ACSM
         </a>{" "}
-        personal training certification, and working with a handful of climbing
-        athletes to improve their performance. Email me or message me on{" "}
+        Certified Personal Trainer® (ACSM-CPT). I also love teaching in general
+        and have an extensive history of tutoring and coaching in various
+        subjects, including academia, Melee, and of course health and fitness. I
+        primarily work with climbing athletes to improve their performance, but
+        am happy to help any motivated individual meet their specific goals!
+        Email me or message me on{" "}
         <a
           href={"https://www.instagram.com/r2dliu/"}
           target={"_blank"}
