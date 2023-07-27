@@ -31,7 +31,6 @@ export const links: LinksFunction = () => {
 
 export const meta: V2_MetaFunction = () => {
   return [
-    { title: "R2DLiu.com" },
     {
       property: "og:title",
       content: "R2DLiu.com",

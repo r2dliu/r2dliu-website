@@ -5,17 +5,6 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Chip } from "@mui/material";
 
 import styles from "./Articles.module.css";
-import type { V2_MetaFunction } from "@remix-run/node";
-
-export const meta: V2_MetaFunction = () => {
-  return [
-    { title: "Articles" },
-    {
-      property: "og:title",
-      content: "Articles",
-    },
-  ];
-};
 
 export default function Articles() {
   return (

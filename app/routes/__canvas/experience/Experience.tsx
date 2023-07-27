@@ -15,16 +15,6 @@ type entriesType = {
   };
 };
 
-export const meta: V2_MetaFunction = () => {
-  return [
-    { title: "Experience" },
-    {
-      property: "og:title",
-      content: "Experience",
-    },
-  ];
-};
-
 export default function Experience() {
   const entries: entriesType = {
     "JHU/APL": {
