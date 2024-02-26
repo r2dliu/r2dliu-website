@@ -63,7 +63,7 @@ jobs:
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
         with:
-          working-directory: app1
+          working-directory: web
           useLockFile: false
 
       - name: 🔎 Type check
@@ -90,7 +90,7 @@ jobs:
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
         with:
-          working-directory: app1
+          working-directory: web
           useLockFile: false
 
       - name: ⚡ Run vitest
@@ -126,7 +126,7 @@ jobs:
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
         with:
-          working-directory: app1
+          working-directory: web
           useLockFile: false
 
       - name: 🏗 Build
