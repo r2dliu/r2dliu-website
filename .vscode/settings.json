@@ -4,5 +4,11 @@
     "**/*.css.map": true
   },
   "editor.tabSize": 2,
-  "editor.wordWrap": "on"
+  "editor.wordWrap": "on",
+  "ruff.fixAll": true,
+  "ruff.enable": true,
+  "ruff.lint.run": "onSave",
+  "flake8.ignorePatterns": [
+    "*"
+  ]
 }
