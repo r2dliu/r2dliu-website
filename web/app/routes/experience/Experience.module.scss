@@ -1,0 +1,150 @@
+@use "../../../styles/mixins" as *;
+
+.Experience {
+  display: flex;
+  height: calc(100% - 48px);
+  width: calc(100% - 48px);
+  padding: 24px;
+  @include breakpoint(mobile) {
+    padding: 0px;
+    height: 100%;
+    width: 100%;
+  }
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  flex-direction: column;
+
+  .work,
+  .skills {
+    padding: 16px;
+    .header {
+      font-family: "HelveticaNeueMedium";
+      font-size: 32px;
+      padding-bottom: 32px;
+    }
+  }
+
+  .work {
+    .content {
+      position: relative;
+      display: flex;
+
+      @include breakpoint(tablet) {
+        max-height: 450px;
+        overflow-y: scroll;
+      }
+
+      .timeline {
+        position: absolute;
+        border: none;
+        background-color: gray;
+        width: 1px;
+        height: 444px;
+        left: 7.5px;
+
+        @include breakpoint(tablet) {
+          height: 500px;
+          left: 11.5px;
+        }
+
+        z-index: -1;
+      }
+
+      .entries {
+        min-width: 240px;
+
+        @include breakpoint(tablet) {
+          min-width: 30%;
+        }
+
+        .entry {
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          color: gray;
+
+          @include breakpoint(tablet) {
+            padding-left: 4px;
+          }
+
+          &:hover,
+          &.active {
+            transition: all 0.15s ease-in;
+            color: white;
+
+            .diamond {
+              transition: all 0.15s ease-in;
+              background-color: white;
+            }
+          }
+
+          .diamond {
+            min-height: 16px;
+            min-width: 16px;
+            rotate: 45deg;
+            background-color: gray;
+          }
+
+          .name {
+            padding-left: 8px;
+            font-family: "HelveticaNeueMedium";
+            font-size: 18px;
+          }
+        }
+
+        .entry:not(:last-child) {
+          margin-bottom: 120px;
+        }
+      }
+
+      .details {
+        padding-left: 24px;
+
+        .name {
+          font-family: "HelveticaNeueMedium";
+          font-size: 24px;
+        }
+
+        .title {
+          font-family: "HelveticaNeueRegular";
+          font-size: 16px;
+          color: gray;
+        }
+
+        .range {
+          font-family: "HelveticaNeueRegular";
+          font-size: 16px;
+          color: gray;
+        }
+
+        .description {
+          font-family: "HelveticaNeueLight";
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  .skills {
+    .content {
+      display: flex;
+      .column {
+        display: flex;
+        flex-direction: column;
+        .skill {
+          font-family: "HelveticaNeueLight";
+          font-size: 16px;
+        }
+
+        .skill:not(:last-child) {
+          padding-bottom: 12px;
+        }
+      }
+
+      .column:not(:last-child) {
+        padding-right: 48px;
+      }
+    }
+  }
+}

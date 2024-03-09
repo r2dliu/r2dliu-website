@@ -1,0 +1,215 @@
+@use "../../../styles/mixins" as *;
+
+.Articles {
+  display: flex;
+  height: calc(100% - 48px);
+  width: calc(100% - 48px);
+  padding: 24px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  flex-direction: column;
+
+  .link {
+    text-decoration: none;
+    color: white;
+  }
+
+  .featured,
+  .article {
+    display: flex;
+
+    .info {
+      margin: 12px;
+      margin-left: 0;
+      padding-right: 8px;
+
+      .title {
+        font-family: "HelveticaNeueBold";
+        font-size: 22px;
+        margin-bottom: 2px;
+      }
+
+      .description {
+        font-family: "HelveticaNeueRegular";
+        font-size: 16px;
+        color: gray;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .details {
+        padding-top: 4px;
+        display: flex;
+        align-items: center;
+
+        .date,
+        .chip,
+        .dot {
+          color: white;
+          font-size: 14px;
+          font-family: "HelveticaNeueRegular";
+        }
+
+        .dot {
+          padding-left: 4px;
+          padding-right: 4px;
+        }
+
+        .chip {
+          height: 20px;
+
+          &.climbing {
+            background-color: blue;
+          }
+
+          &.math {
+            background-color: green;
+          }
+
+          &.melee {
+            background-color: red;
+          }
+        }
+      }
+    }
+
+    @include breakpoint(tablet) {
+      .info {
+        margin: 0px;
+
+        .title {
+          font-size: 16px;
+
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .description {
+          font-size: 12px;
+          -webkit-line-clamp: 2;
+        }
+
+        .details {
+          .date,
+          .chip,
+          .dot {
+            font-size: 12px;
+          }
+
+          :global(.MuiChip-label) {
+            padding-left: 4px;
+            padding-right: 4px;
+          }
+
+          .chip {
+            height: 14px;
+          }
+        }
+      }
+    }
+  }
+
+  .featured {
+    align-items: end;
+    position: relative;
+    width: 100%;
+    min-height: 500px;
+    max-height: 500px;
+
+    @include breakpoint(tablet) {
+      min-height: 300px;
+      max-height: 300px;
+      padding-bottom: 8px;
+      // background-image: linear-gradient(
+      //   to right,
+      //   black 0%,
+      //   rgba(0, 0, 0, 0.8) 80%,
+      //   transparent 100%
+      // );
+    }
+
+    .info {
+      max-width: 450px;
+    }
+
+    .wrapper {
+      z-index: -1;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      display: flex !important;
+      align-items: center;
+
+      &:after {
+        font-size: 100vw;
+        background: linear-gradient(
+          to right,
+          black 0%,
+          rgba(0, 0, 0, 0.7) 50%,
+          transparent 100%
+        );
+
+        content: "";
+        display: block;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+
+      .image {
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+        opacity: 1;
+      }
+    }
+  }
+
+  .bottom {
+    display: flex;
+    .column {
+      .article {
+        justify-content: space-between;
+        padding-bottom: 8px;
+        padding-top: 8px;
+        border-bottom: 1px solid grey;
+        align-items: center;
+        max-width: 700px;
+        .wrapper {
+          // background-color: #111111;
+          min-width: 200px;
+          max-width: 200px;
+          height: 150px;
+
+          @include breakpoint(tablet) {
+            min-width: 100px;
+            max-width: 100px;
+            height: 100px;
+          }
+
+          display: flex !important;
+          justify-content: center;
+          align-items: center;
+          overflow: hidden;
+          .image {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  .divider {
+    margin-top: 12px;
+    border-color: gray;
+  }
+}

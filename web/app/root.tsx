@@ -40,6 +40,8 @@ export const meta: V2_MetaFunction = () => {
 
 export const Head = createHead(() => (
   <>
+    <meta charSet="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <Meta />
     <Links />
   </>
@@ -90,7 +92,6 @@ export default function App() {
 
   return (
     <>
-      {/* <html lang="en"> */}
       <Head />
       {process.env.NODE_ENV === "development" || !gaTrackingId ? null : (
         <>
@@ -114,8 +115,6 @@ export default function App() {
           />
         </>
       )}
-      {/* <body> */}
-      {/* <Outlet /> */}
       <AnimatePresence mode="wait">
         <motion.main
           key={getKey()}
@@ -137,8 +136,6 @@ export default function App() {
       <ScrollRestoration />
       <Scripts />
       <LiveReload />
-      {/* </body> */}
-      {/* </html> */}
     </>
   );
 }

@@ -10,8 +10,4 @@ module.exports = {
   server: "./server.ts",
   ignoredRouteFiles: ["**/.*", "**/*.css", "**/*.css.map", "**/*.scss", "**/*.test.{js,jsx,ts,tsx}"],
   serverDependenciesToBundle: "all",
-  future: {
-    unstable_cssModules: true,
-    v2_meta: true
-  },
 };
