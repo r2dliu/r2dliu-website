@@ -11,6 +11,7 @@ class Course(AbstractBaseModel):
 class Class(AbstractBaseModel):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    description = models.TextField()
 
 
 class Subscriber(AbstractBaseModel):
