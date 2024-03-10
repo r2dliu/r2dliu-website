@@ -1,8 +1,8 @@
-import type { V2_MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/node";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import styles from "./Climbing.module.css";
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [
     { title: "Climbing" },
     {

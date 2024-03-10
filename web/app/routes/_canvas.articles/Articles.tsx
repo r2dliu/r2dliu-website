@@ -1,8 +1,7 @@
-import { Divider } from "@mui/material";
+import { Chip, Divider } from "@mui/material";
 import { Link } from "@remix-run/react";
 import cn from "classnames";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Chip } from "@mui/material";
 
 import styles from "./Articles.module.css";
 

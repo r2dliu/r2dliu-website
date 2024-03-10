@@ -1,7 +1,7 @@
 node_modules
 
-/server/index.js
-/public/build
+web/server/*
+web/build/*
 preferences.arc
 sam.json
 sam.yaml

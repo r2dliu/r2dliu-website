@@ -1,17 +1,85 @@
-/* Error: Can't find stylesheet to import.
- *   ,
- * 1 | @use "../../../styles/mixins" as *;
- *   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- *   '
- *   app/routes/_canvas.about/About.module.scss 1:1  root stylesheet */
-
-body::before {
-  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
-      "Droid Sans Mono", monospace, monospace;
-  white-space: pre;
-  display: block;
-  padding: 1em;
-  margin-bottom: 1em;
-  border-bottom: 2px solid black;
-  content: "Error: Can't find stylesheet to import.\a   \2577 \a 1 \2502  @use \"../../../styles/mixins\" as *;\a   \2502  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a   \2575 \a   app/routes/_canvas.about/About.module.scss 1:1  root stylesheet";
+.About {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 48px);
+  width: calc(100% - 48px);
+  padding: 24px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  align-items: center;
 }
+.About .title {
+  margin: 8%;
+  font-family: "HelveticaNeueBold";
+  font-size: 64px;
+}
+@media only screen and (max-width: 768px) {
+  .About .title {
+    margin: 0;
+  }
+}
+.About .title .description {
+  font-family: "HelveticaNeueLight";
+  font-size: 20px;
+  width: 35%;
+  word-wrap: break-word;
+}
+@media only screen and (max-width: 768px) {
+  .About .title .description {
+    width: 100%;
+  }
+}
+.About .wrapper {
+  opacity: 0.7;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+  overflow: hidden;
+}
+.About .wrapper .image {
+  height: 125%;
+}
+@media only screen and (max-width: 480px) {
+  .About .wrapper .image {
+    height: 100%;
+  }
+}
+@media only screen and (max-width: 1024px) {
+  .About .wrapper {
+    left: 0;
+    opacity: 0.4;
+  }
+}
+.About .wrapper:after {
+  font-size: 100vw;
+  box-shadow: inset 0 0 0.1em 0.1em black;
+  content: "";
+  display: block;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+@media only screen and (max-width: 480px) {
+  .About .wrapper:after {
+    box-shadow: inset 0 0 0.3em 0.3em black;
+  }
+}
+.About .credit {
+  font-family: "HelveticaNeueThin";
+  color: gray;
+  font-size: 14px;
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+}
+.About .credit .url {
+  text-decoration: none;
+}
+@media only screen and (max-width: 768px) {
+  .About .credit {
+    visibility: hidden;
+  }
+}
+
+/*# sourceMappingURL=About.module.css.map */

@@ -6,11 +6,8 @@ r2dliu
   method any
   src server
 
-@static
+@plugins
+plugin-remix
+  src plugin-remix.js
 
-@tables
-article
-  title *String
-  timestamp **Number
-  author **String
-  markdown **String
+@static

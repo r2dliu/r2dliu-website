@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import type { LinksFunction, V2_MetaFunction } from "@remix-run/node";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { cssBundleHref } from "@remix-run/css-bundle";
 import {
@@ -29,7 +29,7 @@ export const links: LinksFunction = () => {
   ];
 };
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [
     {
       property: "og:title",

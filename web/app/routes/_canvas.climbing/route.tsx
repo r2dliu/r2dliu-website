@@ -1,18 +1,17 @@
 import type { MetaFunction } from "@remix-run/node";
-import Articles from "./Articles";
+import Climbing from "./Climbing";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Articles" },
+    { title: "Climbing" },
     {
       property: "og:title",
-      content: "Articles",
+      content: "Climbing",
     },
     {
       name: "description",
-      content: "Articles and blog posts about various subjects",
+      content: "My climbing journey and personal training/coaching",
     },
   ];
 };
-
-export default Articles;
+export default Climbing;

@@ -1,17 +1,66 @@
-/* Error: Can't find stylesheet to import.
- *   ,
- * 1 | @use "../../../styles/mixins" as *;
- *   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- *   '
- *   app/routes/_canvas.climbing/Climbing.module.scss 1:1  root stylesheet */
-
-body::before {
-  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
-      "Droid Sans Mono", monospace, monospace;
-  white-space: pre;
-  display: block;
-  padding: 1em;
-  margin-bottom: 1em;
-  border-bottom: 2px solid black;
-  content: "Error: Can't find stylesheet to import.\a   \2577 \a 1 \2502  @use \"../../../styles/mixins\" as *;\a   \2502  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a   \2575 \a   app/routes/_canvas.climbing/Climbing.module.scss 1:1  root stylesheet";
+.Climbing {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 48px);
+  width: calc(100% - 48px);
+  padding: 40px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
+@media only screen and (max-width: 768px) {
+  .Climbing {
+    height: calc(100% - 32px);
+    width: initial;
+    padding: 16px;
+  }
+}
+.Climbing .quote {
+  font-family: "HelveticaNeueBold";
+  font-size: 48px;
+  padding-bottom: 16px;
+}
+@media only screen and (max-width: 768px) {
+  .Climbing .quote {
+    font-size: 32px;
+  }
+}
+.Climbing .header {
+  padding-top: 24px;
+  font-family: "HelveticaNeueMedium";
+  font-size: 32px;
+  padding-bottom: 24px;
+}
+.Climbing .attribution {
+  font-family: "HelveticaNeueLight";
+  font-size: 24px;
+  align-self: flex-end;
+  padding-bottom: 16px;
+  padding-right: 16px;
+}
+.Climbing .bio {
+  max-width: 800px;
+  font-family: "HelveticaNeueLight";
+  font-size: 20px;
+}
+.Climbing .wrapper {
+  opacity: 1;
+  height: 100%;
+  right: 0;
+  opacity: 0.5;
+  object-fit: cover;
+  position: absolute;
+  z-index: -1;
+  overflow: hidden;
+}
+@media only screen and (max-width: 768px) {
+  .Climbing .wrapper {
+    right: -64px;
+  }
+}
+.Climbing .wrapper .image {
+  z-index: -2;
+  position: relative;
+  height: 100%;
+}
+
+/*# sourceMappingURL=Climbing.module.css.map */

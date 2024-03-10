@@ -1,7 +1,7 @@
 {
   "files.exclude": {
-    "**/*.css": true,
-    "**/*.css.map": true
+    // "**/*.css": true,
+    // "**/*.css.map": true
   },
   "editor.tabSize": 2,
   "editor.wordWrap": "on",

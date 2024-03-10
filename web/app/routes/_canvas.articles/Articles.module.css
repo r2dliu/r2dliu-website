@@ -1,17 +1,192 @@
-/* Error: Can't find stylesheet to import.
- *   ,
- * 1 | @use "../../../styles/mixins" as *;
- *   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- *   '
- *   app/routes/_canvas.articles/Articles.module.scss 1:1  root stylesheet */
-
-body::before {
-  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
-      "Droid Sans Mono", monospace, monospace;
-  white-space: pre;
-  display: block;
-  padding: 1em;
-  margin-bottom: 1em;
-  border-bottom: 2px solid black;
-  content: "Error: Can't find stylesheet to import.\a   \2577 \a 1 \2502  @use \"../../../styles/mixins\" as *;\a   \2502  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a   \2575 \a   app/routes/_canvas.articles/Articles.module.scss 1:1  root stylesheet";
+.Articles {
+  display: flex;
+  height: calc(100% - 48px);
+  width: calc(100% - 48px);
+  padding: 24px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  flex-direction: column;
 }
+.Articles .link {
+  text-decoration: none;
+  color: white;
+}
+.Articles .featured,
+.Articles .article {
+  display: flex;
+}
+.Articles .featured .info,
+.Articles .article .info {
+  margin: 12px;
+  margin-left: 0;
+  padding-right: 8px;
+}
+.Articles .featured .info .title,
+.Articles .article .info .title {
+  font-family: "HelveticaNeueBold";
+  font-size: 22px;
+  margin-bottom: 2px;
+}
+.Articles .featured .info .description,
+.Articles .article .info .description {
+  font-family: "HelveticaNeueRegular";
+  font-size: 16px;
+  color: gray;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.Articles .featured .info .details,
+.Articles .article .info .details {
+  padding-top: 4px;
+  display: flex;
+  align-items: center;
+}
+.Articles .featured .info .details .date,
+.Articles .featured .info .details .chip,
+.Articles .featured .info .details .dot,
+.Articles .article .info .details .date,
+.Articles .article .info .details .chip,
+.Articles .article .info .details .dot {
+  color: white;
+  font-size: 14px;
+  font-family: "HelveticaNeueRegular";
+}
+.Articles .featured .info .details .dot,
+.Articles .article .info .details .dot {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.Articles .featured .info .details .chip,
+.Articles .article .info .details .chip {
+  height: 20px;
+}
+.Articles .featured .info .details .chip.climbing,
+.Articles .article .info .details .chip.climbing {
+  background-color: blue;
+}
+.Articles .featured .info .details .chip.math,
+.Articles .article .info .details .chip.math {
+  background-color: green;
+}
+.Articles .featured .info .details .chip.melee,
+.Articles .article .info .details .chip.melee {
+  background-color: red;
+}
+@media only screen and (max-width: 768px) {
+  .Articles .featured .info,
+  .Articles .article .info {
+    margin: 0px;
+  }
+  .Articles .featured .info .title,
+  .Articles .article .info .title {
+    font-size: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .Articles .featured .info .description,
+  .Articles .article .info .description {
+    font-size: 12px;
+    -webkit-line-clamp: 2;
+  }
+  .Articles .featured .info .details .date,
+  .Articles .featured .info .details .chip,
+  .Articles .featured .info .details .dot,
+  .Articles .article .info .details .date,
+  .Articles .article .info .details .chip,
+  .Articles .article .info .details .dot {
+    font-size: 12px;
+  }
+  .Articles .featured .info .details :global(.MuiChip-label),
+  .Articles .article .info .details :global(.MuiChip-label) {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  .Articles .featured .info .details .chip,
+  .Articles .article .info .details .chip {
+    height: 14px;
+  }
+}
+.Articles .featured {
+  align-items: end;
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  max-height: 500px;
+}
+@media only screen and (max-width: 768px) {
+  .Articles .featured {
+    min-height: 300px;
+    max-height: 300px;
+    padding-bottom: 8px;
+  }
+}
+.Articles .featured .info {
+  max-width: 450px;
+}
+.Articles .featured .wrapper {
+  z-index: -1;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex !important;
+  align-items: center;
+}
+.Articles .featured .wrapper:after {
+  font-size: 100vw;
+  background: linear-gradient(to right, black 0%, rgba(0, 0, 0, 0.7) 50%, transparent 100%);
+  content: "";
+  display: block;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+.Articles .featured .wrapper .image {
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  opacity: 1;
+}
+.Articles .bottom {
+  display: flex;
+}
+.Articles .bottom .column .article {
+  justify-content: space-between;
+  padding-bottom: 8px;
+  padding-top: 8px;
+  border-bottom: 1px solid grey;
+  align-items: center;
+  max-width: 700px;
+}
+.Articles .bottom .column .article .wrapper {
+  min-width: 200px;
+  max-width: 200px;
+  height: 150px;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+@media only screen and (max-width: 768px) {
+  .Articles .bottom .column .article .wrapper {
+    min-width: 100px;
+    max-width: 100px;
+    height: 100px;
+  }
+}
+.Articles .bottom .column .article .wrapper .image {
+  width: 100%;
+}
+.Articles .divider {
+  margin-top: 12px;
+  border-color: gray;
+}
+
+/*# sourceMappingURL=Articles.module.css.map */

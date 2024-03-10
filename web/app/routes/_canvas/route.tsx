@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useMediaQuery } from "@mui/material";
 import { tabletQuery } from "helpers/breakpoints";
 
-import styles from "./route.module.css";
+import styles from "./canvas.module.css";
 
 export default function Canvas() {
   const outlet = useOutlet();

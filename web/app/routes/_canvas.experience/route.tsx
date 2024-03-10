@@ -1,18 +1,18 @@
 import type { MetaFunction } from "@remix-run/node";
-import Articles from "./Articles";
+import Experience from "./Experience";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Articles" },
+    { title: "Experience" },
     {
       property: "og:title",
-      content: "Articles",
+      content: "Experience",
     },
     {
       name: "description",
-      content: "Articles and blog posts about various subjects",
+      content: "My professional work experience as a software engineer",
     },
   ];
 };
 
-export default Articles;
+export default Experience;
