@@ -1,5 +1,4 @@
-import pkg from "react-lazy-load-image-component";
-const { LazyLoadImage } = pkg;
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import styles from "./About.module.css";
 

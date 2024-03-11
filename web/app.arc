@@ -2,9 +2,10 @@
 r2dliu
 
 @aws
-runtime nodejs20.x
+runtime nodejs18.x
+memory 512
+timeout 30
 # concurrency 1
-# memory 1152
 # profile default
 # region us-west-1
 # timeout 30

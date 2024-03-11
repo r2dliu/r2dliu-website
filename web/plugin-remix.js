@@ -2,16 +2,16 @@
 // Its job is to notify the remix dev server of the version of the running
 // app to trigger HMR / HDR.
 
-import * as fs from "node:fs";
-import * as path from "node:path";
+const fs = require("node:fs")
+const path = require("node:path");
 
-import { logDevReady } from "@remix-run/node";
+const { logDevReady } = require("@remix-run/node")
 
-const buildPath = "server/index.mjs";
+const buildPath = "server/index.js";
 
 let lastTimeout;
 
-export default {
+module.exports = {
   sandbox: {
     async watcher() {
       if (lastTimeout) {

@@ -7,10 +7,9 @@ import {
 } from "@mui/icons-material";
 import { Link, useMatches } from "@remix-run/react";
 import cn from "classnames";
-import pkg from "react-lazy-load-image-component";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import styles from "./Menu.module.css";
-const { LazyLoadImage } = pkg;
 
 export default function Menu() {
   const matches = useMatches();

@@ -1,8 +1,8 @@
-import pkg from "react-lazy-load-image-component";
 import cn from "classnames";
-// import ReactPlayer from "react-player/youtube.js";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import ReactPlayer from "react-player/youtube";
+
 import styles from "./Melee.module.css";
-const { LazyLoadImage } = pkg;
 
 export default function Melee() {
   return (
@@ -116,7 +116,7 @@ export default function Melee() {
       </div>
       <div className={styles.header}>{"Gameplay"}</div>
       <div className={styles.matches}>
-        {/* <ReactPlayer
+        <ReactPlayer
           className={styles.video}
           width={300}
           height={200}
@@ -136,7 +136,7 @@ export default function Melee() {
           height={200}
           controls={true}
           url="https://www.youtube.com/watch?v=Nc8gFTz2irw"
-        /> */}
+        />
       </div>
     </div>
   );
