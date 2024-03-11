@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
+
 import Climbing from "./Climbing";
 
 export const meta: MetaFunction = () => {

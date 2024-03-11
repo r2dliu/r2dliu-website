@@ -1,8 +1,4 @@
 {
-  "exclude": [
-    "./cypress",
-    "./cypress.config.ts"
-  ],
   "include": [
     "remix.env.d.ts",
     "**/*.ts",
@@ -14,10 +10,13 @@
       "DOM.Iterable",
       "ES2020"
     ],
+    "types": [
+      "vitest/globals"
+    ],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "module": "CommonJS",
+    "module": "ES2020",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "target": "ES2020",
@@ -28,18 +27,6 @@
     "paths": {
       "~/*": [
         "./app/*"
-      ],
-      "components/*": [
-        "./app/components/*"
-      ],
-      "styles/*": [
-        "./app/styles/*"
-      ],
-      "helpers/*": [
-        "./app/helpers/*"
-      ],
-      "data/*": [
-        "./app/data/*"
       ]
     },
     "skipLibCheck": true,

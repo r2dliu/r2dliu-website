@@ -1,13 +1,15 @@
-import { useRef, useEffect } from "react";
 import { Divider } from "@mui/material";
-import rehypeRaw from "rehype-raw";
-import ReactMarkdown from "react-markdown";
-import { motion } from "framer-motion";
-import tocbot from "tocbot";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link, useLoaderData } from "@remix-run/react";
-import type { loader } from "./loader";
+import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
+import pkg from "react-lazy-load-image-component";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import tocbot from "tocbot";
+
 import styles from "./Article.module.css";
+import type { loader } from "./loader";
+const { LazyLoadImage } = pkg;
 
 const generateSlug = (str: string) => {
   str = str?.replace(/^\s+|\s+$/g, "");
@@ -47,10 +49,10 @@ export default function Articles() {
       // For headings inside relative or absolute positioned containers within content.
       hasInnerContainers: true,
       scrollContainer: `.${styles.markdown}`,
-      onClick: async (e) => {
+      onClick: async () => {
         // Minor hack to fix active link highlighting
         await new Promise((r) => setTimeout(r, 50));
-        // @ts-ignore
+        // @ts-expect-error tocbot has options
         tocbot.refresh({ ...tocbot.options });
       },
       headingsOffset: 90,

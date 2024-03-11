@@ -5,14 +5,15 @@ import { type ReactNode, useState } from "react";
 
 import styles from "./Experience.module.css";
 
-type entriesType = {
-  [key: string]: {
+type entriesType = Record<
+  string,
+  {
     name: string;
     title: string;
     range: string;
     description: ReactNode[];
-  };
-};
+  }
+>;
 
 export default function Experience() {
   const entries: entriesType = {
@@ -64,10 +65,10 @@ export default function Experience() {
     "Johns Hopkins University": {
       name: "Johns Hopkins University",
       title: "M.S. in Computer Science",
-      range: "2019 — Present",
+      range: "2021 — 2023",
       description: [
         <br key={1} />,
-        "Expected graduation in 2023, with 6 required credits (2 classes) remaining. Most of this progress was done while working full time at APL.",
+        "Mostly done part time (2-3 classes per semester) while working full time at APL.",
       ],
     },
     "Swarthmore College": {

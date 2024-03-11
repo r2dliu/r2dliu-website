@@ -1,4 +1,5 @@
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import pkg from "react-lazy-load-image-component";
+const { LazyLoadImage } = pkg;
 
 import styles from "./About.module.css";
 
@@ -31,9 +32,9 @@ export default function About() {
         wrapperClassName={styles.wrapper}
         className={styles.image}
         alt={"Picture of David in a background filled with neon lights"}
-        effect="opacity"
+        effect="blur"
         src={"https://s3.r2dliu.com/assets/about.jpg"}
-        placeholderSrc={"https://s3.r2dliu.com/assets/about_small.jpg"}
+        placeholderSrc={"https://s3.r2dliu.com/assets/about.jpg"}
       />
       <div className={styles.credit}>
         Photo by Bekah Wong |{" "}

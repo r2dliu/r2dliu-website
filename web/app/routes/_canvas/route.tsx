@@ -1,8 +1,9 @@
-import { useLocation, useOutlet } from "@remix-run/react";
-import CanvasPage from "components/BasePages/CanvasPage";
-import { AnimatePresence, motion } from "framer-motion";
 import { useMediaQuery } from "@mui/material";
-import { tabletQuery } from "helpers/breakpoints";
+import { useLocation, useOutlet } from "@remix-run/react";
+import { AnimatePresence, motion } from "framer-motion";
+
+import CanvasPage from "~/components/BasePages/CanvasPage";
+import { tabletQuery } from "~/helpers/breakpoints";
 
 import styles from "./canvas.module.css";
 

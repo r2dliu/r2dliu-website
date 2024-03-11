@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import { useNavigate } from "@remix-run/react";
 import cn from "classnames";
 import { useState } from "react";
+
 import styles from "./index.module.css";
 
 export default function Index() {
@@ -15,6 +16,7 @@ export default function Index() {
       <Button
         onTransitionEnd={(e) => {
           if (e.propertyName === "width" && e.pseudoElement === "::before") {
+            console.log("before navigate");
             navigate("/about");
           }
         }}
@@ -24,6 +26,7 @@ export default function Index() {
         variant="outlined"
         color="primary"
         onClick={() => {
+          console.log("wtf");
           setIsClicked(true);
         }}
       >

@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import pkg from "react-lazy-load-image-component";
+const { LazyLoadImage } = pkg;
 import styles from "./Climbing.module.css";
 
 export const meta: MetaFunction = () => {

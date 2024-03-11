@@ -1,11 +1,13 @@
-import { type PropsWithChildren, useEffect, useState } from "react";
-import cn from "classnames";
-import Menu from "~/components/Menu";
 import { Divider, useMediaQuery, Button } from "@mui/material";
 import { useLocation } from "@remix-run/react";
-import { tabletQuery } from "helpers/breakpoints";
-import styles from "./CanvasPage.module.css";
+import cn from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
+import { type PropsWithChildren, useEffect, useState } from "react";
+
+import Menu from "~/components/Menu";
+import { tabletQuery } from "~/helpers/breakpoints";
+
+import styles from "./CanvasPage.module.css";
 
 export default function CanvasPage(props: PropsWithChildren<unknown>) {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -17,7 +19,7 @@ export default function CanvasPage(props: PropsWithChildren<unknown>) {
 
   return (
     <div className={styles.CanvasPage}>
-      {!isTablet && (
+      {!isTablet ? (
         <>
           <Menu />
           <AnimatePresence>
@@ -31,14 +33,14 @@ export default function CanvasPage(props: PropsWithChildren<unknown>) {
             </motion.div>
           </AnimatePresence>
         </>
-      )}
-      {isTablet && (
+      ) : null}
+      {isTablet ? (
         <div className={styles.navbar}>
           <Button
             className={cn(styles.hamburger, styles.hamburgerSlider, {
               [styles.isActive]: isMenuOpen,
             })}
-            onClick={(_) => {
+            onClick={() => {
               setMenuOpen(!isMenuOpen);
             }}
           >
@@ -46,9 +48,9 @@ export default function CanvasPage(props: PropsWithChildren<unknown>) {
               <span className={styles.hamburgerInner} />
             </span>
           </Button>
-          {isMenuOpen && <Menu />}
+          {isMenuOpen ? <Menu /> : null}
         </div>
-      )}
+      ) : null}
       <div
         className={cn(styles.canvas, {
           [styles.blur]: isMenuOpen,

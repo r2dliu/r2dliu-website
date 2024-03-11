@@ -1,33 +1,24 @@
-import { useEffect } from "react";
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { cssBundleHref } from "@remix-run/css-bundle";
+import { LinksFunction, MetaFunction, json } from "@remix-run/node";
 import {
   Links,
   LiveReload,
   Meta,
+  useOutlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
   useLocation,
-  useOutlet,
+  useLoaderData,
 } from "@remix-run/react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect } from "react";
 import { createHead } from "remix-island";
 
 import "react-lazy-load-image-component/src/effects/opacity.css";
-import styles from "styles/index.css";
-import * as gtag from "helpers/gtags.client";
-import NotFoundPage from "./components/BasePages/NotFoundPage";
+import * as gtag from "~/helpers/gtags.client";
+import stylesheet from "~/styles/index.css";
 
-export const links: LinksFunction = () => {
-  return [
-    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-    // NOTE: Architect deploys the public directory to /_static/
-    { rel: "icon", href: "/_static/favicon.ico" },
-    { rel: "stylesheet", href: styles },
-  ];
-};
+import NotFoundPage from "./components/BasePages/NotFoundPage";
 
 export const meta: MetaFunction = () => {
   return [
@@ -38,18 +29,24 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: stylesheet },
+  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+  { rel: "icon", href: "/_static/favicon.ico" },
+];
+
 export const Head = createHead(() => (
   <>
+    <Meta />
     <meta charSet="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <Meta />
     <Links />
   </>
 ));
 
 export function CatchBoundary() {
   return (
-    <html>
+    <html lang="en">
       <head>
         <title>Oops!</title>
         <meta charSet="utf-8" />

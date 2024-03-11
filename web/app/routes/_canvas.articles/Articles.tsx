@@ -1,9 +1,10 @@
 import { Chip, Divider } from "@mui/material";
 import { Link } from "@remix-run/react";
 import cn from "classnames";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import pkg from "react-lazy-load-image-component";
 
 import styles from "./Articles.module.css";
+const { LazyLoadImage } = pkg;
 
 export default function Articles() {
   return (
