@@ -92,6 +92,7 @@
 }
 .Experience .work .content .details {
   padding-left: 24px;
+  padding-right: 8px;
 }
 .Experience .work .content .details .name {
   font-family: "HelveticaNeueMedium";

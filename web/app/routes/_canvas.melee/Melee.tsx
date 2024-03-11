@@ -1,6 +1,6 @@
 import pkg from "react-lazy-load-image-component";
 import cn from "classnames";
-// import ReactPlayer from "react-player/youtube";
+// import ReactPlayer from "react-player/youtube.js";
 import styles from "./Melee.module.css";
 const { LazyLoadImage } = pkg;
 

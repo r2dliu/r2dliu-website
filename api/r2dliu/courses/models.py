@@ -1,5 +1,6 @@
 # Create your models here.
 from django.db import models
+
 from r2dliu.utils.models import AbstractBaseModel
 
 

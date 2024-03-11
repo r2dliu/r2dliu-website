@@ -6,6 +6,7 @@
   padding: 24px;
   overflow-y: scroll;
   overflow-x: hidden;
+  justify-content: space-between;
   align-items: center;
 }
 .About .title {
@@ -66,19 +67,24 @@
   }
 }
 .About .credit {
+  position: absolute;
   font-family: "HelveticaNeueThin";
   color: gray;
   font-size: 14px;
-  position: absolute;
-  right: 4px;
   bottom: 4px;
+  right: 12px;
 }
 .About .credit .url {
   text-decoration: none;
 }
 @media only screen and (max-width: 768px) {
   .About .credit {
-    visibility: hidden;
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: -24px;
+    bottom: 0;
+    right: 0;
+    align-self: end;
   }
 }
 

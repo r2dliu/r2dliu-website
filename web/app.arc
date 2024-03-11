@@ -2,7 +2,7 @@
 r2dliu
 
 @aws
-runtime nodejs18.x
+runtime nodejs20.x
 # concurrency 1
 # memory 1152
 # profile default

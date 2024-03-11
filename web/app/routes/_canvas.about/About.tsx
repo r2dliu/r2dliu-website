@@ -34,7 +34,7 @@ export default function About() {
         alt={"Picture of David in a background filled with neon lights"}
         effect="blur"
         src={"https://s3.r2dliu.com/assets/about.jpg"}
-        placeholderSrc={"https://s3.r2dliu.com/assets/about.jpg"}
+        placeholderSrc={"https://s3.r2dliu.com/assets/about_small.jpg"}
       />
       <div className={styles.credit}>
         Photo by Bekah Wong |{" "}

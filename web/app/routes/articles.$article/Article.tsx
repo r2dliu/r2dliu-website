@@ -8,7 +8,8 @@ import rehypeRaw from "rehype-raw";
 import tocbot from "tocbot";
 
 import styles from "./Article.module.css";
-import type { loader } from "./loader";
+import type { loader } from "./route";
+
 const { LazyLoadImage } = pkg;
 
 const generateSlug = (str: string) => {
@@ -75,16 +76,10 @@ export default function Articles() {
             className="article"
             components={{
               h1: ({ node, ...props }) => (
-                <h1
-                  id={generateSlug(props.children[0] as string)}
-                  {...props}
-                ></h1>
+                <h1 id={generateSlug(props.children as string)} {...props}></h1>
               ),
               h2: ({ node, ...props }) => (
-                <h2
-                  id={generateSlug(props.children[0] as string)}
-                  {...props}
-                ></h2>
+                <h2 id={generateSlug(props.children as string)} {...props}></h2>
               ),
               img: ({ node, ...props }) => (
                 // @ts-ignore
