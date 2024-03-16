@@ -1,0 +1,12 @@
+[
+  {
+    "model": "courses.course",
+    "pk": "2728692e-bd98-4d15-9dd0-a3a4bb948258",
+    "fields": {
+      "datetime_created": "2024-03-16T02:47:31.915Z",
+      "last_edited": "2024-03-16T02:47:31.915Z",
+      "name": "Climbing Training Workshops",
+      "description": "Workshop style classes that focus on topics related to climbing specific training. Some example topics include finger training, core training, overcoming fear/mentality, rehab, weightlifting, reading routes, coordination. Classes run weekly, typically with a focus on a single topic per class."
+    }
+  }
+]
