@@ -12,10 +12,14 @@ aniso8601==9.0.1
     # via graphene
 asgiref==3.7.2
     # via django
+    # via django-cors-headers
 django==5.0.2
     # via api
+    # via django-cors-headers
     # via django-filter
     # via graphene-django
+django-cors-headers==4.3.1
+    # via api
 django-filter==24.1
     # via api
 graphene==3.3

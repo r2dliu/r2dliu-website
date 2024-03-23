@@ -5,6 +5,8 @@
   padding: 40px;
   overflow-y: scroll;
   overflow-x: hidden;
+  font-family: "HelveticaNeue";
+  width: fit-content;
 
   &.loading {
     justify-content: center;
@@ -15,62 +17,97 @@
     }
   }
 
-  .course {
-    font-family: "HelveticaNeue";
-    width: fit-content;
+  .header {
+    font-family: "HelveticaNeueMedium";
+    font-size: 32px;
+    padding-bottom: 8px;
+  }
 
-    .class {
-      border: none;
-      background-color: transparent;
-      color: white;
-      border-radius: 4px;
-      padding: 4px 8px;
-      align-items: center;
-      transition: all 0.15s ease-in;
+  .wrapper {
+    display: flex;
+
+    .classList {
+      width: 100%;
       display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
 
-      &:hover {
-        background-color: white;
-        color: black;
+      .accordion {
+        padding: 0;
+        background-color: transparent;
+        color: white;
+        border-radius: 4px;
+        padding: 4px 8px;
+        transition: all 0.15s ease-in;
+        display: flex;
+        flex-direction: column;
+
+        .drawer {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          height: 100%;
+
+          .button {
+            align-self: flex-end;
+
+            &:hover {
+              background-color: white;
+              color: black;
+            }
+          }
+        }
+
+        &.active {
+          background-color: white;
+          color: black;
+
+          .icon {
+            visibility: visible;
+          }
+        }
+
+        .content {
+          padding-left: 14px;
+          padding-right: 14px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: flex-start;
+
+          .title {
+            font-family: "HelveticaNeueMedium";
+          }
+
+          .details {
+            font-size: 12px;
+          }
+        }
+
+        .date {
+          display: flex;
+          flex-direction: column;
+
+          .month {
+            font-family: "HelveticaNeueMedium";
+            text-transform: uppercase;
+            // font-weight: 700;
+          }
+          .day {
+            font-family: "HelveticaNeueBold";
+            font-size: 28px;
+          }
+        }
 
         .icon {
-          visibility: visible;
+          margin-left: auto;
+          display: flex;
+          align-items: center;
         }
       }
 
-      .content {
-        padding-left: 14px;
-        padding-right: 14px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-
-        .title {
-          font-family: "HelveticaNeueMedium";
-        }
-
-        .details {
-          font-size: 12px;
-        }
-      }
-
-      .date {
-        display: flex;
-        flex-direction: column;
-
-        .month {
-          font-family: "HelveticaNeueMedium";
-          text-transform: uppercase;
-          // font-weight: 700;
-        }
-        .day {
-          font-family: "HelveticaNeueBold";
-          font-size: 28px;
-        }
-      }
-
-      .icon {
-        visibility: hidden;
+      .divider {
+        background-color: white;
       }
     }
   }

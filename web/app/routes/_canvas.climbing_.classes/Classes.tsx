@@ -1,10 +1,15 @@
-//  import { LazyLoadImage } from "react-lazy-load-image-component";
-
-// import { Link } from "@remix-run/react";
 import { gql, useQuery } from "@apollo/client";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { Button, Divider } from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
 import CircularProgress from "@mui/material/CircularProgress";
 import cn from "classnames";
+import keyBy from "lodash.keyby";
+import moment from "moment-timezone";
+import { Fragment } from "react";
+import { ClassType, ClassTypeEdge } from "src/__generated__/graphql";
 
 import styles from "./Classes.module.css";
 
@@ -15,7 +20,15 @@ const classesQuery = gql`
         node {
           id
           startTime
+          description
           endTime
+          location
+          url
+          course {
+            id
+            name
+            description
+          }
         }
         cursor
       }
@@ -26,9 +39,10 @@ const classesQuery = gql`
     }
   }
 `;
+
 export default function Classes() {
   const { loading, error, data } = useQuery(classesQuery);
-  console.log(data);
+
   if (loading) {
     return (
       <div className={cn(styles.Classes, styles.loading)}>
@@ -37,29 +51,73 @@ export default function Classes() {
     );
   }
 
-  const openDrawer = () => {
-    console.log("open drawer");
-  };
+  const classesById: Record<string, ClassType> = keyBy(
+    data?.classes?.edges.map((edge: ClassTypeEdge) => edge.node),
+    "id",
+  );
+
   return (
     <div className={styles.Classes}>
-      <div className={styles.course}>
-        {error ? <div>Something went wrong: check back later!</div> : null}
-        <button onClick={() => openDrawer()} className={styles.class}>
-          <div className={styles.date}>
-            <div className={styles.day}>26</div>
-            <div className={styles.month}>Mar</div>
-          </div>
-          <div className={styles.content}>
-            <div className={styles.title}>Climbing Training & Workshops</div>
-            <div className={styles.details}>
-              7:15 EST - 8:15 EST • Movement Columbia
+      {error ? (
+        <div>Something went wrong: check back later!</div>
+      ) : (
+        <>
+          <div className={styles.header}>Upcoming Classes</div>
+          <div className={styles.wrapper}>
+            <div className={styles.classList}>
+              {Object.values(classesById).map((instance: ClassType) => {
+                const startTime = moment.utc(instance.startTime);
+                const endTime = moment.utc(instance.endTime);
+                return (
+                  <Fragment key={instance.id}>
+                    <Accordion disableGutters className={styles.accordion}>
+                      <AccordionSummary>
+                        <div className={styles.date}>
+                          <div className={styles.day}>
+                            {startTime.tz("America/New_York").format("DD")}
+                          </div>
+                          <div className={styles.month}>
+                            {startTime.tz("America/New_York").format("MMM")}
+                          </div>
+                        </div>
+                        <div className={styles.content}>
+                          <div className={styles.title}>
+                            {instance.course?.name}
+                          </div>
+                          <div className={styles.details}>
+                            {`${startTime
+                              .tz("America/New_York")
+                              .format("hh:mm A")} - ${endTime
+                              .tz("America/New_York")
+                              .format("hh:mm A")} • ${instance.location}`}
+                          </div>
+                        </div>
+                        <div className={styles.icon}>
+                          <ArrowForwardIosIcon />
+                        </div>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <div className={styles.drawer}>
+                          <div className={styles.description}>
+                            {instance.description}
+                          </div>
+                          <Button
+                            className={styles.button}
+                            onClick={() => window.open(instance.url, "_blank")}
+                          >
+                            Register
+                          </Button>
+                        </div>
+                      </AccordionDetails>
+                    </Accordion>
+                    <Divider className={styles.divider} />
+                  </Fragment>
+                );
+              })}
             </div>
           </div>
-          <div className={styles.icon}>
-            <ArrowForwardIosIcon />
-          </div>
-        </button>
-      </div>
+        </>
+      )}
     </div>
   );
 }

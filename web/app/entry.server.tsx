@@ -54,9 +54,10 @@ async function getApolloClient(request: Request) {
     ssrMode: true,
     cache: new InMemoryCache(),
     link: createHttpLink({
-      uri: "http://localhost:3000/graphql",
+      uri: "http://localhost:8000/graphql",
       headers: {
         ...Object.fromEntries(request.headers),
+        Accept: "application/json",
       },
       credentials: "same-origin",
     }),
@@ -150,13 +151,17 @@ function handleBrowserRequest(
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) {
-  return new Promise((resolve, reject) => {
+  // eslint-disable-next-line no-async-promise-executor
+  return new Promise(async (resolve, reject) => {
     const { abort, pipe } = renderToPipeableStream(
-      <RemixServer
-        context={remixContext}
-        url={request.url}
-        abortDelay={ABORT_DELAY}
-      />,
+      await wrapRemixServerWithApollo(
+        <RemixServer
+          context={remixContext}
+          url={request.url}
+          abortDelay={ABORT_DELAY}
+        />,
+        request,
+      ),
       {
         onShellReady() {
           const head = renderHeadToString({ request, remixContext, Head });

@@ -17,7 +17,8 @@ class Class(AbstractBaseModel):
     end_time = models.DateTimeField()
     description = models.TextField()
     location = models.TextField()
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="classes")
+    url = models.TextField(blank=True)
 
     class Meta:
         ordering = ["start_time"]

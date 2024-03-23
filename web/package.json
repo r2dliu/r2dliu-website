@@ -5,6 +5,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "run-p dev:*",
+    "dev:gql": "graphql-codegen -w",
     "dev:css": "sass --watch app/:app/",
     "dev:remix": "remix dev --manual -c \"arc sandbox -e testing\"",
     "format": "prettier --write .",
@@ -12,7 +13,8 @@
     "start": "cross-env NODE_ENV=production arc sandbox",
     "test": "vitest",
     "typecheck": "tsc",
-    "validate": "run-p \"test -- --run\" lint typecheck"
+    "validate": "run-p \"test -- --run\" lint typecheck",
+    "compile": "graphql-codegen"
   },
   "prettier": {},
   "eslintIgnore": [
@@ -39,6 +41,9 @@
     "framer-motion": "^11.0.8",
     "graphql": "^16.8.1",
     "isbot": "^3.7.0",
+    "lodash.keyby": "^4.6.0",
+    "moment": "^2.30.1",
+    "moment-timezone": "^0.5.45",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-lazy-load-image-component": "^1.6.0",
@@ -51,11 +56,16 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.2.0",
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/client-preset": "^4.2.4",
+    "@graphql-typed-document-node/core": "^3.2.0",
+    "@parcel/watcher": "^2.4.1",
     "@remix-run/dev": "^2.7.2",
     "@testing-library/jest-dom": "^6.1.4",
     "@types/architect__functions": "^3.13.10",
     "@types/bcryptjs": "2.4.5",
     "@types/eslint": "^8.44.6",
+    "@types/lodash.keyby": "^4.6.9",
     "@types/node": "^18.18.6",
     "@types/react": "^18.2.31",
     "@types/react-dom": "^18.2.14",

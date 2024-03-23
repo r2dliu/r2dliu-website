@@ -4,6 +4,7 @@
  * For more information, see https://remix.run/docs/en/main/file-conventions/entry.client
  */
 
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { RemixBrowser } from "@remix-run/react";
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
@@ -21,10 +22,18 @@ export function ErrorBoundary() {
 }
 
 startTransition(() => {
+  const client = new ApolloClient({
+    // @ts-expect-error __APOLLO_STATE__ should exist. see entry.server.tsx
+    cache: new InMemoryCache().restore(window.__APOLLO_STATE__),
+    uri: "http://localhost:8000/graphql",
+  });
+
   hydrateRoot(
     document.getElementById("root")!,
     <StrictMode>
-      <RemixBrowser />
+      <ApolloProvider client={client}>
+        <RemixBrowser />
+      </ApolloProvider>
     </StrictMode>,
   );
 });
