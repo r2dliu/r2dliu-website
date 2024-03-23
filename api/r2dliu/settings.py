@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "r2dliu",
     "r2dliu.courses",
     "graphene_django",
+    "django_filters",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

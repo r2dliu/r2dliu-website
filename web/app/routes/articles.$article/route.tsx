@@ -1,9 +1,8 @@
-import type { MetaFunction } from "@remix-run/node";
-import Article from "./Article";
-
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { MetaFunction, LoaderFunctionArgs } from "@remix-run/node";
 
 import { articleData } from "~/data/articles";
+
+import Article from "./Article";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   console.log("params", params);

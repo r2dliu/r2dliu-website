@@ -1,17 +1,7 @@
-import type { MetaFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import styles from "./Climbing.module.css";
-
-export const meta: MetaFunction = () => {
-  return [
-    { title: "Climbing" },
-    {
-      property: "og:title",
-      content: "Climbing",
-    },
-  ];
-};
 
 export default function Climbing() {
   return (
@@ -19,7 +9,7 @@ export default function Climbing() {
       <div className={styles.quote}>
         {'"You will always find an appropriate opponent in the rocks."'}
       </div>
-      <div className={styles.attribution}>— Tomáš "TOMAJDA" Sobotka</div>
+      <div className={styles.attribution}>{'— Tomáš "TOMAJDA" Sobotka'}</div>
       <LazyLoadImage
         wrapperClassName={styles.wrapper}
         className={styles.image}
@@ -41,12 +31,20 @@ export default function Climbing() {
         <a href={"https://www.acsm.org/"} target={"_blank"} rel="noreferrer">
           ACSM
         </a>{" "}
-        Certified Personal Trainer® (ACSM-CPT). I also love teaching in general
-        and have an extensive history of tutoring and coaching in various
-        subjects, including academia, Melee, and of course health and fitness. I
-        primarily work with climbing athletes to improve their performance, but
-        am happy to help any motivated individual meet their specific goals!
-        Email me or message me on{" "}
+        Certified Personal Trainer® (ACSM-CPT) who works at{" "}
+        <a
+          href="https://movementgyms.com/columbia/"
+          target={"_blank"}
+          rel="noreferrer"
+        >
+          Movement Columbia
+        </a>
+        . Check out my free <Link to="classes">classes</Link>! I love teaching
+        in general and have an extensive history of tutoring and coaching in
+        various subjects, including academia, Melee, and of course health and
+        fitness. I primarily work with climbing athletes to improve their
+        performance, but am happy to help any motivated individual meet their
+        specific goals! Email me or message me on{" "}
         <a
           href={"https://www.instagram.com/r2dliu/"}
           target={"_blank"}

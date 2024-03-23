@@ -1,0 +1,66 @@
+.Classes {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 80px);
+  padding: 40px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.Classes.loading {
+  justify-content: center;
+  align-items: center;
+}
+.Classes.loading .icon {
+  color: white;
+}
+.Classes .course {
+  font-family: "HelveticaNeue";
+  width: fit-content;
+}
+.Classes .course .class {
+  border: none;
+  background-color: transparent;
+  color: white;
+  border-radius: 4px;
+  padding: 4px 8px;
+  align-items: center;
+  transition: all 0.15s ease-in;
+  display: flex;
+}
+.Classes .course .class:hover {
+  background-color: white;
+  color: black;
+}
+.Classes .course .class:hover .icon {
+  visibility: visible;
+}
+.Classes .course .class .content {
+  padding-left: 14px;
+  padding-right: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.Classes .course .class .content .title {
+  font-family: "HelveticaNeueMedium";
+}
+.Classes .course .class .content .details {
+  font-size: 12px;
+}
+.Classes .course .class .date {
+  display: flex;
+  flex-direction: column;
+}
+.Classes .course .class .date .month {
+  font-family: "HelveticaNeueMedium";
+  text-transform: uppercase;
+}
+.Classes .course .class .date .day {
+  font-family: "HelveticaNeueBold";
+  font-size: 28px;
+}
+.Classes .course .class .icon {
+  visibility: hidden;
+}
+
+/*# sourceMappingURL=Classes.module.css.map */

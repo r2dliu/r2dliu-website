@@ -16,7 +16,11 @@ class Class(AbstractBaseModel):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     description = models.TextField()
+    location = models.TextField()
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ["start_time"]
 
     def __str__(self):
         return self.description

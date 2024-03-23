@@ -1,5 +1,11 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
-import { LinksFunction, MetaFunction, json } from "@remix-run/node";
+import {
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
+  json,
+  redirect,
+} from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -44,7 +50,14 @@ export const Head = createHead(() => (
   </>
 ));
 
-export function CatchBoundary() {
+export const SafeHead = createHead(() => (
+  <>
+    <meta charSet="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+  </>
+));
+
+export function ErrorBoundary() {
   return (
     <html lang="en">
       <head>
@@ -62,14 +75,27 @@ export function CatchBoundary() {
   );
 }
 
-export const loader = async () => {
-  return json({ gaTrackingId: process.env.GA_TRACKING_ID });
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { pathname, search } = new URL(request.url);
+
+  if (pathname.endsWith("/") && pathname !== "/") {
+    // Redirect to the same URL without a trailing slash
+    throw redirect(`${pathname.slice(0, -1)}${search}`, 301);
+  }
+
+  return json({
+    gaTrackingId: process.env.GA_TRACKING_ID,
+    ENV: {
+      nodeEnv: process.env.NODE_ENV,
+      apiUrl: process.env.REACT_APP_API_URL,
+    },
+  });
 };
 
 export default function App() {
   const outlet = useOutlet();
   const location = useLocation();
-  const { gaTrackingId } = useLoaderData<typeof loader>();
+  const { gaTrackingId, ENV } = useLoaderData<typeof loader>();
 
   useEffect(() => {
     if (gaTrackingId?.length) {
@@ -80,7 +106,7 @@ export default function App() {
   const getKey = () => {
     const path = location.pathname;
     const splitPath = location.pathname.split("/");
-    if (splitPath.length === 2 && splitPath[1] !== "") {
+    if (splitPath.length >= 2 && splitPath[1] !== "") {
       return "main";
     } else {
       return path;
@@ -131,6 +157,11 @@ export default function App() {
         </motion.main>
       </AnimatePresence>
       <ScrollRestoration />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `window.ENV = ${JSON.stringify(ENV)}`,
+        }}
+      />
       <Scripts />
       <LiveReload />
     </>

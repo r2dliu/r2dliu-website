@@ -13,7 +13,7 @@ import styles from "./Menu.module.css";
 
 export default function Menu() {
   const matches = useMatches();
-  const currPage = matches[2]?.pathname.substring(1);
+  const currPage = matches[2]?.pathname.split("/")[1];
 
   const pages = {
     about: "About Me",

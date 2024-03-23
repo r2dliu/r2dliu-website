@@ -14,7 +14,10 @@ asgiref==3.7.2
     # via django
 django==5.0.2
     # via api
+    # via django-filter
     # via graphene-django
+django-filter==24.1
+    # via api
 graphene==3.3
     # via graphene-django
 graphene-django==3.2.0

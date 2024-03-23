@@ -3,10 +3,11 @@ name = "api"
 version = "0.1.0"
 description = "Add your description here"
 dependencies = [
-  "django>=5.0.2",
-  "graphene-django>=3.2.0",
-  "psycopg>=3.1.18",
-  "python-dotenv>=1.0.1",
+    "django>=5.0.2",
+    "graphene-django>=3.2.0",
+    "psycopg>=3.1.18",
+    "python-dotenv>=1.0.1",
+    "django-filter>=24.1",
 ]
 readme = "README.md"
 requires-python = ">= 3.12"
