@@ -24,7 +24,7 @@ TIME_ZONE = "UTC"
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Cors
-CORS_ALLOWED_ORIGINS = ["http://localhost:3333"]
+CORS_ALLOWED_ORIGINS = [os.environ.get("CORS_ALLOWED_ORIGINS")]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -35,9 +35,7 @@ SECRET_KEY = "django-insecure-b^npkausehgs^+u%st=kt!%-98v8hz!o-&_%_s4j=xhejf-fw=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-STATIC_ROOT = "static/"
+ALLOWED_HOSTS = [os.environ.get("ALLOWED_HOSTS")]
 
 # Application definition
 
