@@ -13,6 +13,12 @@ aniso8601==9.0.1
 asgiref==3.7.2
     # via django
     # via django-cors-headers
+cachetools==5.3.3
+    # via google-auth
+certifi==2024.2.2
+    # via requests
+charset-normalizer==3.3.2
+    # via requests
 django==5.0.2
     # via api
     # via django-cors-headers
@@ -22,6 +28,19 @@ django-cors-headers==4.3.1
     # via api
 django-filter==24.1
     # via api
+google-api-core==2.18.0
+    # via google-cloud-secret-manager
+google-auth==2.29.0
+    # via google-api-core
+    # via google-cloud-secret-manager
+google-cloud==0.34.0
+    # via api
+google-cloud-secret-manager==2.19.0
+    # via api
+googleapis-common-protos==1.63.0
+    # via google-api-core
+    # via grpc-google-iam-v1
+    # via grpcio-status
 graphene==3.3
     # via graphene-django
 graphene-django==3.2.0
@@ -33,12 +52,42 @@ graphql-core==3.2.3
 graphql-relay==3.2.0
     # via graphene
     # via graphene-django
+grpc-google-iam-v1==0.13.0
+    # via google-cloud-secret-manager
+grpcio==1.62.1
+    # via google-api-core
+    # via googleapis-common-protos
+    # via grpc-google-iam-v1
+    # via grpcio-status
+grpcio-status==1.62.1
+    # via google-api-core
+idna==3.6
+    # via requests
 promise==2.3
     # via graphene-django
+proto-plus==1.23.0
+    # via google-api-core
+    # via google-cloud-secret-manager
+protobuf==4.25.3
+    # via google-api-core
+    # via google-cloud-secret-manager
+    # via googleapis-common-protos
+    # via grpc-google-iam-v1
+    # via grpcio-status
+    # via proto-plus
 psycopg==3.1.18
     # via api
+pyasn1==0.6.0
+    # via pyasn1-modules
+    # via rsa
+pyasn1-modules==0.4.0
+    # via google-auth
 python-dotenv==1.0.1
     # via api
+requests==2.31.0
+    # via google-api-core
+rsa==4.9
+    # via google-auth
 six==1.16.0
     # via promise
 sqlparse==0.4.4
@@ -47,3 +96,5 @@ text-unidecode==1.3
     # via graphene-django
 typing-extensions==4.10.0
     # via psycopg
+urllib3==2.2.1
+    # via requests

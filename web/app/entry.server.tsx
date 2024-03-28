@@ -54,7 +54,7 @@ async function getApolloClient(request: Request) {
     ssrMode: true,
     cache: new InMemoryCache(),
     link: createHttpLink({
-      uri: "http://localhost:8000/graphql",
+      uri: process.env.REACT_APP_API_URL,
       headers: {
         ...Object.fromEntries(request.headers),
         Accept: "application/json",

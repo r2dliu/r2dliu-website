@@ -10,12 +10,24 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import io
 import os
 from pathlib import Path
 
 from dotenv import load_dotenv
+from google.cloud import secretmanager
 
-load_dotenv()
+if not os.environ.get("GOOGLE_CLOUD_PROJECT", None):
+    load_dotenv()
+else:
+    project_id = "r2dliu-website"
+
+    client = secretmanager.SecretManagerServiceClient()
+    settings_name = os.environ.get("SETTINGS_NAME", "django-settings")
+    name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
+    payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
+
+    load_dotenv(stream=io.StringIO(payload))
 
 USE_TZ = True
 TIME_ZONE = "UTC"

@@ -25,7 +25,8 @@ startTransition(() => {
   const client = new ApolloClient({
     // @ts-expect-error __APOLLO_STATE__ should exist. see entry.server.tsx
     cache: new InMemoryCache().restore(window.__APOLLO_STATE__),
-    uri: "http://localhost:8000/graphql",
+    // @ts-expect-error API_URL should exist. see root.tsx
+    uri: window.API_URL,
   });
 
   hydrateRoot(

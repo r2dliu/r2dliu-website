@@ -85,17 +85,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   return json({
     gaTrackingId: process.env.GA_TRACKING_ID,
-    ENV: {
-      nodeEnv: process.env.NODE_ENV,
-      apiUrl: process.env.REACT_APP_API_URL,
-    },
+    apiUrl: process.env.API_URL,
   });
 };
 
 export default function App() {
   const outlet = useOutlet();
   const location = useLocation();
-  const { gaTrackingId, ENV } = useLoaderData<typeof loader>();
+  const { gaTrackingId, apiUrl } = useLoaderData<typeof loader>();
 
   useEffect(() => {
     if (gaTrackingId?.length) {
@@ -138,6 +135,11 @@ export default function App() {
           />
         </>
       )}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `window.API_URL = '${apiUrl}'`,
+        }}
+      ></script>
       <AnimatePresence mode="wait">
         <motion.main
           key={getKey()}
@@ -157,11 +159,6 @@ export default function App() {
         </motion.main>
       </AnimatePresence>
       <ScrollRestoration />
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `window.ENV = ${JSON.stringify(ENV)}`,
-        }}
-      />
       <Scripts />
       <LiveReload />
     </>

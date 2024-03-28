@@ -16,7 +16,6 @@ export default function Index() {
       <Button
         onTransitionEnd={(e) => {
           if (e.propertyName === "width" && e.pseudoElement === "::before") {
-            console.log("before navigate");
             navigate("/about");
           }
         }}
@@ -26,7 +25,6 @@ export default function Index() {
         variant="outlined"
         color="primary"
         onClick={() => {
-          console.log("wtf");
           setIsClicked(true);
         }}
       >
