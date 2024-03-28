@@ -9,6 +9,7 @@ import cn from "classnames";
 import keyBy from "lodash.keyby";
 import moment from "moment-timezone";
 import { Fragment } from "react";
+
 import { ClassType, ClassTypeEdge } from "src/__generated__/graphql";
 
 import styles from "./Classes.module.css";

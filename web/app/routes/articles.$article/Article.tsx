@@ -73,14 +73,19 @@ export default function Articles() {
           <ReactMarkdown
             className="article"
             components={{
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               h1: ({ node, ...props }) => (
+                // eslint-disable-next-line react/prop-types
                 <h1 id={generateSlug(props.children as string)} {...props}></h1>
               ),
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               h2: ({ node, ...props }) => (
+                // eslint-disable-next-line react/prop-types
                 <h2 id={generateSlug(props.children as string)} {...props}></h2>
               ),
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               img: ({ node, ...props }) => (
-                // @ts-ignore
+                // @ts-expect-error props are fine
                 <LazyLoadImage effect="blur" {...props} />
               ),
             }}

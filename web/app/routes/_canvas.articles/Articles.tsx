@@ -84,8 +84,9 @@ export default function Articles() {
               <div className={styles.info}>
                 <div className={styles.title}>Fox Autocancel Aerials</div>
                 <div className={styles.description}>
-                  Small piece on niche but practical situations for Fox's
-                  underutilized autocancel options
+                  {
+                    "Small piece on niche but practical situations for Fox's underutilized autocancel options"
+                  }
                 </div>
                 <div className={styles.details}>
                   <div className={styles.date}>Sep 13th, 2019</div>

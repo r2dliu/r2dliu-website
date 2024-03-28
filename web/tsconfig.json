@@ -4,6 +4,9 @@
     "**/*.ts",
     "**/*.tsx"
   ],
+  "exclude": [
+    "src/__generated__/**"
+  ],
   "compilerOptions": {
     "lib": [
       "DOM",
