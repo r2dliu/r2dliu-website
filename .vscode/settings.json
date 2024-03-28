@@ -1,7 +1,7 @@
 {
   "files.exclude": {
-    // "**/*.css": true,
-    // "**/*.css.map": true
+    "**/*.css": true,
+    "**/*.css.map": true
   },
   "ruff.importStrategy": "fromEnvironment",
   "editor.tabSize": 2,
