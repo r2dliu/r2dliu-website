@@ -3,6 +3,7 @@
     "**/*.css": true,
     "**/*.css.map": true
   },
+  "ruff.importStrategy": "fromEnvironment",
   "editor.tabSize": 2,
   "editor.wordWrap": "on",
   "ruff.fixAll": true,

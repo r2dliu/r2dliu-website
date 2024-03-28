@@ -1,17 +1,10 @@
-/**
- * @type {import('@remix-run/dev').AppConfig}
- */
+/** @type {import('@remix-run/dev').AppConfig} */
 module.exports = {
-  appDirectory: "app",
   cacheDirectory: "./node_modules/.cache/remix",
-  assetsBuildDirectory: "public/build",
+  ignoredRouteFiles: ["**/.*", "**/*.test.{js,jsx,ts,tsx}"],
   publicPath: "/_static/build/",
-  serverBuildTarget: "arc",
-  server: "./server.ts",
-  ignoredRouteFiles: ["**/.*", "**/*.css", "**/*.css.map", "**/*.scss", "**/*.test.{js,jsx,ts,tsx}"],
-  serverDependenciesToBundle: "all",
-  future: {
-    unstable_cssModules: true,
-    v2_meta: true
-  },
+  server: "server.ts",
+  serverBuildPath: "server/index.js",
+  serverModuleFormat: "cjs",
+  serverDependenciesToBundle: "all"
 };

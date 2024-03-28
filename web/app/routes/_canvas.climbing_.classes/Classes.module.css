@@ -1,0 +1,99 @@
+.Classes {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 80px);
+  padding: 40px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  font-family: "HelveticaNeue";
+  width: fit-content;
+}
+.Classes.loading {
+  width: 100%;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+}
+.Classes.loading .icon {
+  color: white;
+}
+.Classes .header {
+  font-family: "HelveticaNeueMedium";
+  font-size: 32px;
+  padding-bottom: 8px;
+}
+.Classes .wrapper {
+  display: flex;
+}
+.Classes .wrapper .classList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.Classes .wrapper .classList .accordion {
+  padding: 0;
+  background-color: transparent;
+  color: white;
+  border-radius: 4px;
+  padding: 4px 8px;
+  transition: all 0.15s ease-in;
+  display: flex;
+  flex-direction: column;
+}
+.Classes .wrapper .classList .accordion .drawer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+.Classes .wrapper .classList .accordion .drawer .button {
+  align-self: flex-end;
+}
+.Classes .wrapper .classList .accordion .drawer .button:hover {
+  background-color: white;
+  color: black;
+}
+.Classes .wrapper .classList .accordion.active {
+  background-color: white;
+  color: black;
+}
+.Classes .wrapper .classList .accordion.active .icon {
+  visibility: visible;
+}
+.Classes .wrapper .classList .accordion .content {
+  padding-left: 14px;
+  padding-right: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+.Classes .wrapper .classList .accordion .content .title {
+  font-family: "HelveticaNeueMedium";
+}
+.Classes .wrapper .classList .accordion .content .details {
+  font-size: 12px;
+}
+.Classes .wrapper .classList .accordion .date {
+  display: flex;
+  flex-direction: column;
+}
+.Classes .wrapper .classList .accordion .date .month {
+  font-family: "HelveticaNeueMedium";
+  text-transform: uppercase;
+}
+.Classes .wrapper .classList .accordion .date .day {
+  font-family: "HelveticaNeueBold";
+  font-size: 28px;
+}
+.Classes .wrapper .classList .accordion .icon {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+.Classes .wrapper .classList .divider {
+  background-color: white;
+}
+
+/*# sourceMappingURL=Classes.module.css.map */

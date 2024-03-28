@@ -1,16 +1,19 @@
-import cn from "classnames";
+import {
+  Email as EmailIcon,
+  Instagram as InstagramIcon,
+  LinkedIn as LinkedInIcon,
+  PlayArrow as PlayArrowIcon,
+  Twitter as TwitterIcon,
+} from "@mui/icons-material";
 import { Link, useMatches } from "@remix-run/react";
+import cn from "classnames";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import EmailIcon from "@mui/icons-material/Email";
-import TwitterIcon from "@mui/icons-material/Twitter";
+
 import styles from "./Menu.module.css";
 
 export default function Menu() {
   const matches = useMatches();
-  const currPage = matches[2]?.pathname.substring(1);
+  const currPage = matches[2]?.pathname.split("/")[1];
 
   const pages = {
     about: "About Me",
@@ -36,7 +39,7 @@ export default function Menu() {
           const isActive = key === currPage;
           return (
             <div key={key} className={styles.linkContainer}>
-              {isActive && <PlayArrowIcon className={styles.icon} />}
+              {isActive ? <PlayArrowIcon className={styles.icon} /> : null}
               <Link
                 to={`/${key}`}
                 className={cn(styles.link, {

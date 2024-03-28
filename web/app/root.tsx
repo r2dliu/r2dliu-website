@@ -1,35 +1,32 @@
-import { useEffect } from "react";
-import type { LinksFunction, V2_MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { cssBundleHref } from "@remix-run/css-bundle";
+import {
+  LinksFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
+  json,
+  redirect,
+} from "@remix-run/node";
 import {
   Links,
   LiveReload,
   Meta,
+  useOutlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
   useLocation,
-  useOutlet,
+  useLoaderData,
 } from "@remix-run/react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect } from "react";
 import { createHead } from "remix-island";
 
 import "react-lazy-load-image-component/src/effects/opacity.css";
-import styles from "styles/index.css";
-import * as gtag from "helpers/gtags.client";
+import * as gtag from "~/helpers/gtags.client";
+import stylesheet from "~/styles/index.css";
+
 import NotFoundPage from "./components/BasePages/NotFoundPage";
 
-export const links: LinksFunction = () => {
-  return [
-    ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-    // NOTE: Architect deploys the public directory to /_static/
-    { rel: "icon", href: "/_static/favicon.ico" },
-    { rel: "stylesheet", href: styles },
-  ];
-};
-
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [
     {
       property: "og:title",
@@ -38,16 +35,31 @@ export const meta: V2_MetaFunction = () => {
   ];
 };
 
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: stylesheet },
+  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+  { rel: "icon", href: "/_static/favicon.ico" },
+];
+
 export const Head = createHead(() => (
   <>
     <Meta />
+    <meta charSet="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <Links />
   </>
 ));
 
-export function CatchBoundary() {
+export const SafeHead = createHead(() => (
+  <>
+    <meta charSet="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+  </>
+));
+
+export function ErrorBoundary() {
   return (
-    <html>
+    <html lang="en">
       <head>
         <title>Oops!</title>
         <meta charSet="utf-8" />
@@ -63,14 +75,24 @@ export function CatchBoundary() {
   );
 }
 
-export const loader = async () => {
-  return json({ gaTrackingId: process.env.GA_TRACKING_ID });
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { pathname, search } = new URL(request.url);
+
+  if (pathname.endsWith("/") && pathname !== "/") {
+    // Redirect to the same URL without a trailing slash
+    throw redirect(`${pathname.slice(0, -1)}${search}`, 301);
+  }
+
+  return json({
+    gaTrackingId: process.env.GA_TRACKING_ID,
+    apiUrl: process.env.API_URL,
+  });
 };
 
 export default function App() {
   const outlet = useOutlet();
   const location = useLocation();
-  const { gaTrackingId } = useLoaderData<typeof loader>();
+  const { gaTrackingId, apiUrl } = useLoaderData<typeof loader>();
 
   useEffect(() => {
     if (gaTrackingId?.length) {
@@ -81,7 +103,7 @@ export default function App() {
   const getKey = () => {
     const path = location.pathname;
     const splitPath = location.pathname.split("/");
-    if (splitPath.length === 2 && splitPath[1] !== "") {
+    if (splitPath.length >= 2 && splitPath[1] !== "") {
       return "main";
     } else {
       return path;
@@ -90,7 +112,6 @@ export default function App() {
 
   return (
     <>
-      {/* <html lang="en"> */}
       <Head />
       {process.env.NODE_ENV === "development" || !gaTrackingId ? null : (
         <>
@@ -114,8 +135,11 @@ export default function App() {
           />
         </>
       )}
-      {/* <body> */}
-      {/* <Outlet /> */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `window.API_URL = '${apiUrl}'`,
+        }}
+      ></script>
       <AnimatePresence mode="wait">
         <motion.main
           key={getKey()}
@@ -137,8 +161,6 @@ export default function App() {
       <ScrollRestoration />
       <Scripts />
       <LiveReload />
-      {/* </body> */}
-      {/* </html> */}
     </>
   );
 }

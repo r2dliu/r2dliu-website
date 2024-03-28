@@ -1,7 +1,10 @@
 node_modules
-
-/server/index.js
-/public/build
+**/__pycache__
+api/.venv
+api/.ruff_cache
+api/static/
+web/server/*
+web/build/*
 preferences.arc
 sam.json
 sam.yaml

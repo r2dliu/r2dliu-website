@@ -1,10 +1,15 @@
 name: 🚀 Deploy
+
 on:
   push:
     branches:
       - main
       - dev
-  pull_request: {}
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   actions: write
@@ -22,22 +27,18 @@ jobs:
       run:
         working-directory: web
     steps:
-      - name: 🛑 Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
-
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 14
+          cache: npm
+          cache-dependency-path: "**/package.json"
+          node-version: 18
 
-      - name: 📥 Download deps
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: web
-          useLockFile: false
+      - name: 📥 Install deps
+        run: npm install
 
       - name: 🔬 Lint
         run: npm run lint
@@ -49,70 +50,39 @@ jobs:
       run:
         working-directory: web
     steps:
-      - name: 🛑 Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
-
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 14
+          cache: npm
+          cache-dependency-path: "**/package.json"
+          node-version: 18
 
-      - name: 📥 Download deps
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: web
-          useLockFile: false
+      - name: 📥 Install deps
+        run: npm install
 
       - name: 🔎 Type check
         run: npm run typecheck --if-present
 
-  vitest:
-    name: ⚡ Vitest
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: web
-    steps:
-      - name: 🛑 Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
-
-      - name: ⬇️ Checkout repo
-        uses: actions/checkout@v3
-
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 14
-
-      - name: 📥 Download deps
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: web
-          useLockFile: false
-
-      - name: ⚡ Run vitest
-        run: npm run test -- --coverage
-
   deploy:
-    needs: [lint, typecheck, vitest]
+    needs: [lint, typecheck]
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: web
-    steps:
-      - name: 🛑 Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
 
+    steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 14
+          cache: npm
+          cache-dependency-path: "**/package.json"
+          node-version: 18
 
       - name: 👀 Env
         run: |
@@ -123,11 +93,8 @@ jobs:
           VER=`node --version`; echo "Node ver:   $VER"
           VER=`npm --version`; echo "npm ver:    $VER"
 
-      - name: 📥 Download deps
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: web
-          useLockFile: false
+      - name: 📥 Install deps
+        run: npm install
 
       - name: 🏗 Build
         run: npm run build

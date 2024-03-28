@@ -10,16 +10,36 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import io
 import os
 from pathlib import Path
 
 from dotenv import load_dotenv
+from google.cloud import secretmanager
 
-load_dotenv()
+if not os.environ.get("GOOGLE_CLOUD_PROJECT", None):
+    load_dotenv()
+else:
+    project_id = "r2dliu-website"
+
+    client = secretmanager.SecretManagerServiceClient()
+    settings_name = os.environ.get("SETTINGS_NAME", "django-settings")
+    name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
+    payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
+
+    load_dotenv(stream=io.StringIO(payload))
+
+USE_TZ = True
+TIME_ZONE = "UTC"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Cors
+CORS_ALLOWED_ORIGINS = [
+    "https://staging.r2dliu.com",
+    os.environ.get("CORS_ALLOWED_ORIGINS"),
+]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -30,8 +50,7 @@ SECRET_KEY = "django-insecure-b^npkausehgs^+u%st=kt!%-98v8hz!o-&_%_s4j=xhejf-fw=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [os.environ.get("ALLOWED_HOSTS")]
 
 # Application definition
 
@@ -39,6 +58,8 @@ INSTALLED_APPS = [
     "r2dliu",
     "r2dliu.courses",
     "graphene_django",
+    "corsheaders",
+    "django_filters",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -50,6 +71,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
