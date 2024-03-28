@@ -34,7 +34,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: npm
-          cache-dependency-path: ./package.json
+          cache-dependency-path: "**/package.json"
           node-version: 18
 
       - name: 📥 Install deps
@@ -57,7 +57,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: npm
-          cache-dependency-path: ./package.json
+          cache-dependency-path: "**/package.json"
           node-version: 18
 
       - name: 📥 Install deps
@@ -80,7 +80,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: npm
-          cache-dependency-path: ./package.json
+          cache-dependency-path: "**/package.json"
           node-version: 18
 
       - name: 📥 Install deps
@@ -106,7 +106,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: npm
-          cache-dependency-path: ./package.json
+          cache-dependency-path: "**/package.json"
           node-version: 18
 
       - name: 📥 Install deps
@@ -138,7 +138,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           cache: npm
-          cache-dependency-path: ./package.json
+          cache-dependency-path: "**/package.json"
           node-version: 18
 
       - name: 👀 Env
