@@ -54,7 +54,7 @@ async function getApolloClient(request: Request) {
     ssrMode: true,
     cache: new InMemoryCache(),
     link: createHttpLink({
-      uri: process.env.REACT_APP_API_URL,
+      uri: process.env.API_URL,
       headers: {
         ...Object.fromEntries(request.headers),
         Accept: "application/json",
