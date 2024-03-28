@@ -18,6 +18,8 @@
 # [START gaestd_py_django_app_yaml]
 runtime: python311
 
+entrypoint: gunicorn -b :$PORT r2dliu.wsgi:application
+
 env_variables:
   # This setting is used in settings.py to configure your ALLOWED_HOSTS
   APPENGINE_URL: r2dliu-website.uc.r.appspot.com

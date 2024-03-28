@@ -1,6 +1,8 @@
 node_modules
 **/__pycache__
-api/static/*
+api/.venv
+api/.ruff_cache
+api/static/
 web/server/*
 web/build/*
 preferences.arc
