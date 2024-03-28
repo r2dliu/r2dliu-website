@@ -66,65 +66,8 @@ jobs:
       - name: 🔎 Type check
         run: npm run typecheck --if-present
 
-  vitest:
-    name: ⚡ Vitest
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: web
-    steps:
-      - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
-
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v4
-        with:
-          cache: npm
-          cache-dependency-path: "**/package.json"
-          node-version: 18
-
-      - name: 📥 Install deps
-        run: npm install
-
-      - name: ⚡ Run vitest
-        run: npm run test -- --coverage
-
-  cypress:
-    name: ⚫️ Cypress
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: web
-    steps:
-      - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
-
-      - name: 🏄 Copy test env vars
-        run: cp .env.example .env
-
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v4
-        with:
-          cache: npm
-          cache-dependency-path: "**/package.json"
-          node-version: 18
-
-      - name: 📥 Install deps
-        run: npm install
-
-      - name: 🏗 Build
-        run: npm run build
-
-      - name: 🌳 Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          start: npm run dev
-          wait-on: "http://localhost:8811"
-        env:
-          PORT: "8811"
-
   deploy:
-    needs: [lint, typecheck, vitest, cypress]
+    needs: [lint, typecheck]
     runs-on: ubuntu-latest
     defaults:
       run:

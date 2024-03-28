@@ -36,7 +36,10 @@ TIME_ZONE = "UTC"
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Cors
-CORS_ALLOWED_ORIGINS = [os.environ.get("CORS_ALLOWED_ORIGINS")]
+CORS_ALLOWED_ORIGINS = [
+    "https://staging.r2dliu.com",
+    os.environ.get("CORS_ALLOWED_ORIGINS"),
+]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
