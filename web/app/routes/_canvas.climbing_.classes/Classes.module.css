@@ -54,6 +54,9 @@
   background-color: white;
   color: black;
 }
+.Classes .wrapper .classList .accordion .drawer .description {
+  font-family: "HelveticaNeueRegular";
+}
 .Classes .wrapper .classList .accordion.active {
   background-color: white;
   color: black;
@@ -73,6 +76,8 @@
   font-family: "HelveticaNeueMedium";
 }
 .Classes .wrapper .classList .accordion .content .details {
+  opacity: 70%;
+  font-family: "HelveticaNeueRegular";
   font-size: 12px;
 }
 .Classes .wrapper .classList .accordion .date {
