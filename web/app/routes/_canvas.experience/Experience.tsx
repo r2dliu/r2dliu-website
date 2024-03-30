@@ -20,10 +20,30 @@ type entriesType = Record<
 
 export default function Experience() {
   const entries: entriesType = {
+    ThinkNimble: {
+      name: "ThinkNimble",
+      title: "Software Engineer / Project Lead",
+      range: "2023 - Present",
+      description: [
+        <br key={1} />,
+        <a
+          key={"link"}
+          href="https://www.thinknimble.com/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          ThinkNimble
+        </a>,
+        " is a startup-oriented software development agency, but with a twist: they build businesses from the ground up. Rather than just coding the product, they also coach founders through strategy, help them hire their staff, advise them through launch, and guide them through the startup process with decades of collective knowledge amongst its staff.",
+        <br key={2} />,
+        <br key={3} />,
+        "As a software engineer and project lead, I work directly with clients throughout the process of turning their ideas into reality, typically from scratch or bootstrapped with ThinkNimble's internal tooling. This involves a large variety of fields and expertise, such as medicine, the judicial system, political lobbying, education, finance, machine learning, etc.",
+      ],
+    },
     "JHU/APL": {
       name: "JHU Applied Physics Laboratory",
       title: "Software Architect",
-      range: "2019 — Present",
+      range: "2019 — 2023",
       description: [
         <br key={1} />,
         "At ",
@@ -82,7 +102,7 @@ export default function Experience() {
     },
   };
 
-  const [activeEntry, setActiveEntry] = useState("JHU/APL");
+  const [activeEntry, setActiveEntry] = useState("ThinkNimble");
 
   return (
     <div className={styles.Experience}>
@@ -145,7 +165,7 @@ export default function Experience() {
             <div className={styles.skill}>{"Rust"}</div>
             <div className={styles.skill}>{"Python"}</div>
             <div className={styles.skill}>{"C"}</div>
-            <div className={styles.skill}>{"React"}</div>
+            <div className={styles.skill}>{"React / React Native / Vue"}</div>
           </div>
           <div className={styles.column}>
             <div className={styles.skill}>{"Linux"}</div>

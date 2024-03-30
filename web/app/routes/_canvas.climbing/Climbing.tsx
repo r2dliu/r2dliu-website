@@ -52,8 +52,8 @@ export default function Climbing() {
         >
           Instagram
         </a>{" "}
-        for information on rates and availability! Happy to work with both
-        remote and in-person clients.
+        for information on rates and availability! I work with both remote and
+        in-person clients.
       </div>
       <div className={styles.header}>Tick List</div>
       <div className={styles.bio}>Soon&trade;</div>
