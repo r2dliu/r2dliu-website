@@ -5,18 +5,22 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useLoaderData } from "@remix-run/react";
 import cn from "classnames";
 import keyBy from "lodash.keyby";
 import moment from "moment-timezone";
 import { Fragment } from "react";
-
+import Markdown from "react-markdown";
 import { ClassType, ClassTypeEdge } from "src/__generated__/graphql";
 
 import styles from "./Classes.module.css";
+import { loader } from "./route";
 
-const classesQuery = gql`
+export default function Classes() {
+  const timestamp = useLoaderData<typeof loader>();
+  const classesQuery = gql`
   {
-    classes(startTime_Gte: "2006-01-02T15:04:05") {
+    classes(startTime_Gte: "${timestamp}") {
       edges {
         node {
           id
@@ -40,8 +44,6 @@ const classesQuery = gql`
     }
   }
 `;
-
-export default function Classes() {
   const { loading, error, data } = useQuery(classesQuery);
 
   if (loading) {
@@ -100,7 +102,7 @@ export default function Classes() {
                       <AccordionDetails>
                         <div className={styles.drawer}>
                           <div className={styles.description}>
-                            {instance.description}
+                            <Markdown>{instance.description}</Markdown>
                           </div>
                           <Button
                             className={styles.button}

@@ -3,7 +3,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { motion } from "framer-motion";
 import { useRef, useEffect } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import ReactMarkdown from "react-markdown";
+import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import tocbot from "tocbot";
 
@@ -70,7 +70,7 @@ export default function Articles() {
         </motion.div>
         <span className={styles.title}>{data.title}</span>
         <div className={styles.markdown}>
-          <ReactMarkdown
+          <Markdown
             className="article"
             components={{
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -92,7 +92,7 @@ export default function Articles() {
             rehypePlugins={[rehypeRaw]}
           >
             {data.markdown}
-          </ReactMarkdown>
+          </Markdown>
         </div>
       </div>
       <div className={styles.sidebar}>
