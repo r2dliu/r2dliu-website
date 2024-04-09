@@ -44,7 +44,6 @@
 .Classes .wrapper .classList .accordion .drawer {
   display: flex;
   flex-direction: column;
-  align-items: center;
   height: 100%;
 }
 .Classes .wrapper .classList .accordion .drawer .button {
