@@ -10,7 +10,9 @@ import cn from "classnames";
 import keyBy from "lodash.keyby";
 import moment from "moment-timezone";
 import { Fragment } from "react";
+// eslint-disable-next-line import/order
 import Markdown from "react-markdown";
+
 import { ClassType, ClassTypeEdge } from "src/__generated__/graphql";
 
 import styles from "./Classes.module.css";
