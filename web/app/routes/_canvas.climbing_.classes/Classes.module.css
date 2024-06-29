@@ -53,9 +53,6 @@
   background-color: white;
   color: black;
 }
-.Classes .wrapper .classList .accordion .drawer .description {
-  font-family: "HelveticaNeueRegular";
-}
 .Classes .wrapper .classList .accordion.active {
   background-color: white;
   color: black;

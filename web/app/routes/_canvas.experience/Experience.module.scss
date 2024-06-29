@@ -99,7 +99,11 @@
       }
 
       .details {
+        flex-shrink: 3;
         padding-left: 24px;
+        @include breakpoint(tablet) {
+          padding-left: 8px;
+        }
         padding-right: 8px;
 
         .name {

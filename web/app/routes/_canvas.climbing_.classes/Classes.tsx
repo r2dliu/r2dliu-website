@@ -103,9 +103,7 @@ export default function Classes() {
                       </AccordionSummary>
                       <AccordionDetails>
                         <div className={styles.drawer}>
-                          <div className={styles.description}>
-                            <Markdown>{instance.description}</Markdown>
-                          </div>
+                          <Markdown>{instance.description}</Markdown>
                           <Button
                             className={styles.button}
                             onClick={() => window.open(instance.url, "_blank")}
