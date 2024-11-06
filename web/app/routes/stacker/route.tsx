@@ -2,6 +2,7 @@ import { Stats, CameraControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import cn from "classnames";
 import { useEffect, useRef, useState } from "react";
+import { Vector3 } from "three";
 
 import { useGameStore } from "./logic/core/gameStore";
 import { Tile } from "./renderables/tile/tile";
@@ -41,7 +42,6 @@ export default function Stacker() {
           onStart={() => {
             cameraControlsRef.current?.setTarget(centerPoint, 0, centerPoint);
             setVisible(true);
-            console.log("wow");
           }}
         />
         <ambientLight />
@@ -50,7 +50,10 @@ export default function Stacker() {
           col.map((tile, j) => (
             <Tile
               key={`(${i.toString()},${j.toString()})`}
-              position={[j, 0, i]}
+              position={new Vector3(j, 0, i)}
+              initialHeight={tile.initialHeight}
+              owner={tile.owner}
+              count={tile.count}
             />
           )),
         )}
