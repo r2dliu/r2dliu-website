@@ -1,5 +1,6 @@
 import { Stats, CameraControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
+import MouseButtons from "camera-controls";
 import cn from "classnames";
 import { useEffect, useRef, useState } from "react";
 import { Vector3 } from "three";
@@ -13,7 +14,7 @@ export default function Stacker() {
   const initializeBoard = useGameStore((state) => state.initializeBoard);
   const board = useGameStore((state) => state.board);
 
-  useEffect(() => initializeBoard(6), [initializeBoard]);
+  useEffect(() => initializeBoard(), [initializeBoard]); // TODO add boardsize to initializeBoard
   const [visible, setVisible] = useState(false);
 
   const centerPoint = board.length / 2.0 - 0.5;
@@ -21,7 +22,6 @@ export default function Stacker() {
 
   return (
     <div className={styles.Stacker}>
-      testing
       <Canvas
         className={cn(styles.canvas, { [styles.visible]: visible })}
         camera={{
@@ -36,6 +36,12 @@ export default function Stacker() {
       >
         {/* Camera helper to visualize camera position */}
         <CameraControls
+          mouseButtons={{
+            left: MouseButtons.ACTION.NONE,
+            wheel: MouseButtons.ACTION.ZOOM,
+            right: MouseButtons.ACTION.NONE,
+            middle: MouseButtons.ACTION.ROTATE,
+          }}
           minDistance={2}
           maxDistance={20}
           ref={cameraControlsRef}

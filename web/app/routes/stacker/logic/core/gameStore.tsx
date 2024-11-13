@@ -10,11 +10,15 @@ interface Tile {
 }
 
 interface GameState {
+  boardSize: number;
   updatePlayer: (player: number) => void;
   inProgress: boolean;
+  notCascading: boolean;
   activePlayer: number;
   board: Tile[][];
-  initializeBoard: (boardSize: number) => void;
+  allowMove: () => boolean;
+  cascade: () => Promise<void>;
+  initializeBoard: () => void;
   updateTile: (x: number, y: number, owner: number, count: number) => void;
 }
 
@@ -31,25 +35,88 @@ function calculateInitialHeight(boardSize: number, i: number, j: number) {
 }
 export const useGameStore = create<GameState>()(
   devtools(
-    immer((set) => ({
-      inProgress: true,
+    immer((set, get) => ({
+      boardSize: 6,
+      inProgress: true as boolean,
+      notCascading: true as boolean,
       activePlayer: 1,
-      board: [],
-      initializeBoard: (boardSize: number) =>
+      board: [] as Tile[][],
+      allowMove: () => {
+        return get().inProgress && get().notCascading;
+      },
+      initializeBoard: () =>
         set((state: GameState) => {
-          state.board = [...Array(boardSize).keys()].map((i) =>
-            [...Array(boardSize).keys()].map((j) => ({
+          state.board = [...Array(get().boardSize).keys()].map((i) =>
+            [...Array(get().boardSize).keys()].map((j) => ({
               owner: 0,
               count: 0,
-              initialHeight: calculateInitialHeight(boardSize, i, j),
+              initialHeight: calculateInitialHeight(get().boardSize, i, j),
             })),
           );
         }),
-      updateTile: (x, y, owner, count) =>
+      cascade: async () => {
+        let changed = false;
+        await set((state: GameState) => {
+          state.notCascading = false;
+          const updatedBoard = structuredClone(get().board);
+          state.board.forEach((column, i) => {
+            column.forEach((tile, j) => {
+              if (tile.count + tile.initialHeight >= 4) {
+                changed = true;
+                // collapse the tiles outwards in cardinal directions
+                updatedBoard[i][j].count = Math.max(
+                  tile.count + tile.initialHeight - 4,
+                  0,
+                );
+                if (j > 0) {
+                  // left
+                  updatedBoard[i][j - 1].count =
+                    state.board[i][j - 1].count + 1;
+                  updatedBoard[i][j - 1].owner = state.board[i][j].owner;
+                }
+                if (j < get().boardSize - 1) {
+                  // right
+                  updatedBoard[i][j + 1].count =
+                    state.board[i][j + 1].count + 1;
+                  updatedBoard[i][j + 1].owner = state.board[i][j].owner;
+                }
+                if (i > 0) {
+                  // down
+                  updatedBoard[i - 1][j].count =
+                    state.board[i - 1][j].count + 1;
+                  updatedBoard[i - 1][j].owner = state.board[i][j].owner;
+                }
+                if (i < get().boardSize - 1) {
+                  // up
+                  updatedBoard[i + 1][j].count =
+                    state.board[i + 1][j].count + 1;
+                  updatedBoard[i + 1][j].owner = state.board[i][j].owner;
+                }
+                // reset owner if no tiles remaining on that square
+                if (state.board[i][j].count === 0) {
+                  updatedBoard[i][j].owner = 0;
+                }
+              }
+            });
+          });
+          state.board = updatedBoard;
+        });
+
+        if (!changed) {
+          await set((state: GameState) => {
+            state.notCascading = true;
+          });
+        } else {
+          await new Promise((r) => setTimeout(r, 1000));
+          await get().cascade();
+        }
+      },
+      updateTile: (x, y, owner, count) => {
         set((state: GameState) => {
           state.board[x][y].owner = owner;
           state.board[x][y].count = count;
-        }),
+        });
+      },
       updatePlayer: (player: number) =>
         set((state: GameState) => {
           state.activePlayer = player;
