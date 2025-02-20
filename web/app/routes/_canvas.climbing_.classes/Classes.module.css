@@ -5,7 +5,7 @@
   padding: 40px;
   overflow-y: scroll;
   overflow-x: hidden;
-  font-family: "HelveticaNeue";
+  font-family: "HelveticaNeueRegular";
   width: fit-content;
 }
 .Classes.loading {
