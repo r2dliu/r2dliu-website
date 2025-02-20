@@ -50,6 +50,7 @@ module.exports = {
     
       },
       rules: {
+        "react/no-unknown-property": "off",
         "react/jsx-no-leaked-render": [
           "warn",
           { validStrategies: ["ternary"] },

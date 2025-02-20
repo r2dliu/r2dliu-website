@@ -1,0 +1,13 @@
+.Stacker {
+  height: 100%;
+}
+.Stacker .canvas {
+  opacity: 0;
+  height: 100%;
+  width: 100%;
+}
+.Stacker .canvas.visible {
+  opacity: 1;
+}
+
+/*# sourceMappingURL=stacker.module.css.map */
