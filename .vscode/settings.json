@@ -1,14 +1,18 @@
 {
-  "files.exclude": {
-    "**/*.css": true,
-    "**/*.css.map": true
+  "files.watcherExclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "search.exclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "files.readonlyInclude": {
+    "**/routeTree.gen.ts": true
   },
   "ruff.importStrategy": "fromEnvironment",
   "editor.tabSize": 2,
   "editor.wordWrap": "on",
   "ruff.fixAll": true,
   "ruff.enable": true,
-  "ruff.lint.run": "onSave",
   "flake8.ignorePatterns": [
     "*"
   ]

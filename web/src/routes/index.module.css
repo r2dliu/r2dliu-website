@@ -1,0 +1,82 @@
+.Home {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.Home .name {
+  font-family: 'BebasNeue';
+  font-size: 90px;
+}
+.Home .description {
+  padding-top: 6px;
+  font-family: 'HelveticaNeueRegular';
+  font-size: 20px;
+  padding-bottom: 18px;
+}
+.Home .button {
+  font-family: 'HelveticaNeueMedium';
+  opacity: 1;
+}
+.Home .button:before,
+.Home .button:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: white;
+  transition: all 0.15s linear;
+}
+.Home .button span::before,
+.Home .button span::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 100%;
+  background: white;
+  transition: all 0.15s linear;
+}
+.Home .button:before {
+  left: 0;
+  bottom: 0;
+  transition-delay: 0.45s;
+}
+.Home .button:after {
+  right: 0;
+  top: 0;
+  transition-delay: 0.15s;
+}
+.Home .button span::before {
+  left: 0;
+  top: 0;
+  transition-delay: 0s;
+}
+.Home .button span::after {
+  right: 0;
+  bottom: 0;
+  transition-delay: 0.3s;
+}
+.Home .button:hover {
+  background: white;
+  color: black;
+}
+.Home .button.clicked {
+  background: none;
+  color: white;
+  border: none;
+  opacity: 0.5;
+  transition: opacity 4s;
+  transition-delay: 0.3s;
+}
+.Home .button.clicked:before,
+.Home .button.clicked:after {
+  width: 0;
+}
+.Home .button.clicked span::before,
+.Home .button.clicked span::after {
+  height: 0;
+}
+
+/*# sourceMappingURL=index.module.css.map */
