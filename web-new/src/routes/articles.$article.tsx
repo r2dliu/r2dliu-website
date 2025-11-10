@@ -31,6 +31,7 @@ export const Route = createFileRoute('/articles/$article')({
   loader: ({ params }) => {
     const data = articleData[params.article as keyof typeof articleData]
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!data) {
       throw notFound()
     }
@@ -65,6 +66,8 @@ function Article() {
   const [LazyLoadImage, setLazyLoadImage] = useState<any>(null)
   const data = Route.useLoaderData()
   const lastData = useRef(data)
+  const articleRef = useRef<HTMLDivElement>(null)
+  const tocRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // Dynamic import to avoid SSR require errors
@@ -82,6 +85,10 @@ function Article() {
   const currentData = data || lastData.current
 
   useEffect(() => {
+    if (!articleRef.current || !tocRef.current) {
+      return
+    }
+
     tocbot.init({
       tocSelector: '.toc',
       contentSelector: '.article',
@@ -93,67 +100,72 @@ function Article() {
         tocbot.refresh()
       },
       headingsOffset: 90,
+      scrollSmooth: true,
+      scrollSmoothDuration: 420,
     })
 
     return () => {
       tocbot.destroy()
     }
-  }, [])
+  }, [currentData, LazyLoadImage])
 
   if (!LazyLoadImage) {
-    return <div className="flex flex-col h-full w-full p-6">Loading...</div>
+    return
   }
-
+  
   return (
     <div className="flex flex-row-reverse h-full">
+      {/* Main Content */}
+      <div className="flex flex-col w-[calc(100%-300px)] max-lg:w-full relative">
+        <span className="article-title z-10 bg-black px-2.5 py-2 left-[10%] max-lg:left-10 absolute top-0 text-5xl max-lg:text-4xl font-['BebasNeue'] w-fit">
+          {currentData.title}
+        </span>
+
+        <motion.div
+          initial={{ width: '0%' }}
+          animate={{ width: '100%' }}
+          transition={{ duration: 0.4, ease: 'easeIn', delay: 0.15 }}
+          className="absolute h-16 max-lg:h-13 top-0 left-0 right-0 flex items-center pointer-events-none"
+        >
+          <Divider className="!h-0.5 !w-full !bg-white" />
+        </motion.div>
+
+        <div className="markdown-container overflow-y-auto pr-3 pl-3 overflow-x-hidden">
+          <div className="article" ref={articleRef}>
+            <Markdown
+              components={{
+                h1: ({ node, ...props }) => (
+                  <h1 id={generateSlug(props.children as string)} {...props} />
+                ),
+                h2: ({ node, ...props }) => (
+                  <h2 id={generateSlug(props.children as string)} {...props} />
+                ),
+                img: ({ node, ...props }) => (
+                  <LazyLoadImage effect="blur" {...props} />
+                ),
+              }}
+              rehypePlugins={[rehypeRaw]}
+            >
+              {currentData.markdown}
+            </Markdown>
+          </div>
+        </div>
+      </div>
+
       {/* Sidebar */}
       <div className="flex flex-col items-center justify-between w-[300px] mt-[60px] max-lg:hidden">
-        <div className="w-[224px] pr-4 border-2 border-white">
-          <div className="toc" />
+        <div className="w-[224px] pr-4 border-2 border-white p-4">
+          <div className="toc" ref={tocRef} />
         </div>
 
         <Link to="/articles" className="no-underline self-start w-auto">
-          <div className="flex justify-center items-center text-black w-auto">
+          <div className="flex flex-col justify-center items-start text-black w-auto">
             <div className="bg-white px-1 py-2.5 mb-0.5 font-['HelveticaNeueMedium']">
               ← Back to Articles
             </div>
             <div className="h-0.5 bg-white w-full" />
           </div>
         </Link>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex flex-col w-[calc(100%-300px)] max-lg:w-full relative">
-        <motion.div
-          initial={{ width: '0%' }}
-          animate={{ width: '100%' }}
-          transition={{ duration: 0.4, ease: 'easeIn', delay: 0.15 }}
-        >
-          <Divider className="!mt-8 max-lg:!mt-5 !-z-10 !h-0.5 !w-full !bg-white" />
-        </motion.div>
-
-        <span className="z-10 bg-black px-2.5 left-[10%] max-lg:left-10 absolute pt-2 max-lg:pt-0 text-5xl max-lg:text-4xl font-['BebasNeue']">
-          {currentData.title}
-        </span>
-
-        <div className="markdown-container mt-6 overflow-y-auto pr-3 pl-3 overflow-x-hidden">
-          <Markdown
-            components={{
-              h1: ({ node, ...props }) => (
-                <h1 id={generateSlug(props.children as string)} {...props} />
-              ),
-              h2: ({ node, ...props }) => (
-                <h2 id={generateSlug(props.children as string)} {...props} />
-              ),
-              img: ({ node, ...props }) => (
-                        <LazyLoadImage effect="blur" {...props} />
-              ),
-            }}
-            rehypePlugins={[rehypeRaw]}
-          >
-            {currentData.markdown}
-          </Markdown>
-        </div>
       </div>
     </div>
   )

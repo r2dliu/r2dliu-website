@@ -1,9 +1,7 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Link, createFileRoute  } from '@tanstack/react-router'
 import { Chip, Divider } from '@mui/material'
-import * as pkg from 'react-lazy-load-image-component'
+import { useEffect, useState } from 'react'
 import 'react-lazy-load-image-component/src/effects/blur.css'
-
-const { LazyLoadImage } = pkg
 
 export const Route = createFileRoute('/_canvas/articles')({
   component: Articles,
@@ -25,10 +23,23 @@ export const Route = createFileRoute('/_canvas/articles')({
 })
 
 function Articles() {
+  const [LazyLoadImage, setLazyLoadImage] = useState<any>(null)
+
+  useEffect(() => {
+    // Dynamic import to avoid SSR require errors
+    import('react-lazy-load-image-component').then((pkg) => {
+      setLazyLoadImage(() => pkg.LazyLoadImage)
+    })
+  }, [])
+
+  if (!LazyLoadImage) {
+    return
+  }
+
   return (
     <div className="flex flex-col h-full w-full px-6 overflow-y-auto overflow-x-hidden">
       {/* Featured Article */}
-      <Link to="/articles/pulley" className="no-underline text-white">
+      <Link to="/articles/$article" params={{ article: 'pulley' }} className="no-underline text-white">
         <div className="relative flex items-end w-full min-h-[500px] max-h-[500px] max-md:min-h-[300px] max-md:max-h-[300px] max-md:pb-2">
           <div className="m-3 ml-0 pr-2 max-w-[450px] max-md:m-0 z-10">
             <div className="font-['HelveticaNeueBold'] text-[22px] mb-0.5 max-md:text-base max-md:line-clamp-2">
@@ -69,7 +80,7 @@ function Articles() {
       {/* Article List */}
       <div className="flex">
         <div className="flex flex-col">
-          <Link to="/articles/ledgedash" className="no-underline text-white">
+          <Link to="/articles/$article" params={{ article: 'ledgedash' }} className="no-underline text-white">
             <div className="flex justify-between pt-2 pb-2 border-b border-gray-400 items-center max-w-[700px]">
               <div className="m-3 ml-0 pr-2 max-md:m-0">
                 <div className="font-['HelveticaNeueBold'] text-[22px] mb-0.5 max-md:text-base max-md:line-clamp-2">
@@ -104,7 +115,7 @@ function Articles() {
             </div>
           </Link>
 
-          <Link to="/articles/autocancel" className="no-underline text-white">
+          <Link to="/articles/$article" params={{ article: 'autocancel' }} className="no-underline text-white">
             <div className="flex justify-between pt-2 pb-2 border-b border-gray-400 items-center max-w-[700px]">
               <div className="m-3 ml-0 pr-2 max-md:m-0">
                 <div className="font-['HelveticaNeueBold'] text-[22px] mb-0.5 max-md:text-base max-md:line-clamp-2">

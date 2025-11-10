@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StackerRouteImport } from './routes/stacker'
 import { Route as CanvasRouteImport } from './routes/_canvas'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ArticlesArticleRouteImport } from './routes/articles.$article'
@@ -18,6 +19,11 @@ import { Route as CanvasClimbingRouteImport } from './routes/_canvas.climbing'
 import { Route as CanvasArticlesRouteImport } from './routes/_canvas.articles'
 import { Route as CanvasAboutRouteImport } from './routes/_canvas.about'
 
+const StackerRoute = StackerRouteImport.update({
+  id: '/stacker',
+  path: '/stacker',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CanvasRoute = CanvasRouteImport.update({
   id: '/_canvas',
   getParentRoute: () => rootRouteImport,
@@ -60,6 +66,7 @@ const CanvasAboutRoute = CanvasAboutRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/stacker': typeof StackerRoute
   '/about': typeof CanvasAboutRoute
   '/articles': typeof CanvasArticlesRoute
   '/climbing': typeof CanvasClimbingRoute
@@ -69,6 +76,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/stacker': typeof StackerRoute
   '/about': typeof CanvasAboutRoute
   '/articles': typeof CanvasArticlesRoute
   '/climbing': typeof CanvasClimbingRoute
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_canvas': typeof CanvasRouteWithChildren
+  '/stacker': typeof StackerRoute
   '/_canvas/about': typeof CanvasAboutRoute
   '/_canvas/articles': typeof CanvasArticlesRoute
   '/_canvas/climbing': typeof CanvasClimbingRoute
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/stacker'
     | '/about'
     | '/articles'
     | '/climbing'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/stacker'
     | '/about'
     | '/articles'
     | '/climbing'
@@ -110,6 +121,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_canvas'
+    | '/stacker'
     | '/_canvas/about'
     | '/_canvas/articles'
     | '/_canvas/climbing'
@@ -121,11 +133,19 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CanvasRoute: typeof CanvasRouteWithChildren
+  StackerRoute: typeof StackerRoute
   ArticlesArticleRoute: typeof ArticlesArticleRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/stacker': {
+      id: '/stacker'
+      path: '/stacker'
+      fullPath: '/stacker'
+      preLoaderRoute: typeof StackerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_canvas': {
       id: '/_canvas'
       path: ''
@@ -207,6 +227,7 @@ const CanvasRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CanvasRoute: CanvasRouteWithChildren,
+  StackerRoute: StackerRoute,
   ArticlesArticleRoute: ArticlesArticleRoute,
 }
 export const routeTree = rootRouteImport

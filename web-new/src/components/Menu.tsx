@@ -4,11 +4,19 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 import TwitterIcon from '@mui/icons-material/Twitter'
 import { Link, useRouterState } from '@tanstack/react-router'
-import cn from 'classnames'
+import { useEffect, useState } from 'react'
 
 export default function Menu() {
+  const [LazyLoadImage, setLazyLoadImage] = useState<any>(null)
   const routerState = useRouterState()
   const currPage = routerState.location.pathname.split('/')[1]
+
+  useEffect(() => {
+    // Dynamic import to avoid SSR require errors
+    import('react-lazy-load-image-component').then((pkg) => {
+      setLazyLoadImage(() => pkg.LazyLoadImage)
+    })
+  }, [])
 
   const pages = {
     about: 'About Me',
@@ -18,23 +26,28 @@ export default function Menu() {
     climbing: 'Climbing',
   }
 
+  if (!LazyLoadImage) {
+    return
+  }
+
   return (
-    <div className="flex flex-col items-center h-[90%] max-w-[300px] min-w-[300px]">
+    <div className="flex flex-col items-center h-[90%] max-w-xs min-w-xs">
       <Link to="/" className="pb-6">
-        <img
+        <LazyLoadImage
           className="w-[170px] h-[163px] object-contain"
           alt="Square seal script logo for this website"
           src="https://s3.r2dliu.com/assets/logo.png"
+          effect="blur"
         />
       </Link>
       
-      <div className="flex flex-col font-['HelveticaNeueBold'] text-[32px] uppercase">
+      <div className="flex flex-col font-['HelveticaNeueBold'] text-3xl uppercase">
         {Object.entries(pages).map(([key, page]) => {
           const isActive = key === currPage
           return (
             <div key={key} className="flex items-center pt-[18px]">
               {isActive ? (
-                <PlayArrowIcon className="ml-[-32px] text-[32px] text-white" />
+                <PlayArrowIcon className="-ml-8 text-3xl text-white" />
               ) : null}
               <Link
                 to={`/${key}` as any}

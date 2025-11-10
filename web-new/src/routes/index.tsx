@@ -14,8 +14,8 @@ function Index() {
 
   return (
     <div className="h-full overflow-hidden flex flex-col items-center justify-center">
-      <div className="font-['BebasNeue'] text-[90px] leading-none">David Liu</div>
-      <div className="pt-1.5 font-['HelveticaNeueMedium'] text-xl leading-normal pb-[18px]">
+      <div className="font-['BebasNeue'] text-8xl leading-none">David Liu</div>
+      <div className="pt-1.5 font-['HelveticaNeueMedium'] text-xl pb-6">
         Software | Climbing | Melee
       </div>
       <div className="relative">

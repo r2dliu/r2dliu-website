@@ -33,8 +33,9 @@ function Melee() {
   }, [])
 
   if (!LazyLoadImage) {
-    return <div className="flex flex-col h-full w-full p-6">Loading...</div>
+    return
   }
+
   return (
     <div className="flex flex-col h-full w-full p-6 overflow-y-auto overflow-x-hidden relative">
       <div className="font-['HelveticaNeueLight'] text-gray-400 text-sm">

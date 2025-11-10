@@ -1,8 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import * as pkg from 'react-lazy-load-image-component'
+import { useEffect, useState } from 'react'
 import 'react-lazy-load-image-component/src/effects/blur.css'
-
-const { LazyLoadImage } = pkg
 
 export const Route = createFileRoute('/_canvas/about')({
   component: About,
@@ -24,6 +22,19 @@ export const Route = createFileRoute('/_canvas/about')({
 })
 
 function About() {
+  const [LazyLoadImage, setLazyLoadImage] = useState<any>(null)
+
+  useEffect(() => {
+    // Dynamic import to avoid SSR require errors
+    import('react-lazy-load-image-component').then((pkg) => {
+      setLazyLoadImage(() => pkg.LazyLoadImage)
+    })
+  }, [])
+
+  if (!LazyLoadImage) {
+    return
+  }
+
   return (
     <div className="relative h-full w-full overflow-hidden flex items-center justify-center">
       <div className="h-full absolute inset-0 z-0 flex items-center justify-center">
@@ -43,7 +54,7 @@ function About() {
       <div className="relative h-full w-full p-4 pb-1 md:p-16 overflow-y-auto z-10">
         <div className="flex flex-col min-h-full items-center justify-between">
           <div className="flex flex-col w-full">
-            <div className="font-['HelveticaNeueBold'] text-[64px] pb-8">
+            <div className="font-['HelveticaNeueBold'] text-6xl pb-8">
             I'm David, a full-stack software engineer.
             </div>
             <div className="font-['HelveticaNeue'] text-xl w-full break-words">

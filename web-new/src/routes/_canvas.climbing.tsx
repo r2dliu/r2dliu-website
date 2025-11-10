@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Link, createFileRoute,  } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import 'react-lazy-load-image-component/src/effects/blur.css'
 
@@ -32,7 +32,7 @@ function Climbing() {
   }, [])
 
   if (!LazyLoadImage) {
-    return <div className="flex flex-col h-full w-full p-10">Loading...</div>
+    return
   }
 
   return (

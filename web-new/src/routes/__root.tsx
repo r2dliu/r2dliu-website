@@ -5,9 +5,7 @@ import {
   createRootRoute,
   useLocation,
 } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
-import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
+import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles'
 import GlobalStyles from '@mui/material/GlobalStyles'
 import { useEffect } from 'react'
 
