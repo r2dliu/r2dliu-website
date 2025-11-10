@@ -56,8 +56,8 @@ function About() {
         </div>
       </div>
 
-      <div className="relative h-full w-full p-4 pb-1 md:p-16 overflow-y-auto z-10">
-        <div className="flex flex-col min-h-full items-center justify-between">
+      <div className="relative h-full w-full overflow-y-auto z-10">
+        <div className="flex flex-col min-h-full items-center justify-between p-4 md:p-16">
           <div className="flex flex-col w-full">
             <div className="font-['HelveticaNeueBold'] text-6xl pb-8">
               I'm David, a full-stack software engineer.

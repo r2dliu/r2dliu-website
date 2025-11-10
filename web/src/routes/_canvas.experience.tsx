@@ -170,9 +170,10 @@ function Experience() {
   }, [])
 
   return (
-    <div className="flex flex-col h-full w-full p-12 max-md:p-0 overflow-y-auto overflow-x-hidden">
-      {/* Work & Experience Section */}
-      <div className="flex flex-col">
+    <div className="h-full w-full overflow-y-auto overflow-x-hidden">
+      <div className="flex flex-col p-4 md:p-12">
+        {/* Work & Experience Section */}
+        <div className="flex flex-col">
         <div className="font-['HelveticaNeueBold'] text-3xl pb-4">
           Work & Experience
         </div>
@@ -245,7 +246,7 @@ function Experience() {
               <div className="font-['HelveticaNeueRegular'] text-base text-gray-400">
                 {entries[activeEntry].range}
               </div>
-              <div className="font-['HelveticaNeueLight'] text-base">
+              <div className="font-['HelveticaNeueRegular'] text-base">
                 {entries[activeEntry].description}
               </div>
             </motion.div>
@@ -253,15 +254,16 @@ function Experience() {
         </div>
       </div>
 
-      {/* Skills & Languages Section */}
-      <div className="flex-shrink-0 max-md:pb-0">
-        <div className="font-['HelveticaNeueBold'] text-3xl py-4">
-          Skills & Languages
-        </div>
-        <div className="font-['HelveticaNeueLight'] text-base">
-          C++ (mostly 17, 20) • Javascript (mostly ES6+) • Rust • Python • React
-          / React Native / Vue • Linux • GraphQL • CI/CD • Docker • SQL • Node •
-          Git • Machine Learning • AWS • Figma • Photoshop
+        {/* Skills & Languages Section */}
+        <div className="flex-shrink-0 max-md:pb-0">
+          <div className="font-['HelveticaNeueBold'] text-3xl py-4">
+            Skills & Languages
+          </div>
+          <div className="font-['HelveticaNeueRegular'] text-base">
+            C++ (mostly 17, 20) • Javascript (mostly ES6+) • Rust • Python • React
+            / React Native / Vue • Linux • GraphQL • CI/CD • Docker • SQL • Node •
+            Git • Machine Learning • AWS • Figma • Photoshop
+          </div>
         </div>
       </div>
     </div>

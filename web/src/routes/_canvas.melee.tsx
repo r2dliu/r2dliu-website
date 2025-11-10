@@ -37,13 +37,29 @@ function Melee() {
   }
 
   return (
-    <div className="flex flex-col h-full w-full p-6 overflow-y-auto overflow-x-hidden relative">
-      <div className="font-['HelveticaNeueLight'] text-gray-400 text-sm">
+    <div className="h-full w-full overflow-y-auto overflow-x-hidden relative">
+      <LazyLoadImage
+        wrapperClassName="opacity-100 h-full right-0 absolute -z-10 overflow-hidden max-[1400px]:hidden after:content-[''] after:block after:h-full after:absolute after:top-0 after:w-full after:bg-gradient-to-r after:from-black after:from-0% after:via-black/60 after:via-40% after:via-black/30 after:via-70% after:to-transparent"
+        className="-z-20 relative h-full w-auto min-w-full object-cover"
+        alt="Picture of David with a Gamecube controller in pocket"
+        effect="blur"
+        src="https://s3.r2dliu.com/assets/melee.jpg"
+        placeholderSrc="https://s3.r2dliu.com/assets/melee_small.jpg"
+      />
+      <div className="font-['HelveticaNeueThin'] text-gray-400 text-sm absolute right-4 bottom-1 max-[1400px]:hidden z-10">
+        Photo by Lilian Chen |{' '}
+        <a className="no-underline" href="https://twitter.com/_lilchen">
+          @_lilchen
+        </a>
+      </div>
+
+      <div className="flex flex-col p-4 md:p-6 relative">
+      <div className="font-['HelveticaNeueRegular'] text-gray-400 text-sm">
         Super Smash Bros. Melee • Fox
       </div>
       <div className="font-['BebasNeue'] text-8xl mt-0">EGTV. R2DLiu</div>
 
-      <div className="font-['HelveticaNeueLight'] text-base pb-4 max-w-full w-96 relative pt-2">
+      <div className="font-['HelveticaNeueRegular'] text-base pb-2 max-w-full w-96 relative pt-2">
         After picking up the game competitively back in late 2014, David
         "R2DLiu" Liu quickly rose to prominence, consolidating a spot as a top
         player within the greater Philadelphia region. In October 2016, with a
@@ -62,7 +78,7 @@ function Melee() {
         </div>
       </div>
 
-      <div className="font-['HelveticaNeueLight'] text-base pb-8 max-w-3xl max-lg:max-w-sm">
+      <div className="font-['HelveticaNeueRegular'] text-base pb-4 max-w-3xl max-lg:max-w-sm">
         Since then, R2DLiu has continued to compete on and off throughout the
         years, fading slowly into inactivity, but continuing to remain a threat
         in bracket at majors. Most recently, he achieved a top 64 finish at
@@ -71,25 +87,10 @@ function Melee() {
         and <a href="https://twitter.com/r2_dliu">Twitter</a>.
       </div>
 
-      <LazyLoadImage
-        wrapperClassName="opacity-100 h-full right-0 absolute -z-10 overflow-hidden max-[1400px]:hidden after:content-[''] after:block after:h-full after:absolute after:top-0 after:w-full after:bg-gradient-to-r after:from-black after:from-0% after:via-black/60 after:via-40% after:via-black/30 after:via-70% after:to-transparent"
-        className="-z-20 relative h-full w-auto min-w-full object-cover"
-        alt="Picture of David with a Gamecube controller in pocket"
-        effect="blur"
-        src="https://s3.r2dliu.com/assets/melee.jpg"
-        placeholderSrc="https://s3.r2dliu.com/assets/melee_small.jpg"
-      />
-      <div className="font-['HelveticaNeueThin'] text-gray-400 text-sm absolute right-4 bottom-1 max-[1400px]:hidden">
-        Photo by Lilian Chen |{' '}
-        <a className="no-underline" href="https://twitter.com/_lilchen">
-          @_lilchen
-        </a>
-      </div>
-
       <div className="font-['HelveticaNeueMedium'] text-3xl pb-4">
         Achievements
       </div>
-      <div className="flex pb-9">
+      <div className="flex pb-6">
         <div className="flex flex-col justify-center items-center w-44 max-lg:flex-grow max-lg:w-auto">
           <div className="font-['HelveticaNeueRegular'] text-base pb-3">
             The Big House 6
@@ -106,7 +107,7 @@ function Melee() {
               <div className="overflow-hidden absolute -top-4 right-1/2 bottom-1/2 -left-4 origin-bottom-right rotate-180 skew-x-[36deg] before:content-[''] before:box-border before:block before:border-2 before:border-gray-400 before:w-[200%] before:h-[200%] before:rounded-full before:-skew-x-[36deg]" />
             </div>
           </div>
-          <div className="font-['HelveticaNeueLight'] text-base pt-3">
+          <div className="font-['HelveticaNeueRegular'] text-base pt-3">
             <span className="text-gray-400">out of </span>
             <span>1564</span>
           </div>
@@ -128,7 +129,7 @@ function Melee() {
               <div className="overflow-hidden absolute -top-4 right-1/2 bottom-1/2 -left-4 origin-bottom-right rotate-180 skew-x-[36deg] before:content-[''] before:box-border before:block before:border-2 before:border-gray-400 before:w-[200%] before:h-[200%] before:rounded-full before:-skew-x-[36deg]" />
             </div>
           </div>
-          <div className="font-['HelveticaNeueLight'] text-base pt-3">
+          <div className="font-['HelveticaNeueRegular'] text-base pt-3">
             <span className="text-gray-400">out of </span>
             <span>1704</span>
           </div>
@@ -150,7 +151,7 @@ function Melee() {
               <div className="overflow-hidden absolute -top-4 right-1/2 bottom-1/2 -left-4 origin-bottom-right rotate-180 skew-x-[36deg] before:content-[''] before:box-border before:block before:border-2 before:border-gray-400 before:w-[200%] before:h-[200%] before:rounded-full before:-skew-x-[36deg]" />
             </div>
           </div>
-          <div className="font-['HelveticaNeueLight'] text-base pt-3">
+          <div className="font-['HelveticaNeueRegular'] text-base pt-3">
             <span className="text-gray-400">out of </span>
             <span>1251</span>
           </div>
@@ -180,6 +181,7 @@ function Melee() {
           controls={true}
           src="https://www.youtube.com/watch?v=Nc8gFTz2irw"
         />
+      </div>
       </div>
     </div>
   )

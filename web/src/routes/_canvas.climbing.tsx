@@ -37,14 +37,8 @@ function Climbing() {
   }
 
   return (
-    <div className="flex flex-col h-full w-full p-10 max-md:p-4 overflow-y-auto overflow-x-hidden relative">
-      <div className="font-['HelveticaNeueBold'] text-5xl max-md:text-3xl pb-4">
-        "You will always find an appropriate opponent in the rocks."
-      </div>
-      <div className="font-['HelveticaNeueLight'] text-2xl self-end pb-4 pr-4">
-        — Tomáš "TOMAJDA" Sobotka
-      </div>
-
+    <div className="h-full w-full overflow-y-auto overflow-x-hidden relative">
+      {/* Background image - positioned relative to scroll container */}
       <LazyLoadImage
         wrapperClassName="opacity-50 h-full right-0 max-md:right-[-64px] absolute -z-10 overflow-hidden"
         className="-z-20 relative h-full w-auto min-w-full object-cover"
@@ -53,6 +47,14 @@ function Climbing() {
         src="https://s3.r2dliu.com/assets/climbing.jpg"
         placeholderSrc="https://s3.r2dliu.com/assets/climbing_small.jpg"
       />
+
+      <div className="flex flex-col p-4 md:p-10 relative">
+      <div className="font-['HelveticaNeueBold'] text-5xl max-md:text-3xl pb-4">
+        "You will always find an appropriate opponent in the rocks."
+      </div>
+      <div className="font-['HelveticaNeueLight'] text-2xl self-end pb-4 pr-4">
+        — Tomáš "TOMAJDA" Sobotka
+      </div>
 
       <div className="max-w-3xl font-['HelveticaNeueLight'] text-xl">
         I discovered rock climbing as a hobby late into my college years, and
@@ -108,6 +110,7 @@ function Climbing() {
         data-instgrm-version="14"
       >
         <script async src="//www.instagram.com/embed.js"></script>
+      </div>
       </div>
     </div>
   )
