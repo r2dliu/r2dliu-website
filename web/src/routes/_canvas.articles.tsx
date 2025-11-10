@@ -1,4 +1,4 @@
-import { Link, createFileRoute  } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { Chip, Divider } from '@mui/material'
 import { useEffect, useState } from 'react'
 import 'react-lazy-load-image-component/src/effects/blur.css'
@@ -16,7 +16,8 @@ export const Route = createFileRoute('/_canvas/articles')({
       },
       {
         name: 'description',
-        content: 'Articles and writeups by David Liu on climbing, gaming, and more.',
+        content:
+          'Articles and writeups by David Liu on climbing, gaming, and more.',
       },
     ],
   }),
@@ -39,7 +40,11 @@ function Articles() {
   return (
     <div className="flex flex-col h-full w-full px-6 overflow-y-auto overflow-x-hidden">
       {/* Featured Article */}
-      <Link to="/articles/$article" params={{ article: 'pulley' }} className="no-underline text-white">
+      <Link
+        to="/articles/$article"
+        params={{ article: 'pulley' }}
+        className="no-underline text-white"
+      >
         <div className="relative flex items-end w-full min-h-[500px] max-h-[500px] max-md:min-h-[300px] max-md:max-h-[300px] max-md:pb-2">
           <div className="m-3 ml-0 pr-2 max-w-[450px] max-md:m-0 z-10">
             <div className="font-['HelveticaNeueBold'] text-[22px] mb-0.5 max-md:text-base max-md:line-clamp-2">
@@ -54,7 +59,9 @@ function Articles() {
               <div className="font-['HelveticaNeueRegular'] text-sm text-white max-md:text-xs">
                 Dec 29th, 2021
               </div>
-              <div className="px-1 text-white text-sm max-md:text-xs">{'•'}</div>
+              <div className="px-1 text-white text-sm max-md:text-xs">
+                {'•'}
+              </div>
               <Chip
                 className="!bg-blue-700 !text-white !font-['HelveticaNeueRegular'] !h-5 max-md:!h-3.5"
                 classes={{ label: 'max-md:!px-1' }}
@@ -80,7 +87,11 @@ function Articles() {
       {/* Article List */}
       <div className="flex">
         <div className="flex flex-col">
-          <Link to="/articles/$article" params={{ article: 'ledgedash' }} className="no-underline text-white">
+          <Link
+            to="/articles/$article"
+            params={{ article: 'ledgedash' }}
+            className="no-underline text-white"
+          >
             <div className="flex justify-between pt-2 pb-2 border-b border-gray-400 items-center max-w-[700px]">
               <div className="m-3 ml-0 pr-2 max-md:m-0">
                 <div className="font-['HelveticaNeueBold'] text-[22px] mb-0.5 max-md:text-base max-md:line-clamp-2">
@@ -95,7 +106,9 @@ function Articles() {
                   <div className="font-['HelveticaNeueRegular'] text-sm text-white max-md:text-xs">
                     Apr 16th, 2018
                   </div>
-                  <div className="px-1 text-white text-sm max-md:text-xs">{'•'}</div>
+                  <div className="px-1 text-white text-sm max-md:text-xs">
+                    {'•'}
+                  </div>
                   <Chip
                     className="!bg-red-700 !text-white !font-['HelveticaNeueRegular'] !h-5 max-md:!h-3.5"
                     classes={{ label: 'max-md:!px-1' }}
@@ -115,7 +128,11 @@ function Articles() {
             </div>
           </Link>
 
-          <Link to="/articles/$article" params={{ article: 'autocancel' }} className="no-underline text-white">
+          <Link
+            to="/articles/$article"
+            params={{ article: 'autocancel' }}
+            className="no-underline text-white"
+          >
             <div className="flex justify-between pt-2 pb-2 border-b border-gray-400 items-center max-w-[700px]">
               <div className="m-3 ml-0 pr-2 max-md:m-0">
                 <div className="font-['HelveticaNeueBold'] text-[22px] mb-0.5 max-md:text-base max-md:line-clamp-2">
@@ -129,7 +146,9 @@ function Articles() {
                   <div className="font-['HelveticaNeueRegular'] text-sm text-white max-md:text-xs">
                     Sep 13th, 2019
                   </div>
-                  <div className="px-1 text-white text-sm max-md:text-xs">{'•'}</div>
+                  <div className="px-1 text-white text-sm max-md:text-xs">
+                    {'•'}
+                  </div>
                   <Chip
                     className="!bg-red-700 !text-white !font-['HelveticaNeueRegular'] !h-5 max-md:!h-3.5"
                     classes={{ label: 'max-md:!px-1' }}
@@ -168,7 +187,9 @@ function Articles() {
                   <div className="font-['HelveticaNeueRegular'] text-sm text-white max-md:text-xs">
                     Dec, 2017
                   </div>
-                  <div className="px-1 text-white text-sm max-md:text-xs">{'•'}</div>
+                  <div className="px-1 text-white text-sm max-md:text-xs">
+                    {'•'}
+                  </div>
                   <Chip
                     className="!bg-green-700 !text-white !font-['HelveticaNeueRegular'] !h-5 max-md:!h-3.5"
                     classes={{ label: 'max-md:!px-1' }}
@@ -207,7 +228,9 @@ function Articles() {
                   <div className="font-['HelveticaNeueRegular'] text-sm text-white max-md:text-xs">
                     Dec, 2015
                   </div>
-                  <div className="px-1 text-white text-sm max-md:text-xs">{'•'}</div>
+                  <div className="px-1 text-white text-sm max-md:text-xs">
+                    {'•'}
+                  </div>
                   <Chip
                     className="!bg-green-700 !text-white !font-['HelveticaNeueRegular'] !h-5 max-md:!h-3.5"
                     classes={{ label: 'max-md:!px-1' }}

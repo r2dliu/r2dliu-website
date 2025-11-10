@@ -35,7 +35,7 @@ jobs:
         with:
           cache: npm
           cache-dependency-path: "**/package.json"
-          node-version: 18
+          node-version: 24
 
       - name: 📥 Install deps
         run: npm install
@@ -58,7 +58,7 @@ jobs:
         with:
           cache: npm
           cache-dependency-path: "**/package.json"
-          node-version: 18
+          node-version: 24
 
       - name: 📥 Install deps
         run: npm install
@@ -69,6 +69,9 @@ jobs:
   deploy:
     needs: [lint, typecheck]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     defaults:
       run:
         working-directory: web
@@ -77,12 +80,17 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v4
+      - name: 🔐 Google Auth
+        id: auth
+        uses: google-github-actions/auth@v2
         with:
-          cache: npm
-          cache-dependency-path: "**/package.json"
-          node-version: 18
+          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
+          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
+
+      - name: ☁️ Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: '${{ secrets.GCP_PROJECT_ID }}'
 
       - name: 👀 Env
         run: |
@@ -90,30 +98,13 @@ jobs:
           echo "Git ref:    ${{ github.ref }}"
           echo "GH actor:   ${{ github.actor }}"
           echo "SHA:        ${{ github.sha }}"
-          VER=`node --version`; echo "Node ver:   $VER"
-          VER=`npm --version`; echo "npm ver:    $VER"
+          echo "GCP Project: ${{ secrets.GCP_PROJECT_ID }}"
 
-      - name: 📥 Install deps
-        run: npm install
-
-      - name: 🏗 Build
-        run: npm run build
-
-      - name: 🛠 Install Arc
-        run: npm i -g @architect/architect
-
-      - name: 🚀 Staging Deploy
-        if: github.ref == 'refs/heads/dev'
-        run: arc deploy --staging --prune
+      - name: 🚀 Deploy to Cloud Run
         env:
-          CI: true
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - name: 🚀 Production Deploy
-        if: github.ref == 'refs/heads/main'
-        run: arc deploy --production --prune
-        env:
-          CI: true
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          GCP_PROJECT_ID: '${{ secrets.GCP_PROJECT_ID }}'
+          VITE_API_URL: '${{ secrets.VITE_API_URL }}'
+          VITE_GA_TRACKING_ID: '${{ secrets.VITE_GA_TRACKING_ID }}'
+        run: |
+          chmod +x deploy.sh
+          ./deploy.sh us-central1

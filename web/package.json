@@ -2,14 +2,18 @@
   "name": "r2dliu-website",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
     "dev": "vite dev --port 3000",
     "build": "vite build",
     "serve": "vite preview",
     "test": "vitest run",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "format": "prettier",
-    "check": "prettier --write . && eslint --fix"
+    "check": "prettier --write . && eslint --fix && tsc --noEmit"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -38,6 +42,7 @@
     "rehype-raw": "^7.0.0",
     "tailwindcss": "^4.0.6",
     "three": "^0.181.1",
+    "three-stdlib": "^2.36.0",
     "tocbot": "^4.36.4",
     "vite-tsconfig-paths": "^5.1.4",
     "zustand": "^5.0.8"

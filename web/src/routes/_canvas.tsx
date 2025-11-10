@@ -22,16 +22,18 @@ function CanvasLayout() {
       {/* Desktop Menu */}
       <div className="flex items-center h-full max-md:hidden">
         <Menu />
-        <Divider orientation="vertical" className="!bg-white w-0.5 h-[95%] relative" />
+        <Divider
+          orientation="vertical"
+          className="!bg-white w-0.5 h-[95%] relative"
+        />
       </div>
 
       {/* Mobile Menu */}
       <div className="hidden max-md:flex max-md:flex-col max-md:w-full max-md:items-center">
         <Button
-          className={cn(
-            "hamburger hamburger-slider self-start",
-            { 'is-active': isMenuOpen }
-          )}
+          className={cn('hamburger hamburger-slider self-start', {
+            'is-active': isMenuOpen,
+          })}
           onClick={() => setMenuOpen(!isMenuOpen)}
         >
           <span className="hamburger-box">
@@ -45,10 +47,11 @@ function CanvasLayout() {
         )}
       </div>
 
-      <div className={cn(
-        "h-full w-full max-md:h-[calc(100%-44px)]",
-        { 'max-md:opacity-30 max-md:blur-[8px]': isMenuOpen }
-      )}>
+      <div
+        className={cn('h-full w-full max-md:h-[calc(100%-44px)]', {
+          'max-md:opacity-30 max-md:blur-[8px]': isMenuOpen,
+        })}
+      >
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={location.pathname}
@@ -72,4 +75,3 @@ function CanvasLayout() {
     </div>
   )
 }
-

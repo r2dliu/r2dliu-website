@@ -7,21 +7,22 @@
   justify-content: center;
 }
 .Home .name {
-  font-family: "BebasNeue";
+  font-family: 'BebasNeue';
   font-size: 90px;
 }
 .Home .description {
   padding-top: 6px;
-  font-family: "HelveticaNeueRegular";
+  font-family: 'HelveticaNeueRegular';
   font-size: 20px;
   padding-bottom: 18px;
 }
 .Home .button {
-  font-family: "HelveticaNeueMedium";
+  font-family: 'HelveticaNeueMedium';
   opacity: 1;
 }
-.Home .button:before, .Home .button:after {
-  content: "";
+.Home .button:before,
+.Home .button:after {
+  content: '';
   position: absolute;
   width: 100%;
   height: 2px;
@@ -30,7 +31,7 @@
 }
 .Home .button span::before,
 .Home .button span::after {
-  content: "";
+  content: '';
   position: absolute;
   width: 2px;
   height: 100%;
@@ -69,7 +70,8 @@
   transition: opacity 4s;
   transition-delay: 0.3s;
 }
-.Home .button.clicked:before, .Home .button.clicked:after {
+.Home .button.clicked:before,
+.Home .button.clicked:after {
   width: 0;
 }
 .Home .button.clicked span::before,

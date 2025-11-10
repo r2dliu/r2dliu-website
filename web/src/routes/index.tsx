@@ -20,9 +20,12 @@ function Index() {
       </div>
       <div className="relative">
         <Button
-          className={cn("font-['HelveticaNeueBold'] !border-0 active:!bg-transparent focus:!bg-transparent", {
-            'hover:bg-white hover:text-black': !isClicked,
-          })}
+          className={cn(
+            "font-['HelveticaNeueBold'] !border-0 active:!bg-transparent focus:!bg-transparent",
+            {
+              'hover:bg-white hover:text-black': !isClicked,
+            },
+          )}
           variant="outlined"
           color="primary"
           onClick={() => {

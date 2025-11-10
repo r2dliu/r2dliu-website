@@ -1,4 +1,4 @@
-import { Link, createFileRoute,  } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import 'react-lazy-load-image-component/src/effects/blur.css'
 
@@ -15,7 +15,8 @@ export const Route = createFileRoute('/_canvas/climbing')({
       },
       {
         name: 'description',
-        content: 'Rock climbing athlete, ACSM Certified Personal Trainer, and coach.',
+        content:
+          'Rock climbing athlete, ACSM Certified Personal Trainer, and coach.',
       },
     ],
   }),
@@ -54,10 +55,11 @@ function Climbing() {
       />
 
       <div className="max-w-3xl font-['HelveticaNeueLight'] text-xl">
-        I discovered rock climbing as a hobby late into my college years, and I've
-        been hooked ever since. Recently, I've started to compete, train, and
-        generally take climbing much more seriously. I currently boulder around V10
-        relatively consistently. Follow me on Instagram for climbing content!
+        I discovered rock climbing as a hobby late into my college years, and
+        I've been hooked ever since. Recently, I've started to compete, train,
+        and generally take climbing much more seriously. I currently boulder
+        around V10 relatively consistently. Follow me on Instagram for climbing
+        content!
       </div>
 
       <div className="pt-6 font-['HelveticaNeueMedium'] text-3xl pb-6">
@@ -76,12 +78,12 @@ function Climbing() {
         >
           Movement Columbia
         </a>
-        . Check out my free <Link to="/classes">classes</Link>! I love teaching in
-        general and have an extensive history of tutoring and coaching in various
-        subjects, including academia, Melee, and of course health and fitness. I
-        primarily work with climbing athletes to improve their performance, but am
-        happy to help any motivated individual meet their specific goals! Email me
-        or message me on{' '}
+        . I love teaching
+        in general and have an extensive history of tutoring and coaching in
+        various subjects, including academia, Melee, and of course health and
+        fitness. I primarily work with climbing athletes to improve their
+        performance, but am happy to help any motivated individual meet their
+        specific goals! Email me or message me on{' '}
         <a
           href="https://www.instagram.com/r2dliu/"
           target="_blank"
@@ -96,9 +98,15 @@ function Climbing() {
       <div className="pt-6 font-['HelveticaNeueMedium'] text-3xl pb-6">
         Tick List
       </div>
-      <div className="max-w-3xl font-['HelveticaNeueLight'] text-xl pb-4">Soon™</div>
+      <div className="max-w-3xl font-['HelveticaNeueLight'] text-xl pb-4">
+        Soon™
+      </div>
 
-      <div className="instagram-media" data-instgrm-permalink="https://www.instagram.com/r2dliu/?utm_source=ig_embed&utm_campaign=loading" data-instgrm-version="14">
+      <div
+        className="instagram-media"
+        data-instgrm-permalink="https://www.instagram.com/r2dliu/?utm_source=ig_embed&utm_campaign=loading"
+        data-instgrm-version="14"
+      >
         <script async src="//www.instagram.com/embed.js"></script>
       </div>
     </div>

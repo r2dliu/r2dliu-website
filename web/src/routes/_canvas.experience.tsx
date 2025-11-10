@@ -3,8 +3,8 @@ import { Divider } from '@mui/material'
 import cn from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
-import type { ReactNode } from 'react';
- 
+import type { ReactNode } from 'react'
+
 export const Route = createFileRoute('/_canvas/experience')({
   component: Experience,
   head: () => ({
@@ -53,7 +53,7 @@ function Experience() {
         ' is a bioinformatics and health data science company that partners with federal agencies and research institutions to advance scientific discovery and public health initiatives.',
         <br key={2} />,
         <br key={3} />,
-        "I primarily run two main projects, one where I build a Photoshop-like tool for visualizing, analyzing, and manipulating multi-terabyte 3D light microscopy datasets, and a second where I construct a library that permits arbitrary transformations on structured data, extremely useful for manipulating messy EHR data and translating between standards."
+        'I primarily run two main projects, one where I build a Photoshop-like tool for visualizing, analyzing, and manipulating multi-terabyte 3D light microscopy datasets, and a second where I construct a library that permits arbitrary transformations on structured data, extremely useful for manipulating messy EHR data and translating between standards.',
       ],
     },
     ThinkNimble: {
@@ -145,9 +145,15 @@ function Experience() {
 
   useEffect(() => {
     if (entriesRef.current) {
-      const children = Array.from(entriesRef.current.children) as Array<HTMLElement>
-      const firstDiamond = children[0].querySelector('div:first-child') as HTMLElement
-      const lastDiamond = children[children.length - 1].querySelector('div:first-child') as HTMLElement
+      const children = Array.from(
+        entriesRef.current.children,
+      ) as Array<HTMLElement>
+      const firstDiamond = children[0].querySelector(
+        'div:first-child',
+      ) as HTMLElement
+      const lastDiamond = children[children.length - 1].querySelector(
+        'div:first-child',
+      ) as HTMLElement
 
       // Get the vertical positions of the diamonds
       const containerRect = entriesRef.current.getBoundingClientRect()
@@ -177,7 +183,7 @@ function Experience() {
             className="!absolute !border-none !bg-gray-400 !w-px left-2 max-md:left-3 -z-10"
             style={{
               top: `${timelineTop}px`,
-              height: `${timelineHeight}px`
+              height: `${timelineHeight}px`,
             }}
           />
 
@@ -192,7 +198,7 @@ function Experience() {
                     'text-white': entry === activeEntry,
                     'h-20 mb-4': index !== Object.keys(entries).length - 1,
                     'h-20': index === Object.keys(entries).length - 1,
-                  }
+                  },
                 )}
                 onClick={() => {
                   setActiveEntry(entry)
@@ -203,7 +209,7 @@ function Experience() {
                     'min-h-4 min-w-4 rotate-45 bg-gray-400 transition-all duration-150 ease-in flex-shrink-0',
                     {
                       'bg-white': entry === activeEntry,
-                    }
+                    },
                   )}
                 />
                 <div className="pl-2 font-['HelveticaNeueMedium'] text-lg break-words">
@@ -253,7 +259,9 @@ function Experience() {
           Skills & Languages
         </div>
         <div className="font-['HelveticaNeueLight'] text-base">
-          C++ (mostly 17, 20) • Javascript (mostly ES6+) • Rust • Python • React / React Native / Vue • Linux • GraphQL • CI/CD • Docker • SQL • Node • Git • Machine Learning • AWS • Figma • Photoshop
+          C++ (mostly 17, 20) • Javascript (mostly ES6+) • Rust • Python • React
+          / React Native / Vue • Linux • GraphQL • CI/CD • Docker • SQL • Node •
+          Git • Machine Learning • AWS • Figma • Photoshop
         </div>
       </div>
     </div>

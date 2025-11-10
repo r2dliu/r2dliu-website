@@ -40,7 +40,7 @@ export default function Menu() {
           effect="blur"
         />
       </Link>
-      
+
       <div className="flex flex-col font-['HelveticaNeueBold'] text-3xl uppercase">
         {Object.entries(pages).map(([key, page]) => {
           const isActive = key === currPage
@@ -69,7 +69,7 @@ export default function Menu() {
           </a>
         </div>
       </div>
-      
+
       <div className="flex pt-9">
         <a
           href="https://www.linkedin.com/in/r2dliu/"
@@ -87,10 +87,7 @@ export default function Menu() {
         >
           <InstagramIcon className="w-10 h-10" />
         </a>
-        <a
-          href="mailto:zliu3301@gmail.com"
-          className="pr-3 text-white"
-        >
+        <a href="mailto:zliu3301@gmail.com" className="pr-3 text-white">
           <EmailIcon className="w-10 h-10" />
         </a>
         <a
@@ -105,4 +102,3 @@ export default function Menu() {
     </div>
   )
 }
-

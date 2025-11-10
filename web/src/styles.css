@@ -1,38 +1,38 @@
 @layer theme, base, mui, components, utilities;
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Font Face Declarations */
 @font-face {
-  font-family: "BebasNeue";
-  src: url("/fonts/BebasNeue/Bold.woff2") format("woff2");
+  font-family: 'BebasNeue';
+  src: url('/fonts/BebasNeue/Bold.woff2') format('woff2');
 }
 @font-face {
-  font-family: "HelveticaNeueBlack";
-  src: url("/fonts/HelveticaNeue/Black.woff2") format("woff2");
+  font-family: 'HelveticaNeueBlack';
+  src: url('/fonts/HelveticaNeue/Black.woff2') format('woff2');
 }
 @font-face {
-  font-family: "HelveticaNeueBold";
-  src: url("/fonts/HelveticaNeue/Bold.woff2") format("woff2");
+  font-family: 'HelveticaNeueBold';
+  src: url('/fonts/HelveticaNeue/Bold.woff2') format('woff2');
 }
 @font-face {
-  font-family: "HelveticaNeueMedium";
-  src: url("/fonts/HelveticaNeue/Medium.woff2") format("woff2");
+  font-family: 'HelveticaNeueMedium';
+  src: url('/fonts/HelveticaNeue/Medium.woff2') format('woff2');
 }
 @font-face {
-  font-family: "HelveticaNeueRegular";
-  src: url("/fonts/HelveticaNeue/Regular.woff2") format("woff2");
+  font-family: 'HelveticaNeueRegular';
+  src: url('/fonts/HelveticaNeue/Regular.woff2') format('woff2');
 }
 @font-face {
-  font-family: "HelveticaNeueLight";
-  src: url("/fonts/HelveticaNeue/Light.woff2") format("woff2");
+  font-family: 'HelveticaNeueLight';
+  src: url('/fonts/HelveticaNeue/Light.woff2') format('woff2');
 }
 @font-face {
-  font-family: "HelveticaNeueThin";
-  src: url("/fonts/HelveticaNeue/Thin.woff2") format("woff2");
+  font-family: 'HelveticaNeueThin';
+  src: url('/fonts/HelveticaNeue/Thin.woff2') format('woff2');
 }
 @font-face {
-  font-family: "HelveticaNeueUltralight";
-  src: url("/fonts/HelveticaNeue/Ultralight.woff2") format("woff2");
+  font-family: 'HelveticaNeueUltralight';
+  src: url('/fonts/HelveticaNeue/Ultralight.woff2') format('woff2');
 }
 
 /* Base Styles */
@@ -104,13 +104,13 @@
   }
 
   html body .article h1 {
-    font-family: "HelveticaNeueBold";
+    font-family: 'HelveticaNeueBold';
     font-size: 28px;
     font-weight: normal;
   }
 
   html body .article h1::after {
-    content: "";
+    content: '';
     display: block;
     width: 100%;
     height: 1px;
@@ -118,7 +118,7 @@
   }
 
   html body .article h2 {
-    font-family: "HelveticaNeueMedium";
+    font-family: 'HelveticaNeueMedium';
     font-size: 24px;
     font-weight: normal;
   }
@@ -171,20 +171,20 @@
   html body .article figcaption {
     padding-top: 8px;
     padding-bottom: 8px;
-    font-family: "HelveticaNeueLight";
+    font-family: 'HelveticaNeueLight';
     font-size: 14px;
     text-align: center;
   }
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 /* Image vignette effect */
 .image-wrapper::after {
-  content: "";
+  content: '';
   display: block;
   height: 100%;
   position: absolute;
@@ -210,7 +210,9 @@ code {
   align-items: center !important;
   justify-content: center !important;
   cursor: pointer;
-  transition: opacity 0.15s linear, filter 0.15s linear;
+  transition:
+    opacity 0.15s linear,
+    filter 0.15s linear;
   background-color: transparent !important;
   border: 0 !important;
   color: white !important;
@@ -247,7 +249,7 @@ code {
 
 .hamburger-inner::before,
 .hamburger-inner::after {
-  content: "";
+  content: '';
   display: block;
 }
 
@@ -265,7 +267,9 @@ code {
 
 .hamburger-slider .hamburger-inner::before {
   top: 9px;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
 }
 
 .hamburger-slider .hamburger-inner::after {
@@ -312,7 +316,7 @@ code {
   text-overflow: ellipsis;
   list-style-type: none;
   text-align: left;
-  font-family: "HelveticaNeueMedium";
+  font-family: 'HelveticaNeueMedium';
 }
 
 .toc ol li .toc-link {
@@ -320,7 +324,9 @@ code {
   text-decoration: none;
   padding-left: 5px;
   box-shadow: 0px 0px 0px 0px white;
-  transition: color 0.05s ease-in, box-shadow 0.05s ease-in;
+  transition:
+    color 0.05s ease-in,
+    box-shadow 0.05s ease-in;
   margin: 0.5em;
 }
 

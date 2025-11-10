@@ -1,4 +1,3 @@
- 
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
@@ -63,7 +62,7 @@ export const useGameStore = create<GameState>()(
         }),
       cascade: async () => {
         let changed = false
-        await set((state: GameState) => {
+        set((state: GameState) => {
           state.notCascading = false
           const updatedBoard = structuredClone(get().board)
           state.board.forEach((column, i) => {
@@ -77,26 +76,22 @@ export const useGameStore = create<GameState>()(
                 )
                 if (j > 0) {
                   // left
-                  updatedBoard[i][j - 1].count =
-                    state.board[i][j - 1].count + 1
+                  updatedBoard[i][j - 1].count = state.board[i][j - 1].count + 1
                   updatedBoard[i][j - 1].owner = state.board[i][j].owner
                 }
                 if (j < get().boardSize - 1) {
                   // right
-                  updatedBoard[i][j + 1].count =
-                    state.board[i][j + 1].count + 1
+                  updatedBoard[i][j + 1].count = state.board[i][j + 1].count + 1
                   updatedBoard[i][j + 1].owner = state.board[i][j].owner
                 }
                 if (i > 0) {
                   // down
-                  updatedBoard[i - 1][j].count =
-                    state.board[i - 1][j].count + 1
+                  updatedBoard[i - 1][j].count = state.board[i - 1][j].count + 1
                   updatedBoard[i - 1][j].owner = state.board[i][j].owner
                 }
                 if (i < get().boardSize - 1) {
                   // up
-                  updatedBoard[i + 1][j].count =
-                    state.board[i + 1][j].count + 1
+                  updatedBoard[i + 1][j].count = state.board[i + 1][j].count + 1
                   updatedBoard[i + 1][j].owner = state.board[i][j].owner
                 }
                 // reset owner if no tiles remaining on that square

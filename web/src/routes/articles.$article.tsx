@@ -28,17 +28,19 @@ const generateSlug = (str: string) => {
 
 export const Route = createFileRoute('/articles/$article')({
   component: Article,
-  loader: ({ params }) => {
-    const data = articleData[params.article as keyof typeof articleData]
+  loader: ({ params }: { params: { article: string } }) => {
+    const data = articleData[params.article as keyof typeof articleData] as
+      | (typeof articleData)[keyof typeof articleData]
+      | undefined
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (!data) {
       throw notFound()
     }
 
     return data
   },
-  head: ({ loaderData }) => {
+  head: (ctx) => {
+    const loaderData = ctx.loaderData
     if (!loaderData) return { meta: [] }
     return {
       meta: [
@@ -77,12 +79,8 @@ function Article() {
   }, [])
 
   useEffect(() => {
-    if (data) {
-      lastData.current = data
-    }
+    lastData.current = data
   }, [data])
-
-  const currentData = data || lastData.current
 
   useEffect(() => {
     if (!articleRef.current || !tocRef.current) {
@@ -107,18 +105,18 @@ function Article() {
     return () => {
       tocbot.destroy()
     }
-  }, [currentData, LazyLoadImage])
+  }, [data, LazyLoadImage])
 
   if (!LazyLoadImage) {
     return
   }
-  
+
   return (
     <div className="flex flex-row-reverse h-full">
       {/* Main Content */}
       <div className="flex flex-col w-[calc(100%-300px)] max-lg:w-full relative">
         <span className="article-title z-10 bg-black px-2.5 py-2 left-[10%] max-lg:left-10 absolute top-0 text-5xl max-lg:text-4xl font-['BebasNeue'] w-fit">
-          {currentData.title}
+          {data.title}
         </span>
 
         <motion.div
@@ -134,19 +132,19 @@ function Article() {
           <div className="article" ref={articleRef}>
             <Markdown
               components={{
-                h1: ({ node, ...props }) => (
+                h1: ({ ...props }) => (
                   <h1 id={generateSlug(props.children as string)} {...props} />
                 ),
-                h2: ({ node, ...props }) => (
+                h2: ({ ...props }) => (
                   <h2 id={generateSlug(props.children as string)} {...props} />
                 ),
-                img: ({ node, ...props }) => (
+                img: ({ ...props }) => (
                   <LazyLoadImage effect="blur" {...props} />
                 ),
               }}
               rehypePlugins={[rehypeRaw]}
             >
-              {currentData.markdown}
+              {data.markdown}
             </Markdown>
           </div>
         </div>

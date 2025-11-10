@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react'
 import { extend } from '@react-three/fiber'
 import { BoxGeometry } from 'three'
-import { Line2 } from 'three/examples/jsm/lines/Line2'
-import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
-import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
+import { Line2 } from 'three/examples/jsm/lines/Line2.js'
+import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js'
+import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js'
 
 import { useGameStore } from '../../stores/stacker/gameStore'
-import type { JSX} from 'react';
+import type { JSX } from 'react'
 import type { Vector3 } from 'three'
 
 // Register these custom elements with R3F
@@ -56,12 +56,10 @@ function getColorForPlayer(player: number) {
 
 // Helper component for edge highlighting - only the 12 perimeter edges, no diagonals
 const BoxEdges = ({
-  geometry,
   color,
   lineWidth = 5,
   hideTop = false,
 }: {
-  geometry: BoxGeometry
   color: string
   lineWidth?: number
   hideTop?: boolean
@@ -75,26 +73,76 @@ const BoxEdges = ({
 
     const allSegments = [
       // Top face (4 edges)
-      { start: [-w - offset, h + offset, -d - offset], end: [w + offset, h + offset, -d - offset], type: 'top' },
-      { start: [w + offset, h + offset, -d - offset], end: [w + offset, h + offset, d + offset], type: 'top' },
-      { start: [w + offset, h + offset, d + offset], end: [-w - offset, h + offset, d + offset], type: 'top' },
-      { start: [-w - offset, h + offset, d + offset], end: [-w - offset, h + offset, -d - offset], type: 'top' },
+      {
+        start: [-w - offset, h + offset, -d - offset],
+        end: [w + offset, h + offset, -d - offset],
+        type: 'top',
+      },
+      {
+        start: [w + offset, h + offset, -d - offset],
+        end: [w + offset, h + offset, d + offset],
+        type: 'top',
+      },
+      {
+        start: [w + offset, h + offset, d + offset],
+        end: [-w - offset, h + offset, d + offset],
+        type: 'top',
+      },
+      {
+        start: [-w - offset, h + offset, d + offset],
+        end: [-w - offset, h + offset, -d - offset],
+        type: 'top',
+      },
 
       // Bottom face (4 edges)
-      { start: [-w - offset, -h - offset, -d - offset], end: [w + offset, -h - offset, -d - offset], type: 'bottom' },
-      { start: [w + offset, -h - offset, -d - offset], end: [w + offset, -h - offset, d + offset], type: 'bottom' },
-      { start: [w + offset, -h - offset, d + offset], end: [-w - offset, -h - offset, d + offset], type: 'bottom' },
-      { start: [-w - offset, -h - offset, d + offset], end: [-w - offset, -h - offset, -d - offset], type: 'bottom' },
+      {
+        start: [-w - offset, -h - offset, -d - offset],
+        end: [w + offset, -h - offset, -d - offset],
+        type: 'bottom',
+      },
+      {
+        start: [w + offset, -h - offset, -d - offset],
+        end: [w + offset, -h - offset, d + offset],
+        type: 'bottom',
+      },
+      {
+        start: [w + offset, -h - offset, d + offset],
+        end: [-w - offset, -h - offset, d + offset],
+        type: 'bottom',
+      },
+      {
+        start: [-w - offset, -h - offset, d + offset],
+        end: [-w - offset, -h - offset, -d - offset],
+        type: 'bottom',
+      },
 
       // Vertical edges (4 edges)
-      { start: [-w - offset, -h - offset, -d - offset], end: [-w - offset, h + offset, -d - offset], type: 'vertical' },
-      { start: [w + offset, -h - offset, -d - offset], end: [w + offset, h + offset, -d - offset], type: 'vertical' },
-      { start: [w + offset, -h - offset, d + offset], end: [w + offset, h + offset, d + offset], type: 'vertical' },
-      { start: [-w - offset, -h - offset, d + offset], end: [-w - offset, h + offset, d + offset], type: 'vertical' },
+      {
+        start: [-w - offset, -h - offset, -d - offset],
+        end: [-w - offset, h + offset, -d - offset],
+        type: 'vertical',
+      },
+      {
+        start: [w + offset, -h - offset, -d - offset],
+        end: [w + offset, h + offset, -d - offset],
+        type: 'vertical',
+      },
+      {
+        start: [w + offset, -h - offset, d + offset],
+        end: [w + offset, h + offset, d + offset],
+        type: 'vertical',
+      },
+      {
+        start: [-w - offset, -h - offset, d + offset],
+        end: [-w - offset, h + offset, d + offset],
+        type: 'vertical',
+      },
     ]
 
     // Filter out top edges if hideTop is true
-    return hideTop ? allSegments.filter(seg => seg.type !== 'top') : allSegments
+    return hideTop
+      ? allSegments.filter((seg) => seg.type !== 'top')
+      : allSegments
   }, [hideTop])
 
   // Determine render order based on color (colored edges render on top)
@@ -164,11 +212,7 @@ export const Stack = (
         reflectivity={0.5}
       />
       <primitive attach="geometry" object={boxGeometry} />
-      <BoxEdges
-        geometry={boxGeometry}
-        color={getColorForPlayer(props.owner)}
-        lineWidth={3}
-      />
+      <BoxEdges color={getColorForPlayer(props.owner)} lineWidth={3} />
     </mesh>
   ))
 
@@ -224,7 +268,6 @@ export const Risers = (
             <primitive attach="geometry" object={boxGeometry} />
             {/* Hide top edges on risers where they overlap with colored stacks */}
             <BoxEdges
-              geometry={boxGeometry}
               color={'#404040'}
               lineWidth={3}
               hideTop={isTopOfRiser && hasStackAbove}
@@ -318,7 +361,7 @@ export const Tile = ({ ...props }: TileProps) => {
         roughness={1.0}
       />
       <primitive attach="geometry" object={boxGeometry} />
-      <BoxEdges geometry={boxGeometry} color={'#404040'} lineWidth={3} />
+      <BoxEdges color={'#404040'} lineWidth={3} />
       <Risers
         activePlayer={activePlayer}
         height={props.initialHeight}
@@ -339,11 +382,7 @@ export const Tile = ({ ...props }: TileProps) => {
             emissiveIntensity={0.2}
           />
           <primitive attach="geometry" object={boxGeometry} />
-          <BoxEdges
-            geometry={boxGeometry}
-            color={getColorForPlayer(activePlayer)}
-            lineWidth={2}
-          />
+          <BoxEdges color={getColorForPlayer(activePlayer)} lineWidth={2} />
         </mesh>
       )}
     </mesh>

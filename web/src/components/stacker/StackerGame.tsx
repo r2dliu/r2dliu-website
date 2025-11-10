@@ -34,7 +34,7 @@ export function StackerGame() {
         centerPoint,
         0,
         centerPoint,
-        true
+        true,
       )
     }
   }, []) // Empty dependency array - only run once on mount
@@ -70,11 +70,7 @@ export function StackerGame() {
       <Canvas
         className="h-full w-full"
         camera={{
-          position: [
-            centerPoint + distance,
-            distance,
-            centerPoint + distance,
-          ],
+          position: [centerPoint + distance, distance, centerPoint + distance],
           near: 0.1,
           far: 1000,
         }}
