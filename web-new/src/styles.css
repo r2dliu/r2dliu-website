@@ -1,0 +1,207 @@
+@layer theme, base, mui, components, utilities;
+@import "tailwindcss";
+
+/* Font Face Declarations */
+@font-face {
+  font-family: "BebasNeue";
+  src: url("/fonts/BebasNeue/Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "HelveticaNeueBlack";
+  src: url("/fonts/HelveticaNeue/Black.woff2") format("woff2");
+}
+@font-face {
+  font-family: "HelveticaNeueBold";
+  src: url("/fonts/HelveticaNeue/Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "HelveticaNeueMedium";
+  src: url("/fonts/HelveticaNeue/Medium.woff2") format("woff2");
+}
+@font-face {
+  font-family: "HelveticaNeueRegular";
+  src: url("/fonts/HelveticaNeue/Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "HelveticaNeueLight";
+  src: url("/fonts/HelveticaNeue/Light.woff2") format("woff2");
+}
+@font-face {
+  font-family: "HelveticaNeueThin";
+  src: url("/fonts/HelveticaNeue/Thin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "HelveticaNeueUltralight";
+  src: url("/fonts/HelveticaNeue/Ultralight.woff2") format("woff2");
+}
+
+/* Base Styles */
+@layer base {
+  html,
+  body,
+  main,
+  #root {
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+  }
+
+  html body {
+    background: black;
+    color: white;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Scrollbar Styles */
+  html body div {
+    scrollbar-color: white transparent;
+    scrollbar-width: thin;
+  }
+
+  html body div ::-webkit-scrollbar {
+    width: 1px;
+  }
+
+  html body div ::-webkit-scrollbar-thumb {
+    background: white;
+  }
+
+  html body div ::-webkit-scrollbar-track {
+    width: 1px;
+    background: transparent;
+  }
+
+  /* Link Styles */
+  html body a {
+    text-decoration: underline;
+    transition: color 0.05s ease-in;
+  }
+
+  html body a:hover {
+    color: grey;
+  }
+
+  p {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  p:first-child {
+    margin-top: 0;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+/* Image vignette effect */
+.image-wrapper::after {
+  content: "";
+  display: block;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  font-size: 100vw;
+  box-shadow: inset 0 0 0.05em 0.05em black;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .image-wrapper::after {
+    box-shadow: inset 0 0 0.15em 0.15em black;
+  }
+}
+
+/* Hamburger Menu */
+.hamburger {
+  padding: 11px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer;
+  transition: opacity 0.15s linear, filter 0.15s linear;
+  background-color: transparent !important;
+  border: 0 !important;
+  color: white !important;
+  min-width: auto !important;
+}
+
+.hamburger:hover {
+  opacity: 0.7;
+}
+
+.hamburger-box {
+  width: 30px;
+  height: 22px;
+  display: inline-block;
+  position: relative;
+}
+
+.hamburger-inner {
+  display: block;
+  top: 50%;
+  margin-top: -2px;
+}
+
+.hamburger-inner,
+.hamburger-inner::before,
+.hamburger-inner::after {
+  width: 30px;
+  height: 4px;
+  background-color: white;
+  border-radius: 4px;
+  position: absolute;
+  transition: transform 0.15s ease;
+}
+
+.hamburger-inner::before,
+.hamburger-inner::after {
+  content: "";
+  display: block;
+}
+
+.hamburger-inner::before {
+  top: -9px;
+}
+
+.hamburger-inner::after {
+  bottom: -9px;
+}
+
+.hamburger-slider .hamburger-inner {
+  top: 2px;
+}
+
+.hamburger-slider .hamburger-inner::before {
+  top: 9px;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.hamburger-slider .hamburger-inner::after {
+  top: 18px;
+}
+
+.hamburger-slider.is-active .hamburger-inner {
+  transform: translate3d(0, 9px, 0) rotate(45deg);
+}
+
+.hamburger-slider.is-active .hamburger-inner::before {
+  transform: rotate(-45deg) translate3d(-4.28571px, -5px, 0);
+  opacity: 0;
+}
+
+.hamburger-slider.is-active .hamburger-inner::after {
+  transform: translate3d(0, -18px, 0) rotate(-90deg);
+}
