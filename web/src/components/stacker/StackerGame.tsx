@@ -13,6 +13,7 @@ export function StackerGame() {
   const boardSize = useGameStore((state) => state.boardSize)
   const winner = useGameStore((state) => state.winner)
   const resetGame = useGameStore((state) => state.resetGame)
+  const notCascading = useGameStore((state) => state.notCascading)
 
   useEffect(() => {
     initializeBoard()
@@ -51,7 +52,7 @@ export function StackerGame() {
   return (
     <div className="relative h-full">
       {winner && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/80">
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/30">
           <div className="bg-black p-8 text-center">
             <h2 className="mb-6 font-['HelveticaNeueBold'] text-3xl">
               <span style={{ color: getPlayerColor(winner) }}>
@@ -75,12 +76,13 @@ export function StackerGame() {
           near: 0.1,
           far: 1000,
         }}
+        shadows={notCascading}
       >
         <CameraControls
           mouseButtons={{
             left: MouseButtons.ACTION.ROTATE,
             wheel: MouseButtons.ACTION.ZOOM,
-            right: MouseButtons.ACTION.NONE,
+            right: MouseButtons.ACTION.TRUCK,
             middle: MouseButtons.ACTION.ROTATE,
           }}
           minDistance={2}

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { extend } from '@react-three/fiber'
 import { BoxGeometry } from 'three'
 import { Line2 } from 'three/examples/jsm/lines/Line2.js'
@@ -176,7 +176,7 @@ const BoxEdges = ({
   )
 }
 
-export const Stack = (
+const StackComponent = (
   props: {
     activePlayer: number
     owner: number
@@ -219,7 +219,9 @@ export const Stack = (
   return <>{stack}</>
 }
 
-export const Risers = (
+export const Stack = memo(StackComponent)
+
+const RisersComponent = (
   props: {
     height: number
     count: number
@@ -287,22 +289,12 @@ export const Risers = (
   )
 }
 
-export const Tile = ({ ...props }: TileProps) => {
+export const Risers = memo(RisersComponent)
+
+const TileComponent = ({ ...props }: TileProps) => {
   const [hovered, setHovered] = useState(false)
-  const updateTile = useGameStore((state) => state.updateTile)
-  const cascade = useGameStore((state) => state.cascade)
-  const updatePlayer = useGameStore((state) => state.updatePlayer)
-  const checkWinner = useGameStore((state) => state.checkWinner)
-  const activePlayer = useGameStore((state) => state.activePlayer)
-  const allowMove = useGameStore((state) => state.allowMove)
 
   const boxGeometry = useMemo(() => new BoxGeometry(1.0, 0.5, 1.0), [])
-
-  // Check if the tile can be clicked (valid placement)
-  const canPlace =
-    allowMove() &&
-    (props.owner === 0 || activePlayer === props.owner) &&
-    hovered
 
   // Calculate ghost box position (on top of existing stack)
   // The stack group is at height * 0.5, and each box in the stack is at (1 + step) * 0.5
@@ -318,10 +310,13 @@ export const Tile = ({ ...props }: TileProps) => {
       }}
       onClick={async (e) => {
         e.stopPropagation()
-        if (!allowMove()) {
+        const store = useGameStore.getState()
+
+        if (!store.allowMove()) {
           return // can't stack if game isn't running or cascading
         }
 
+        const activePlayer = store.activePlayer
         if (props.owner !== 0 && activePlayer !== props.owner) {
           return // can't stack if opponent already owns spot
         }
@@ -329,22 +324,22 @@ export const Tile = ({ ...props }: TileProps) => {
         // Hide ghost preview immediately on click
         setHovered(false)
 
-        await updateTile(
+        await store.updateTile(
           props.position.z,
           props.position.x,
           activePlayer,
           props.count + 1,
         )
-        await cascade()
+        await store.cascade()
         if (activePlayer === 1) {
-          await updatePlayer(2)
+          await store.updatePlayer(2)
         } else if (activePlayer === 2) {
-          await updatePlayer(1)
+          await store.updatePlayer(1)
         } else {
           console.log("invalid player, this shouldn't have happened...")
           // todo handle error
         }
-        checkWinner()
+        store.checkWinner()
       }}
       onPointerLeave={() => setHovered(false)}
       receiveShadow
@@ -354,8 +349,8 @@ export const Tile = ({ ...props }: TileProps) => {
       <meshPhysicalMaterial
         color={'#E6E6E6'}
         emissive={
-          hovered && (activePlayer === props.owner || props.owner === 0)
-            ? getColorForPlayer(activePlayer)
+          hovered && (useGameStore.getState().activePlayer === props.owner || props.owner === 0)
+            ? getColorForPlayer(useGameStore.getState().activePlayer)
             : 'black'
         }
         roughness={1.0}
@@ -363,28 +358,38 @@ export const Tile = ({ ...props }: TileProps) => {
       <primitive attach="geometry" object={boxGeometry} />
       <BoxEdges color={'#404040'} lineWidth={3} />
       <Risers
-        activePlayer={activePlayer}
+        activePlayer={useGameStore.getState().activePlayer}
         height={props.initialHeight}
         hovered={hovered}
         owner={props.owner}
         count={props.count}
       />
-      {/* Ghost box preview */}
-      {canPlace && (
+      {/* Ghost box preview - only show on empty tiles or tiles owned by active player */}
+      {hovered && (props.owner === 0 || props.owner === useGameStore.getState().activePlayer) && (
         <mesh position={[0, ghostBoxHeight, 0]} raycast={() => null}>
           <meshPhysicalMaterial
-            color={getColorForPlayer(activePlayer)}
+            color={getColorForPlayer(useGameStore.getState().activePlayer)}
             transparent
             opacity={0.3}
             metalness={0.5}
             roughness={0.5}
-            emissive={getColorForPlayer(activePlayer)}
+            emissive={getColorForPlayer(useGameStore.getState().activePlayer)}
             emissiveIntensity={0.2}
           />
           <primitive attach="geometry" object={boxGeometry} />
-          <BoxEdges color={getColorForPlayer(activePlayer)} lineWidth={2} />
+          <BoxEdges color={getColorForPlayer(useGameStore.getState().activePlayer)} lineWidth={2} />
         </mesh>
       )}
     </mesh>
   )
 }
+
+// Memoize to prevent re-renders when props haven't changed
+export const Tile = memo(TileComponent, (prevProps, nextProps) => {
+  return (
+    prevProps.count === nextProps.count &&
+    prevProps.owner === nextProps.owner &&
+    prevProps.initialHeight === nextProps.initialHeight &&
+    prevProps.position.equals(nextProps.position)
+  )
+})

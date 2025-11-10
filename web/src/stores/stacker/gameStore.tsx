@@ -70,28 +70,26 @@ export const useGameStore = create<GameState>()(
               if (tile.count + tile.initialHeight >= 4) {
                 changed = true
                 // collapse the tiles outwards in cardinal directions
-                updatedBoard[i][j].count = Math.max(
-                  tile.count + tile.initialHeight - 4,
-                  0,
-                )
+                const totalHeight = tile.count + tile.initialHeight
+                updatedBoard[i][j].count = totalHeight - 4
                 if (j > 0) {
                   // left
-                  updatedBoard[i][j - 1].count = state.board[i][j - 1].count + 1
+                  updatedBoard[i][j - 1].count += 1
                   updatedBoard[i][j - 1].owner = state.board[i][j].owner
                 }
                 if (j < get().boardSize - 1) {
                   // right
-                  updatedBoard[i][j + 1].count = state.board[i][j + 1].count + 1
+                  updatedBoard[i][j + 1].count += 1
                   updatedBoard[i][j + 1].owner = state.board[i][j].owner
                 }
                 if (i > 0) {
                   // down
-                  updatedBoard[i - 1][j].count = state.board[i - 1][j].count + 1
+                  updatedBoard[i - 1][j].count += 1
                   updatedBoard[i - 1][j].owner = state.board[i][j].owner
                 }
                 if (i < get().boardSize - 1) {
                   // up
-                  updatedBoard[i + 1][j].count = state.board[i + 1][j].count + 1
+                  updatedBoard[i + 1][j].count += 1
                   updatedBoard[i + 1][j].owner = state.board[i][j].owner
                 }
                 // reset owner if no tiles remaining on that square
@@ -103,6 +101,9 @@ export const useGameStore = create<GameState>()(
           })
           state.board = updatedBoard
         })
+
+        // Check for winner after each cascade iteration (but keep cascading)
+        get().checkWinner()
 
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (!changed) {
