@@ -1,14 +1,13 @@
 import { CameraControls, Stats } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import MouseButtons from 'camera-controls'
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect } from 'react'
 import { Vector3 } from 'three'
 
 import { useGameStore } from '../../stores/stacker/gameStore'
 import { Tile } from './Tile'
 
 export function StackerGame() {
-  const cameraControlsRef = useRef<CameraControls>(null)
   const initializeBoard = useGameStore((state) => state.initializeBoard)
   const board = useGameStore((state) => state.board)
   const boardSize = useGameStore((state) => state.boardSize)
@@ -24,20 +23,22 @@ export function StackerGame() {
   const centerPoint = (boardSize - 1) / 2.0
   const distance = boardSize * 2
 
-  // Set camera position once on mount
-  useEffect(() => {
-    if (cameraControlsRef.current) {
-      cameraControlsRef.current.setLookAt(
-        centerPoint + distance,
-        distance,
-        centerPoint + distance,
-        centerPoint,
-        0,
-        centerPoint,
-        true,
-      )
-    }
-  }, []) // Empty dependency array - only run once on mount
+  const cameraControlsRef = useCallback(
+    (controls: CameraControls | null) => {
+      if (controls && board.length > 0) {
+        controls.setLookAt(
+          centerPoint + distance,
+          distance,
+          centerPoint + distance,
+          centerPoint,
+          0,
+          centerPoint,
+          true,
+        )
+      }
+    },
+    [board.length, centerPoint, distance],
+  )
 
   const getPlayerName = (player: number) => {
     return player === 1 ? 'Red' : 'Blue'
