@@ -12,7 +12,8 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build the application
+# Build the application with production mode
+ENV NODE_ENV=production
 RUN npm run build
 
 # Production stage
