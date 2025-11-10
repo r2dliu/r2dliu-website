@@ -15,6 +15,8 @@ COPY . .
 # Build the application with production mode
 ENV NODE_ENV=production
 ENV NODE_OPTIONS=--max-old-space-size=4096
+# Clean any existing build artifacts to prevent hash mismatches
+RUN rm -rf .output .nitro
 RUN npm run build
 
 # Production stage

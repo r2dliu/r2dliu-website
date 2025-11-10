@@ -12,7 +12,7 @@ import { useEffect } from 'react'
 import * as gtag from '../helpers/gtags.client'
 import { theme } from '../theme'
 
-import appCss from '../styles.css?url'
+import '../styles.css'
 
 // You can add these to your .env file
 const GA_TRACKING_ID = import.meta.env.VITE_GA_TRACKING_ID
@@ -37,10 +37,6 @@ export const Route = createRootRoute({
       },
     ],
     links: [
-      {
-        rel: 'stylesheet',
-        href: appCss,
-      },
       {
         rel: 'icon',
         href: '/favicon.ico',
