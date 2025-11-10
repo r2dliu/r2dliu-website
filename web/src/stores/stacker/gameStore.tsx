@@ -95,7 +95,7 @@ export const useGameStore = create<GameState>()(
                   updatedBoard[i + 1][j].owner = state.board[i][j].owner
                 }
                 // reset owner if no tiles remaining on that square
-                if (state.board[i][j].count === 0) {
+                if (updatedBoard[i][j].count === 0) {
                   updatedBoard[i][j].owner = 0
                 }
               }

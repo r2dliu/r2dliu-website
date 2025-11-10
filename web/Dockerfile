@@ -20,18 +20,18 @@ FROM node:24-alpine
 
 WORKDIR /app
 
-# Copy built application
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/node_modules ./node_modules
+# Copy built application (Nitro outputs to .output)
+COPY --from=builder /app/.output ./.output
 
 # Set environment variables
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=8080
+ENV NITRO_PORT=8080
+ENV NITRO_HOST=0.0.0.0
 
 # Expose port
 EXPOSE 8080
 
-# Start the server
-CMD ["node", "dist/server/server.js"]
+# Start the Nitro server
+CMD ["node", ".output/server/index.mjs"]
