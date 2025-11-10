@@ -14,6 +14,7 @@ COPY . .
 
 # Build the application with production mode
 ENV NODE_ENV=production
+ENV NODE_OPTIONS=--max-old-space-size=4096
 RUN npm run build
 
 # Production stage
