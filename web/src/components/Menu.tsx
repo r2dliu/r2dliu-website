@@ -31,7 +31,7 @@ export default function Menu() {
   }
 
   return (
-    <div className="flex flex-col items-center h-[90%] max-w-xs min-w-xs">
+    <div className="flex flex-col items-center max-w-xs min-w-xs">
       <Link to="/" className="pb-6">
         <LazyLoadImage
           className="w-[170px] h-[163px] object-contain"

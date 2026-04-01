@@ -53,7 +53,7 @@ function Experience() {
         ' is a bioinformatics and health data science company that partners with federal agencies and research institutions to advance scientific discovery and public health initiatives.',
         <br key={2} />,
         <br key={3} />,
-        'I primarily run two main projects, one where I build a Photoshop-like tool for visualizing, analyzing, and manipulating multi-terabyte 3D light microscopy datasets, and a second where I construct a library that permits arbitrary transformations on structured data, extremely useful for manipulating messy EHR data and translating between standards.',
+        'I run two main projects. The first is a Photoshop-like tool for visualizing, analyzing, and manipulating multi-terabyte 3D light microscopy datasets, with annotation and labeling tools, AI-assisted and automated segmentation, and a human-in-the-loop workflow for iteratively retraining models on new data. The second aims to give the healthcare data ecosystem a shared conversion language: a schema-agnostic DSL and runtime for bidirectional transformation between incompatible EHR standards like FHIR and OMOP CDM.',
       ],
     },
     ThinkNimble: {
@@ -73,7 +73,7 @@ function Experience() {
         ' is a startup-oriented software development agency, but with a twist: they build businesses from the ground up. Rather than just coding the product, they also coach founders through strategy, help them hire their staff, advise them through launch, and guide them through the startup process with decades of collective knowledge amongst its staff.',
         <br key={2} />,
         <br key={3} />,
-        "As a software engineer and project lead, I work directly with clients throughout the process of turning their ideas into reality, typically from scratch or bootstrapped with ThinkNimble's internal tooling. This involves a large variety of fields and expertise, such as medicine, the judicial system, political lobbying, education, finance, machine learning, etc.",
+        "As a software engineer and project lead, I worked directly with clients throughout the process of turning their ideas into reality, typically from scratch or bootstrapped with ThinkNimble's internal tooling. This involved a large variety of fields and expertise, such as medicine, the judicial system, political lobbying, education, finance, machine learning, etc.",
       ],
     },
     'JHU/APL': {

@@ -159,7 +159,7 @@ function Melee() {
       </div>
 
       <div className="font-['HelveticaNeueMedium'] text-3xl pb-4">Gameplay</div>
-      <div className="flex flex-wrap max-lg:flex-col">
+      <div className="flex flex-wrap max-lg:flex-col max-lg:items-center">
         <ReactPlayer
           className="max-w-[calc(calc(100%-80px)/3)] max-lg:max-w-full mr-10 max-lg:mr-0 max-lg:mb-5"
           width={300}

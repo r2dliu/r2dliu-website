@@ -41,7 +41,7 @@ function CanvasLayout() {
           </span>
         </Button>
         {isMenuOpen && (
-          <div className="flex items-center justify-center flex-1">
+          <div className="fixed left-0 right-0 bottom-0 top-[44px] flex items-start justify-center z-50">
             <Menu />
           </div>
         )}

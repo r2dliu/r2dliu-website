@@ -58,9 +58,8 @@ function Climbing() {
 
       <div className="max-w-3xl font-['HelveticaNeueLight'] text-xl">
         I discovered rock climbing as a hobby late into my college years, and
-        I've been hooked ever since. Recently, I've started to compete, train,
-        and generally take climbing much more seriously. I currently boulder
-        around V10 relatively consistently. Follow me on Instagram for climbing
+        I've been hooked ever since. Around 2021, I started to compete, train,
+        and generally take climbing much more seriously. Follow me on Instagram for climbing
         content!
       </div>
 
@@ -72,7 +71,7 @@ function Climbing() {
         <a href="https://www.acsm.org/" target="_blank" rel="noreferrer">
           ACSM
         </a>{' '}
-        Certified Personal Trainer® (ACSM-CPT) who works at{' '}
+        Certified Personal Trainer® (ACSM-CPT) who worked at{' '}
         <a
           href="https://movementgyms.com/columbia/"
           target="_blank"
