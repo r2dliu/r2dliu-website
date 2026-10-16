@@ -91,21 +91,11 @@ class WordCharacter(models.Model):
 # ---------------------------------------------------------------------------
 
 
-class Learner(AbstractBaseModel):
-    """Anonymous learner, identified by the `X-Learner-Id` request header.
-
-    The site has no accounts yet; the browser generates and stores the id.
-    """
-
-    name = models.CharField(max_length=200, blank=True)
-
-
 class Deck(AbstractBaseModel):
     class CardKind(models.TextChoices):
         CHARACTER = "CHARACTER"
         WORD = "WORD"
 
-    learner = models.ForeignKey(Learner, on_delete=models.CASCADE, related_name="decks")
     name = models.CharField(max_length=200)
     card_kind = models.CharField(max_length=16, choices=CardKind.choices)
     new_cards_per_day = models.PositiveIntegerField(default=20)

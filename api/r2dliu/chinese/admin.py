@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Card, Character, Deck, Learner, Remediation, Review, Word
+from .models import Card, Character, Deck, Remediation, Review, Word
 
 
 @admin.register(Character)
@@ -17,7 +17,7 @@ class WordAdmin(admin.ModelAdmin):
 
 @admin.register(Deck)
 class DeckAdmin(admin.ModelAdmin):
-    list_display = ("name", "card_kind", "learner")
+    list_display = ("name", "card_kind")
 
 
 @admin.register(Card)
@@ -26,6 +26,5 @@ class CardAdmin(admin.ModelAdmin):
     list_select_related = ("character", "word", "deck")
 
 
-admin.site.register(Learner)
 admin.site.register(Review)
 admin.site.register(Remediation)

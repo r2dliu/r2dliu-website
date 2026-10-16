@@ -22,7 +22,7 @@ after pressing Again. GraphQL lives in `r2dliu/chinese/schema.py` and is merged
 into the root schema.
 
 Load the reference data (characters, strokes, vocab, frequencies) once per
-database, after `migrate`. Re-running updates rows in place and keeps learners'
+database, after `migrate`. Re-running updates rows in place and keeps your
 cards:
 
 ```
@@ -34,5 +34,5 @@ Sources: stroke data from Make Me a Hanzi (via `hanzi-writer-data`), definitions
 from CC-CEDICT, frequency order from SUBTLEX-CH (spoken) falling back to Jun Da
 (written), HSK levels from `chinese-lexicon`.
 
-Learners are anonymous for now: the browser generates an id and sends it as the
-`X-Learner-Id` header.
+There are no accounts: it's a single-user tool, so every visitor sees the same
+decks.

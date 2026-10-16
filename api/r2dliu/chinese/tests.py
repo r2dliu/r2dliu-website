@@ -11,7 +11,6 @@ from r2dliu.chinese.models import (
     Card,
     Character,
     Deck,
-    Learner,
     Remediation,
     Stroke,
     Word,
@@ -147,14 +146,12 @@ class StudyFlowTests(TestCase):
         make_word("你好", 1, [self.ni, self.hao], "ni3 hao3")
         make_word("你们", 2, [self.ni, self.men], "ni3 men5")
         make_word("好人", 3, [self.hao], "hao3 ren2")
-        self.learner_id = str(uuid.uuid4())
 
     def gql(self, query, **variables):
         resp = self.client.post(
             "/graphql",
             json.dumps({"query": query, "variables": variables}),
             content_type="application/json",
-            headers={"X-Learner-Id": self.learner_id},
         )
         body = resp.json()
         return body.get("data"), body.get("errors")
@@ -190,11 +187,6 @@ class StudyFlowTests(TestCase):
             c=card_id,
             r=rating,
         )
-
-    def test_requires_learner_header(self):
-        self.learner_id = "nope"
-        _, errors = self.gql("{ decks { id } }")
-        self.assertIn("X-Learner-Id", errors[0]["message"])
 
     def test_new_cards_follow_frequency_order(self):
         deck_id = self.create_deck("CHARACTER", [])
@@ -280,11 +272,9 @@ class StudyFlowTests(TestCase):
         data, _ = self.answer(card["id"], "AGAIN")
         self.assertIsNone(data["answerCard"]["study"]["remediation"])
 
-    def test_learners_are_isolated(self):
-        deck_id = self.create_deck("CHARACTER", [])
-        self.learner_id = str(uuid.uuid4())
+    def test_unknown_deck(self):
         _, errors = self.gql(
-            "query($d: ID!) { study(deckId: $d) { counts { new } } }", d=deck_id
+            "query($d: ID!) { study(deckId: $d) { counts { new } } }", d="nope"
         )
         self.assertEqual(errors[0]["message"], "Deck not found")
 
@@ -306,4 +296,3 @@ class StudyFlowTests(TestCase):
         self.assertIsNone(state["card"])
         self.assertEqual(state["counts"]["new"], 0)
         self.assertEqual(Card.objects.filter(deck_id=deck_id).count(), 1)
-        self.assertTrue(Learner.objects.filter(pk=self.learner_id).exists())

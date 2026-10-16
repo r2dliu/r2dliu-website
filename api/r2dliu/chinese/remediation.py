@@ -209,19 +209,19 @@ def _current(remediation: Remediation, step_type: str) -> tuple[dict, dict]:
     return step, remediation.progress[remediation.current_step]
 
 
-def _locked(remediation_id, learner) -> Remediation:
+def _locked(remediation_id) -> Remediation:
     return (
         # Character/word are outer joins, which can't be locked
         Remediation.objects.select_for_update(of=("self",))
         .select_related("card__character", "card__word", "card__deck")
-        .get(pk=remediation_id, card__deck__learner=learner)
+        .get(pk=remediation_id)
     )
 
 
 @transaction.atomic
-def complete_stroke_quiz(remediation_id, learner, hanzi: str, mistakes: int):
+def complete_stroke_quiz(remediation_id, hanzi: str, mistakes: int):
     """Record one drawing. Returns (remediation, counted)."""
-    remediation = _locked(remediation_id, learner)
+    remediation = _locked(remediation_id)
     step, progress = _current(remediation, DRAW_STROKES)
     if hanzi not in progress["completed"]:
         raise RemediationError(f"{hanzi} is not part of this card")
@@ -234,8 +234,8 @@ def complete_stroke_quiz(remediation_id, learner, hanzi: str, mistakes: int):
 
 
 @transaction.atomic
-def open_related(remediation_id, learner, key: str) -> Remediation:
-    remediation = _locked(remediation_id, learner)
+def open_related(remediation_id, key: str) -> Remediation:
+    remediation = _locked(remediation_id)
     _step, progress = _current(remediation, EXPLORE_RELATED)
     if key not in progress["items"]:
         raise RemediationError("That item isn't in the related list")
@@ -247,9 +247,9 @@ def open_related(remediation_id, learner, key: str) -> Remediation:
 
 
 @transaction.atomic
-def submit_pinyin(remediation_id, learner, answer: str):
+def submit_pinyin(remediation_id, answer: str):
     """Check a typed answer. Returns (remediation, correct, expected)."""
-    remediation = _locked(remediation_id, learner)
+    remediation = _locked(remediation_id)
     _step, progress = _current(remediation, TYPE_PINYIN)
     subject = remediation.card.subject
     correct = pinyin.matches(answer, subject.pinyin_numbered)

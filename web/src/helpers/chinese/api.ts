@@ -6,27 +6,6 @@ declare global {
   }
 }
 
-const LEARNER_KEY = 'chinese.learnerId'
-
-/** Anonymous learner id; the API creates the learner on first use. */
-export function getLearnerId(): string {
-  let id: string | null = null
-  try {
-    id = localStorage.getItem(LEARNER_KEY)
-  } catch {
-    // Storage blocked; fall through to an in-memory id
-  }
-  if (!id) {
-    id = crypto.randomUUID()
-    try {
-      localStorage.setItem(LEARNER_KEY, id)
-    } catch {
-      // ignore
-    }
-  }
-  return id
-}
-
 function apiUrl() {
   return (window.API_URL || import.meta.env.VITE_API_URL || '').replace(
     /\/$/,
@@ -42,7 +21,6 @@ export async function gql<T>(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-Learner-Id': getLearnerId(),
     },
     body: JSON.stringify({ query, variables }),
   })

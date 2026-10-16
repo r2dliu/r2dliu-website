@@ -1,42 +1,24 @@
-import uuid
-
 import graphene
 from django.utils import timezone
 from graphene.types.generic import GenericScalar
+from django.core.exceptions import ValidationError
 from graphql import GraphQLError
 
 from r2dliu.chinese import remediation, scheduler, study
-from r2dliu.chinese.models import Card, Character, Deck, Learner, Word
-
-LEARNER_HEADER = "X-Learner-Id"
-
-
-def get_learner(info) -> Learner:
-    request = info.context
-    if hasattr(request, "learner"):
-        return request.learner
-    raw = request.headers.get(LEARNER_HEADER)
-    try:
-        learner_id = uuid.UUID(raw)
-    except (TypeError, ValueError):
-        raise GraphQLError(f"Missing or invalid {LEARNER_HEADER} header")
-    request.learner, _ = Learner.objects.get_or_create(pk=learner_id)
-    return request.learner
+from r2dliu.chinese.models import Card, Character, Deck, Word
 
 
 def get_deck(info, deck_id) -> Deck:
     try:
-        return Deck.objects.get(pk=deck_id, learner=get_learner(info))
-    except (Deck.DoesNotExist, ValueError):
+        return Deck.objects.get(pk=deck_id)
+    except (Deck.DoesNotExist, ValidationError):
         raise GraphQLError("Deck not found")
 
 
 def get_card(info, card_id) -> Card:
     try:
-        return Card.objects.select_related("deck", "character", "word").get(
-            pk=card_id, deck__learner=get_learner(info)
-        )
-    except (Card.DoesNotExist, ValueError):
+        return Card.objects.select_related("deck", "character", "word").get(pk=card_id)
+    except (Card.DoesNotExist, ValidationError):
         raise GraphQLError("Card not found")
 
 
@@ -284,7 +266,7 @@ class Query(graphene.ObjectType):
         return Word.objects.filter(simplified=simplified).first()
 
     def resolve_decks(root, info):
-        return get_learner(info).decks.order_by("datetime_created")
+        return Deck.objects.order_by("datetime_created")
 
     def resolve_deck(root, info, id):
         return get_deck(info, id)
@@ -346,7 +328,6 @@ class CreateDeck(graphene.Mutation):
         if input.get("card_kind") not in Deck.CardKind.values:
             raise GraphQLError("cardKind must be CHARACTER or WORD")
         deck = Deck(
-            learner=get_learner(info),
             name=input.get("name") or "My deck",
             card_kind=input.card_kind,
             learning_steps=scheduler.DEFAULT_LEARNING_STEPS,
@@ -447,7 +428,6 @@ class CompleteStrokeQuiz(graphene.Mutation):
         rem, counted = _remediation_call(
             remediation.complete_stroke_quiz,
             remediation_id,
-            get_learner(info),
             hanzi,
             mistakes,
         )
@@ -465,9 +445,7 @@ class OpenRelatedItem(graphene.Mutation):
     study = graphene.Field(StudyStateType, required=True)
 
     def mutate(root, info, remediation_id, key):
-        rem = _remediation_call(
-            remediation.open_related, remediation_id, get_learner(info), key
-        )
+        rem = _remediation_call(remediation.open_related, remediation_id, key)
         return OpenRelatedItem(remediation=rem, study=study.get_state(rem.card.deck))
 
 
@@ -483,7 +461,7 @@ class SubmitPinyin(graphene.Mutation):
 
     def mutate(root, info, remediation_id, answer):
         rem, correct, expected = _remediation_call(
-            remediation.submit_pinyin, remediation_id, get_learner(info), answer
+            remediation.submit_pinyin, remediation_id, answer
         )
         return SubmitPinyin(
             remediation=rem,
