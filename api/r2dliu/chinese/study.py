@@ -7,12 +7,16 @@ card, so decks always follow frequency order.
 
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from django.db import transaction
 from django.utils import timezone
 
 from r2dliu.chinese import remediation, scheduler
 from r2dliu.chinese.models import Card, Character, Deck, Remediation, Review, Word
+
+# The daily new-card limit resets at midnight Eastern time
+DAY_TIMEZONE = ZoneInfo("America/New_York")
 
 # Like Anki: if nothing else is due, show learning cards due within this window
 LEARN_AHEAD = timedelta(minutes=20)
@@ -41,7 +45,8 @@ class StudyState:
 
 
 def _start_of_day(now: datetime) -> datetime:
-    return now.replace(hour=0, minute=0, second=0, microsecond=0)
+    local = now.astimezone(DAY_TIMEZONE)
+    return local.replace(hour=0, minute=0, second=0, microsecond=0)
 
 
 def new_introduced_today(deck: Deck, now: datetime) -> int:

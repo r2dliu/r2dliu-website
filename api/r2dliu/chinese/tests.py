@@ -1,11 +1,12 @@
 import json
 import uuid
-from datetime import timedelta
+from datetime import datetime, timedelta
+from datetime import timezone as dt_timezone
 
 from django.test import TestCase
 from django.utils import timezone
 
-from r2dliu.chinese import pinyin, remediation, scheduler
+from r2dliu.chinese import pinyin, remediation, scheduler, study
 from r2dliu.chinese.models import (
     Card,
     Character,
@@ -81,6 +82,18 @@ class SchedulerTests(TestCase):
         self.assertEqual(good.interval_days, 25)
         self.assertLess(hard.interval_days, good.interval_days)
         self.assertGreater(easy.interval_days, good.interval_days)
+
+
+class DayBoundaryTests(TestCase):
+    def test_day_starts_at_midnight_eastern(self):
+        # 03:30 UTC on Jan 15 is still Jan 14 in New York (EST, UTC-5)
+        now = datetime(2026, 1, 15, 3, 30, tzinfo=dt_timezone.utc)
+        start = study._start_of_day(now)
+        self.assertEqual(start, datetime(2026, 1, 14, 5, 0, tzinfo=dt_timezone.utc))
+        # Daylight saving time (EDT, UTC-4)
+        now = datetime(2026, 7, 15, 12, 0, tzinfo=dt_timezone.utc)
+        start = study._start_of_day(now)
+        self.assertEqual(start, datetime(2026, 7, 15, 4, 0, tzinfo=dt_timezone.utc))
 
 
 class ValidateStepsTests(TestCase):
