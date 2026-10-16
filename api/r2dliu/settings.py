@@ -14,6 +14,7 @@ import io
 import os
 from pathlib import Path
 
+from corsheaders.defaults import default_headers
 from dotenv import load_dotenv
 from google.cloud import secretmanager
 
@@ -40,6 +41,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://staging.r2dliu.com",
     os.environ.get("CORS_ALLOWED_ORIGINS"),
 ]
+CORS_ALLOW_HEADERS = (*default_headers, "x-learner-id")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -59,6 +61,7 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
     "r2dliu",
     "r2dliu.courses",
+    "r2dliu.chinese",
     "graphene_django",
     "corsheaders",
     "django_filters",

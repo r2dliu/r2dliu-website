@@ -13,3 +13,26 @@ Update with gcloud app deploy
 Need to manually create requirements.txt unfortunately from the pyproject.toml
 
 `uv pip compile pyproject.toml -o requirements.txt`
+
+## Chinese flashcards (`r2dliu/chinese`)
+
+Anki-style flashcards at `/chinese` on the site, with configurable "failure"
+tasks (draw strokes, explore related vocab, type pinyin) that must be finished
+after pressing Again. GraphQL lives in `r2dliu/chinese/schema.py` and is merged
+into the root schema.
+
+Load the reference data (characters, strokes, vocab, frequencies) once per
+database, after `migrate`. Re-running updates rows in place and keeps learners'
+cards:
+
+```
+../scripts/fetch-chinese-data.sh   # downloads datasets into api/data/chinese
+python manage.py load_chinese_data # ~1 min; 9.6k characters, 112k strokes, 41k words
+```
+
+Sources: stroke data from Make Me a Hanzi (via `hanzi-writer-data`), definitions
+from CC-CEDICT, frequency order from SUBTLEX-CH (spoken) falling back to Jun Da
+(written), HSK levels from `chinese-lexicon`.
+
+Learners are anonymous for now: the browser generates an id and sends it as the
+`X-Learner-Id` header.
