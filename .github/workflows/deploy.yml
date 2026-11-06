@@ -70,8 +70,8 @@ jobs:
 
   deploy:
     needs: [lint, typecheck]
-    # Pull requests only run checks; deploys come from pushes or manual runs
-    if: github.event_name != 'pull_request'
+    # Only main deploys; pull requests and other branches just run checks
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -112,6 +112,20 @@ jobs:
         run: |
           chmod +x deploy.sh
           ./deploy.sh us-central1
+
+      # CloudFront caches pages; clear it so visitors don't get old HTML that
+      # points at the previous build's (now deleted) asset files. The role can
+      # only invalidate this distribution, and only from main of this repo.
+      - name: 🔐 AWS Auth
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::928394170560:role/github-actions-cloudfront-invalidate
+          aws-region: us-east-1
+
+      - name: 🧹 Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation --distribution-id E58EAB7WSCXS9 \
+            --paths "/*" --query "Invalidation.Id" --output text
 
   api-test:
     name: 🐍 API tests
@@ -159,7 +173,7 @@ jobs:
   deploy-api:
     name: 🐍 Deploy API
     needs: [api-test]
-    if: github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
