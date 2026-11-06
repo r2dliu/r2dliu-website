@@ -12,7 +12,7 @@ and `_is_satisfied`, plus an action function the GraphQL schema exposes.
 from django.db import transaction
 from django.utils import timezone
 
-from r2dliu.chinese import pinyin
+from r2dliu.chinese import drawing, pinyin
 from r2dliu.chinese.models import Card, Character, Remediation, Review, Word
 
 DRAW_STROKES = "DRAW_STROKES"
@@ -22,11 +22,16 @@ TYPE_PINYIN = "TYPE_PINYIN"
 STEP_DEFAULTS = {
     # Draw each character stroke by stroke (Hanzi Writer quiz)
     DRAW_STROKES: {
+        # FREE: draw the whole character, then it's scored (see drawing.py).
+        # TRACE: Hanzi Writer checks each stroke as it's drawn.
+        "mode": "FREE",
         # ALL characters of a word, or just the FIRST
         "characters": "ALL",
-        # Clean drawings required per character
+        # Passing drawings required per character
         "repetitions": 1,
-        # A drawing with more mistakes than this doesn't count
+        # FREE: a drawing must score at least this accuracy (%) to count
+        "minAccuracy": 65,
+        # TRACE: a drawing with more mistakes than this doesn't count
         "maxMistakes": 3,
         # Show the faint character outline while drawing
         "showOutline": True,
@@ -47,6 +52,12 @@ _LIMITS = {
     "maxMistakes": (0, 50),
     "minOpened": (0, 50),
     "maxItems": (1, 50),
+    "minAccuracy": (0, 100),
+}
+
+_CHOICES = {
+    "characters": ("ALL", "FIRST"),
+    "mode": ("FREE", "TRACE"),
 }
 
 
@@ -73,8 +84,8 @@ def validate_steps(steps: list[dict]) -> list[dict]:
             elif isinstance(default, int):
                 lo, hi = _LIMITS[key]
                 value = max(lo, min(hi, int(value)))
-            elif key == "characters" and value not in ("ALL", "FIRST"):
-                raise RemediationError("characters must be ALL or FIRST")
+            elif key in _CHOICES and value not in _CHOICES[key]:
+                raise RemediationError(f"{key} must be one of {_CHOICES[key]}")
             step[key] = value
         if step["type"] == EXPLORE_RELATED:
             step["maxItems"] = max(step["maxItems"], step["minOpened"])
@@ -220,17 +231,40 @@ def _locked(remediation_id) -> Remediation:
 
 @transaction.atomic
 def complete_stroke_quiz(remediation_id, hanzi: str, mistakes: int):
-    """Record one drawing. Returns (remediation, counted)."""
+    """Record one traced drawing. Returns (remediation, counted)."""
+    remediation, step, progress = _drawing_step(remediation_id, hanzi)
+    counted = mistakes <= step["maxMistakes"]
+    _count_drawing(remediation, progress, hanzi, counted)
+    return remediation, counted
+
+
+@transaction.atomic
+def submit_free_drawing(remediation_id, hanzi: str, strokes):
+    """Score a freely drawn character. Returns (remediation, score, counted)."""
+    remediation, step, progress = _drawing_step(remediation_id, hanzi)
+    try:
+        strokes = drawing.clean_input(strokes)
+    except (TypeError, ValueError, IndexError) as e:
+        raise RemediationError(f"Invalid drawing: {e}")
+    score = drawing.score_drawing(Character.objects.get(hanzi=hanzi), strokes)
+    counted = score.accuracy >= step["minAccuracy"]
+    _count_drawing(remediation, progress, hanzi, counted)
+    return remediation, score, counted
+
+
+def _drawing_step(remediation_id, hanzi: str):
     remediation = _locked(remediation_id)
     step, progress = _current(remediation, DRAW_STROKES)
     if hanzi not in progress["completed"]:
         raise RemediationError(f"{hanzi} is not part of this card")
-    counted = mistakes <= step["maxMistakes"]
+    return remediation, step, progress
+
+
+def _count_drawing(remediation, progress, hanzi: str, counted: bool) -> None:
     if counted:
         progress["completed"][hanzi] += 1
         _advance(remediation)
         remediation.save()
-    return remediation, counted
 
 
 @transaction.atomic
