@@ -52,7 +52,7 @@ export async function gql<T>(
 // Types
 // ---------------------------------------------------------------------------
 
-export type Rating = 'AGAIN' | 'HARD' | 'GOOD' | 'EASY'
+export type Rating = 'AGAIN' | 'HARD' | 'GOOD' | 'EASY' | 'KNOWN'
 export type CardKind = 'CHARACTER' | 'WORD'
 export type FailureStepType = 'DRAW_STROKES' | 'EXPLORE_RELATED' | 'TYPE_PINYIN'
 
@@ -84,7 +84,7 @@ export interface Word {
 
 export interface Card {
   id: string
-  state: 'NEW' | 'LEARNING' | 'REVIEW' | 'RELEARNING'
+  state: 'NEW' | 'LEARNING' | 'REVIEW' | 'RELEARNING' | 'KNOWN'
   hanzi: string
   lapses: number
   character: Character | null

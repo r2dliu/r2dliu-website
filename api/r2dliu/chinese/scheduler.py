@@ -38,6 +38,8 @@ def _steps(deck: Deck) -> list[float]:
 
 
 def schedule(s: Schedule, rating: str, deck: Deck, now: datetime) -> Schedule:
+    if rating == Rating.KNOWN:
+        return replace(s, state=State.KNOWN, step=0)
     if s.state in (State.NEW, State.LEARNING):
         return _learning(s, rating, deck, now)
     if s.state == State.RELEARNING:
