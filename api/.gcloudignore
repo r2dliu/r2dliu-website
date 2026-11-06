@@ -15,5 +15,10 @@
 
 # Python pycache:
 __pycache__/
+
+# Local-only files: secrets, the virtualenv and raw datasets
+.env
+.venv/
+data/
 # Ignored by the build system
 /setup.cfg
