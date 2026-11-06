@@ -12,20 +12,37 @@ import type {
 
 const OPTION_LABELS: Record<string, string> = {
   repetitions: 'Times required',
-  maxMistakes: 'Max mistakes per drawing',
   showOutline: 'Show outline while drawing',
   characters: 'Characters to draw',
+  mode: 'Drawing',
+  minAccuracy: 'Min accuracy (%), free draw',
+  maxMistakes: 'Max mistakes, guided',
   minOpened: 'Must open at least',
   maxItems: 'Items in list',
 }
 
+const SELECT_OPTIONS: Record<string, Array<[string, string]>> = {
+  characters: [
+    ['ALL', 'All in the card'],
+    ['FIRST', 'Just the first'],
+  ],
+  mode: [
+    ['FREE', 'Free draw'],
+    ['TRACE', 'Guided (stroke by stroke)'],
+  ],
+}
+
 function StepEditor({
-  step,
+  step: saved,
+  defaults,
   onChange,
 }: {
   step: FailureStep
+  /** Fills in options added after this step was saved */
+  defaults?: Record<string, unknown>
   onChange: (s: FailureStep) => void
 }) {
+  const step = { ...defaults, ...saved }
   return (
     <div className="flex flex-wrap items-center gap-4">
       {Object.entries(step)
@@ -47,17 +64,20 @@ function StepEditor({
               </label>
             )
           }
-          if (key === 'characters') {
+          if (key in SELECT_OPTIONS) {
             return (
               <Select
                 key={key}
                 label={label}
                 value={String(value)}
                 onChange={(e) => onChange({ ...step, [key]: e.target.value })}
-                className="w-44"
+                className="w-56"
               >
-                <option value="ALL">All in the card</option>
-                <option value="FIRST">Just the first</option>
+                {SELECT_OPTIONS[key].map(([v, text]) => (
+                  <option key={v} value={v}>
+                    {text}
+                  </option>
+                ))}
               </Select>
             )
           }
@@ -211,6 +231,7 @@ export function DeckSettings({
             </div>
             <StepEditor
               step={step}
+              defaults={stepTypes.find((t) => t.type === step.type)?.defaults}
               onChange={(s) =>
                 setSteps(form.failureSteps.map((x, j) => (j === i ? s : x)))
               }

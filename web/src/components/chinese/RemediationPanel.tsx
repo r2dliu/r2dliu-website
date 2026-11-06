@@ -5,6 +5,7 @@ import { useStudyStore } from '../../stores/chinese/studyStore'
 import { api } from '../../helpers/chinese/api'
 import { CardBack } from './CardFace'
 import { DrawingPad } from './DrawingPad'
+import { FreeDrawPad } from './FreeDrawPad'
 import { RelatedList } from './RelatedList'
 import { Btn, Input } from './ui'
 import type {
@@ -12,10 +13,11 @@ import type {
   RelatedItem,
   Remediation,
   RemediationStep,
+  StudyState,
 } from '../../helpers/chinese/api'
 
 export const STEP_LABELS: Record<string, string> = {
-  DRAW_STROKES: 'Draw it stroke by stroke',
+  DRAW_STROKES: 'Draw the character',
   EXPLORE_RELATED: 'Explore related vocab',
   TYPE_PINYIN: 'Type the pinyin',
 }
@@ -36,6 +38,11 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
   const progress = step.drawProgress ?? {}
   const reps = Number(step.config.repetitions)
   const maxMistakes = Number(step.config.maxMistakes)
+  const minAccuracy = Number(step.config.minAccuracy)
+  // Steps saved before free draw existed have no mode: they were traced
+  const free = step.config.mode === 'FREE'
+  // Free draw: hold the next state until the learner has seen their score
+  const [pending, setPending] = useState<StudyState | null>(null)
   const current = targets.find((t) => (progress[t] ?? 0) < reps) ?? targets[0]
   const [attempt, setAttempt] = useState(0)
   const [mistakes, setMistakes] = useState(0)
@@ -59,23 +66,59 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
 
   return (
     <div className="flex gap-6 max-md:flex-col max-md:items-center">
-      <div className="flex flex-col items-center gap-2">
-        <DrawingPad
+      {free ? (
+        <FreeDrawPad
           key={`${current}-${attempt}`}
           hanzi={current}
           showOutline={Boolean(step.config.showOutline)}
-          onMistake={setMistakes}
-          onComplete={onComplete}
+          onSubmit={async (strokes) => {
+            const r = await run(() =>
+              api.submitFreeDrawing(remediation.id, current, strokes),
+            )
+            if (!r) return null
+            setPending(r.counted ? r.study : null)
+            if (!r.counted) setStudy(r.study)
+            return r.result
+          }}
+          footer={(r) =>
+            r.accuracy >= minAccuracy ? (
+              <Btn
+                variant="outlined"
+                className="mt-1"
+                onClick={() => {
+                  if (pending) setStudy(pending)
+                  setPending(null)
+                  setAttempt((a) => a + 1)
+                }}
+              >
+                Passed — continue
+              </Btn>
+            ) : (
+              <div className="text-sm text-red-300">
+                Needs {minAccuracy}% to count — draw it again
+              </div>
+            )
+          }
         />
-        <div
-          className={cn('text-sm', {
-            'text-red-400': mistakes > maxMistakes,
-            'text-zinc-400': mistakes <= maxMistakes,
-          })}
-        >
-          Mistakes: {mistakes} / {maxMistakes} allowed
+      ) : (
+        <div className="flex flex-col items-center gap-2">
+          <DrawingPad
+            key={`${current}-${attempt}`}
+            hanzi={current}
+            showOutline={Boolean(step.config.showOutline)}
+            onMistake={setMistakes}
+            onComplete={onComplete}
+          />
+          <div
+            className={cn('text-sm', {
+              'text-red-400': mistakes > maxMistakes,
+              'text-zinc-400': mistakes <= maxMistakes,
+            })}
+          >
+            Mistakes: {mistakes} / {maxMistakes} allowed
+          </div>
         </div>
-      </div>
+      )}
       <div className="flex flex-1 flex-col gap-3">
         <div className="flex flex-wrap gap-2">
           {targets.map((t) => (
@@ -93,7 +136,9 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
         </div>
         {message && <div className="text-zinc-300">{message}</div>}
         <div className="text-sm text-zinc-400">
-          Draw each stroke in order on the grid.
+          {free
+            ? `Draw the whole character, then Check. ${minAccuracy}% accuracy counts.`
+            : 'Draw each stroke in order on the grid.'}
           {step.config.showOutline ? '' : ' No outline — from memory!'}
         </div>
         <details className="text-zinc-300">

@@ -6,7 +6,7 @@ from datetime import timezone as dt_timezone
 from django.test import TestCase
 from django.utils import timezone
 
-from r2dliu.chinese import pinyin, remediation, scheduler, study
+from r2dliu.chinese import drawing, pinyin, remediation, scheduler, study
 from r2dliu.chinese.models import (
     Card,
     Character,
@@ -345,3 +345,130 @@ class StudyFlowTests(TestCase):
         self.assertIsNone(state["card"])
         self.assertEqual(state["counts"]["new"], 0)
         self.assertEqual(Card.objects.filter(deck_id=deck_id).count(), 1)
+
+
+SHI = [[(100, 500), (900, 500)], [(500, 850), (500, 50)]]  # 十
+ER = [[(250, 650), (750, 650)], [(100, 250), (900, 250)]]  # 二
+REN = [[(500, 850), (450, 500), (150, 100)], [(480, 450), (850, 100)]]  # 人
+
+
+def make_drawn_char(hanzi, strokes, rank):
+    char = Character.objects.create(
+        hanzi=hanzi,
+        pinyin=["x"],
+        pinyin_numbered=["x1"],
+        frequency_rank=rank,
+        stroke_count=len(strokes),
+    )
+    for i, s in enumerate(strokes):
+        Stroke.objects.create(
+            character=char, order=i, path="M 0 0 Z", median=[list(p) for p in s]
+        )
+    return char
+
+
+def shifted(strokes, dx=40, dy=-30, scale=0.6):
+    return [[(x * scale + dx, y * scale + dy) for x, y in s] for s in strokes]
+
+
+class DrawingTests(TestCase):
+    def setUp(self):
+        drawing._candidates = None  # recognition cache is per database
+        self.shi = make_drawn_char("十", SHI, 1)
+        make_drawn_char("二", ER, 2)
+        make_drawn_char("人", REN, 3)
+
+    def tearDown(self):
+        drawing._candidates = None
+
+    def test_position_and_size_dont_matter(self):
+        score = drawing.score_drawing(self.shi, shifted(SHI))
+        self.assertGreater(score.accuracy, 99)
+        self.assertEqual((score.in_order, score.correct_direction), (2, 2))
+
+    def test_order_and_direction_reported_not_penalised(self):
+        backwards = [s[::-1] for s in SHI[::-1]]
+        score = drawing.score_drawing(self.shi, backwards)
+        self.assertGreater(score.accuracy, 99)
+        self.assertEqual(score.in_order, 1)
+        self.assertEqual(score.correct_direction, 0)
+
+    def test_missing_and_wrong_strokes_lower_accuracy(self):
+        self.assertLess(drawing.score_drawing(self.shi, SHI[:1]).accuracy, 55)
+        self.assertLess(drawing.score_drawing(self.shi, ER).accuracy, 60)
+
+    def test_recognise(self):
+        self.assertEqual(drawing.recognise(shifted(ER))[0][0], "二")
+        self.assertEqual(drawing.recognise(shifted(REN[::-1]))[0][0], "人")
+
+    def test_clean_input_rejects_garbage(self):
+        for bad in ["x", [[]], [["a"]], [[[1, 2]]] * 65]:
+            with self.assertRaises((ValueError, TypeError, IndexError)):
+                drawing.clean_input(bad)
+
+    def test_assign_rectangular(self):
+        pairs = drawing._assign([[1, 9, 9], [9, 9, 1]])
+        self.assertEqual(sorted(pairs), [(0, 0), (1, 2)])
+        pairs = drawing._assign([[1, 9], [9, 9], [9, 1]])
+        self.assertEqual(sorted(pairs), [(0, 0), (2, 1)])
+
+
+class FreeDrawingFlowTests(TestCase):
+    def setUp(self):
+        drawing._candidates = None
+        make_drawn_char("十", SHI, 1)
+        make_drawn_char("二", ER, 2)
+
+    def gql(self, query, **variables):
+        resp = self.client.post(
+            "/graphql",
+            json.dumps({"query": query, "variables": variables}),
+            content_type="application/json",
+        )
+        body = resp.json()
+        return body.get("data"), body.get("errors")
+
+    def test_score_drawing_query(self):
+        data, errors = self.gql(
+            """query($s: GenericScalar!) { scoreDrawing(hanzi: "十", strokes: $s) {
+                accuracy drawnStrokes expectedStrokes inOrder
+                matches { refIndex score } recognized { hanzi } } }""",
+            s=shifted(SHI),
+        )
+        self.assertIsNone(errors)
+        result = data["scoreDrawing"]
+        self.assertGreater(result["accuracy"], 99)
+        self.assertEqual(result["recognized"][0]["hanzi"], "十")
+
+    def test_free_drawing_must_reach_min_accuracy(self):
+        data, _ = self.gql(
+            """mutation($i: DeckInput!) { createDeck(input: $i) { deck { id } } }""",
+            i={
+                "name": "t",
+                "cardKind": "CHARACTER",
+                "failureSteps": [{"type": "DRAW_STROKES", "minAccuracy": 80}],
+            },
+        )
+        deck_id = data["createDeck"]["deck"]["id"]
+        data, _ = self.gql(
+            "query($d: ID!) { study(deckId: $d) { card { id hanzi } } }", d=deck_id
+        )
+        card = data["study"]["card"]
+        self.assertEqual(card["hanzi"], "十")
+        data, _ = self.gql(
+            """mutation($c: ID!) { answerCard(cardId: $c, rating: "AGAIN") {
+                study { remediation { id steps { config } } } } }""",
+            c=card["id"],
+        )
+        rem = data["answerCard"]["study"]["remediation"]
+        self.assertEqual(rem["steps"][0]["config"]["mode"], "FREE")
+
+        submit = """mutation($r: ID!, $s: GenericScalar!) {
+            submitFreeDrawing(remediationId: $r, hanzi: "十", strokes: $s) {
+                counted result { accuracy } study { remediation { id } } } }"""
+        data, errors = self.gql(submit, r=rem["id"], s=ER)
+        self.assertIsNone(errors)
+        self.assertFalse(data["submitFreeDrawing"]["counted"])
+        data, _ = self.gql(submit, r=rem["id"], s=shifted(SHI))
+        self.assertTrue(data["submitFreeDrawing"]["counted"])
+        self.assertIsNone(data["submitFreeDrawing"]["study"]["remediation"])

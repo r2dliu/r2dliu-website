@@ -66,7 +66,7 @@ function Counts() {
   if (!study) return null
   const { counts } = study
   return (
-    <div className="flex gap-4 font-['HelveticaNeueMedium'] text-lg">
+    <div className="flex gap-3 px-2 font-['HelveticaNeueMedium']">
       <span className="text-sky-400" title="New cards left today">
         {counts.new}
       </span>
@@ -80,19 +80,22 @@ function Counts() {
   )
 }
 
-// Same size whether active (outlined) or not, so toggling doesn't shift layout
-const toggleClass = (active: boolean) =>
-  cn('min-h-10', { '!border-2 !border-solid !border-transparent': !active })
+const TABS = [
+  ['meaning', 'Meaning'],
+  ['draw', 'Draw'],
+  ['related', 'Related'],
+] as const
+type Tab = (typeof TABS)[number][0]
 
-/** Optional extras after revealing a card; they don't affect scheduling. */
-function Practice({ card }: { card: Card }) {
-  const [open, setOpen] = useState<'draw' | 'related' | null>(null)
-  const toggle = (panel: 'draw' | 'related') =>
-    setOpen(open === panel ? null : panel)
+/**
+ * The revealed card's details. Meaning, drawing practice and related vocab
+ * share one space as tabs instead of stacking. None of them affect scheduling.
+ */
+function CardDetails({ card }: { card: Card }) {
+  const [tab, setTab] = useState<Tab>('meaning')
 
-  // Never let the panel area shrink for this card: if the page got shorter
-  // while scrolled down, the browser would snap the scroll position and the
-  // buttons would jump.
+  // The area never shrinks for this card, so switching to a shorter tab
+  // doesn't pull the rating buttons (or the scroll position) up.
   const panelRef = useRef<HTMLDivElement>(null)
   const [minHeight, setMinHeight] = useState(0)
   useEffect(() => {
@@ -107,25 +110,31 @@ function Practice({ card }: { card: Card }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap justify-center gap-3">
-        <Btn
-          variant={open === 'draw' ? 'outlined' : 'text'}
-          className={toggleClass(open === 'draw')}
-          onClick={() => toggle('draw')}
-        >
-          Practice drawing
-        </Btn>
-        <Btn
-          variant={open === 'related' ? 'outlined' : 'text'}
-          className={toggleClass(open === 'related')}
-          onClick={() => toggle('related')}
-        >
-          Related vocab
-        </Btn>
+      <div className="flex border-b border-zinc-800" role="tablist">
+        {TABS.map(([key, label]) => (
+          <button
+            key={key}
+            type="button"
+            role="tab"
+            aria-selected={tab === key}
+            onClick={() => setTab(key)}
+            className={cn(
+              "-mb-px flex-1 cursor-pointer border-0 border-b-2 border-solid bg-transparent py-2 font-['HelveticaNeueMedium'] text-sm uppercase tracking-wide",
+              {
+                'border-white text-white': tab === key,
+                'border-transparent text-zinc-500 hover:text-zinc-300':
+                  tab !== key,
+              },
+            )}
+          >
+            {label}
+          </button>
+        ))}
       </div>
       <div ref={panelRef} style={{ minHeight }}>
-        {open === 'draw' && <PracticeDrawing card={card} />}
-        {open === 'related' && <PracticeRelated card={card} />}
+        {tab === 'meaning' && <CardBack card={card} />}
+        {tab === 'draw' && <PracticeDrawing card={card} />}
+        {tab === 'related' && <PracticeRelated card={card} />}
       </div>
     </div>
   )
@@ -195,8 +204,7 @@ function StudyPanel() {
       <CardFront card={card} />
       {revealed ? (
         <>
-          <hr className="border-zinc-800" />
-          <CardBack card={card} />
+          <CardDetails key={card.id} card={card} />
           <div className="grid grid-cols-5 gap-3 pt-2 max-md:gap-2">
             {RATINGS.map(({ rating, label, className }, i) => (
               <Btn
@@ -214,11 +222,10 @@ function StudyPanel() {
               </Btn>
             ))}
           </div>
-          <Practice key={card.id} card={card} />
         </>
       ) : (
         <Btn variant="outlined" onClick={reveal} className="self-center">
-          Show answer (space)
+          Show answer
         </Btn>
       )}
     </div>
@@ -246,41 +253,13 @@ export function ChineseFlashcards() {
             ← r2dliu.com
           </Link>
           <div className="flex-1" />
+          {mode === 'study' && <Counts />}
           {deck && mode === 'study' && (
             <Btn variant="text" onClick={() => setMode('settings')}>
               Settings
             </Btn>
           )}
-          {decks.length > 0 && mode !== 'new' && (
-            <Btn variant="text" onClick={() => setMode('new')}>
-              New deck
-            </Btn>
-          )}
         </div>
-        <div className="flex flex-wrap items-end gap-4">
-          <div className="font-['HelveticaNeueBold'] text-4xl max-md:text-3xl">
-            中文 Flashcards
-          </div>
-          <div className="flex-1" />
-          {decks.length > 0 && (
-            <Select
-              label="Deck"
-              value={deckId ?? ''}
-              onChange={(e) => {
-                setMode('study')
-                selectDeck(e.target.value)
-              }}
-              className="w-56"
-            >
-              {decks.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.name}
-                </option>
-              ))}
-            </Select>
-          )}
-        </div>
-
         {error && (
           <div className="border border-red-500 px-4 py-2 text-red-300">
             {error}
@@ -295,18 +274,45 @@ export function ChineseFlashcards() {
               on — configure it in the deck settings.
             </div>
             <NewDeckForm onDone={() => setMode('study')} />
+            {decks.length > 0 && (
+              <Btn
+                variant="text"
+                className="self-start"
+                onClick={() => setMode('study')}
+              >
+                Cancel
+              </Btn>
+            )}
           </div>
         ) : mode === 'settings' && deck ? (
-          <DeckSettings
-            key={deck.id}
-            deck={deck}
-            onClose={() => setMode('study')}
-          />
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-wrap items-end gap-3">
+              {decks.length > 1 && (
+                <Select
+                  label="Deck"
+                  value={deckId ?? ''}
+                  onChange={(e) => selectDeck(e.target.value)}
+                  className="w-64 max-md:w-full"
+                >
+                  {decks.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name}
+                    </option>
+                  ))}
+                </Select>
+              )}
+              <Btn variant="outlined" onClick={() => setMode('new')}>
+                New deck
+              </Btn>
+            </div>
+            <DeckSettings
+              key={deck.id}
+              deck={deck}
+              onClose={() => setMode('study')}
+            />
+          </div>
         ) : (
-          <>
-            <Counts />
-            <StudyPanel />
-          </>
+          <StudyPanel />
         )}
       </div>
     </div>

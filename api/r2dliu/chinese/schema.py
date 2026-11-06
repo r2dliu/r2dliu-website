@@ -4,7 +4,7 @@ from graphene.types.generic import GenericScalar
 from django.core.exceptions import ValidationError
 from graphql import GraphQLError
 
-from r2dliu.chinese import remediation, scheduler, study
+from r2dliu.chinese import drawing, remediation, scheduler, study
 from r2dliu.chinese.models import Card, Character, Deck, Review, Word
 
 
@@ -243,6 +243,49 @@ class StudyStateType(graphene.ObjectType):
     next_due_at = graphene.DateTime()
 
 
+class StrokeMatchType(graphene.ObjectType):
+    drawn_index = graphene.Int(required=True)
+    ref_index = graphene.Int(required=True)
+    score = graphene.Float(required=True, description="0..1")
+    correct_direction = graphene.Boolean(required=True)
+
+
+class RecognitionType(graphene.ObjectType):
+    hanzi = graphene.String(required=True)
+    accuracy = graphene.Float(required=True)
+
+
+class DrawingResultType(graphene.ObjectType):
+    accuracy = graphene.Float(required=True, description="0..100")
+    shape = graphene.Float(required=True)
+    drawn_strokes = graphene.Int(required=True)
+    expected_strokes = graphene.Int(required=True)
+    in_order = graphene.Int(required=True)
+    correct_direction = graphene.Int(required=True)
+    matches = graphene.List(graphene.NonNull(StrokeMatchType), required=True)
+    recognized = graphene.List(
+        graphene.NonNull(RecognitionType),
+        required=True,
+        description="Characters the drawing most resembles, best first",
+    )
+
+    @staticmethod
+    def build(score, strokes):
+        return DrawingResultType(
+            accuracy=score.accuracy,
+            shape=score.shape,
+            drawn_strokes=score.drawn_strokes,
+            expected_strokes=score.expected_strokes,
+            in_order=score.in_order,
+            correct_direction=score.correct_direction,
+            matches=[StrokeMatchType(**vars(m)) for m in score.matches],
+            recognized=[
+                RecognitionType(hanzi=h, accuracy=a)
+                for h, a in drawing.recognise(strokes)
+            ],
+        )
+
+
 class FailureStepTypeInfo(graphene.ObjectType):
     type = graphene.String(required=True)
     defaults = GenericScalar(required=True)
@@ -266,6 +309,14 @@ class Query(graphene.ObjectType):
         limit=graphene.Int(default_value=12),
         description="Vocab sharing characters with a card, most common first",
     )
+    score_drawing = graphene.Field(
+        DrawingResultType,
+        hanzi=graphene.String(required=True),
+        strokes=GenericScalar(
+            required=True, description="[[[x, y], ...], ...] in the 1024 box"
+        ),
+        description="Score a freely drawn character and recognise it",
+    )
     failure_step_types = graphene.List(
         graphene.NonNull(FailureStepTypeInfo), required=True
     )
@@ -284,6 +335,16 @@ class Query(graphene.ObjectType):
 
     def resolve_study(root, info, deck_id):
         return study.get_state(get_deck(info, deck_id))
+
+    def resolve_score_drawing(root, info, hanzi, strokes):
+        char = Character.objects.filter(hanzi=hanzi, stroke_count__gt=0).first()
+        if not char:
+            raise GraphQLError(f"No stroke data for {hanzi}")
+        try:
+            strokes = drawing.clean_input(strokes)
+        except (TypeError, ValueError, IndexError) as e:
+            raise GraphQLError(f"Invalid drawing: {e}")
+        return DrawingResultType.build(drawing.score_drawing(char, strokes), strokes)
 
     def resolve_related_items(root, info, card_id, limit):
         card = get_card(info, card_id)
@@ -467,6 +528,31 @@ class CompleteStrokeQuiz(graphene.Mutation):
         )
 
 
+class SubmitFreeDrawing(graphene.Mutation):
+    class Arguments:
+        remediation_id = graphene.ID(required=True)
+        hanzi = graphene.String(required=True)
+        strokes = GenericScalar(required=True)
+
+    remediation = graphene.Field(RemediationType, required=True)
+    result = graphene.Field(DrawingResultType, required=True)
+    counted = graphene.Boolean(
+        required=True, description="False when accuracy is below the step's minimum"
+    )
+    study = graphene.Field(StudyStateType, required=True)
+
+    def mutate(root, info, remediation_id, hanzi, strokes):
+        rem, score, counted = _remediation_call(
+            remediation.submit_free_drawing, remediation_id, hanzi, strokes
+        )
+        return SubmitFreeDrawing(
+            remediation=rem,
+            result=DrawingResultType.build(score, drawing.clean_input(strokes)),
+            counted=counted,
+            study=study.get_state(rem.card.deck),
+        )
+
+
 class OpenRelatedItem(graphene.Mutation):
     class Arguments:
         remediation_id = graphene.ID(required=True)
@@ -510,5 +596,6 @@ class Mutation(graphene.ObjectType):
     study_more = StudyMore.Field()
     add_to_deck = AddToDeck.Field()
     complete_stroke_quiz = CompleteStrokeQuiz.Field()
+    submit_free_drawing = SubmitFreeDrawing.Field()
     open_related_item = OpenRelatedItem.Field()
     submit_pinyin = SubmitPinyin.Field()

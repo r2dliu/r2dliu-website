@@ -7,7 +7,7 @@ import type { StrokeData } from '../../helpers/chinese/api'
 const strokeCache = new Map<string, Promise<StrokeData | null>>()
 
 /** Stroke data comes from our own strokes table, not the Hanzi Writer CDN. */
-function loadStrokes(hanzi: string) {
+export function loadStrokes(hanzi: string) {
   if (!strokeCache.has(hanzi)) {
     strokeCache.set(hanzi, api.strokeData(hanzi))
   }

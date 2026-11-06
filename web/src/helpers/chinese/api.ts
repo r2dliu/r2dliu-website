@@ -128,6 +128,25 @@ export interface Remediation {
   steps: Array<RemediationStep>
 }
 
+/** A drawn stroke: points in Make Me a Hanzi's 1024 box (y up) */
+export type DrawnStroke = Array<[number, number]>
+
+export interface DrawingResult {
+  accuracy: number
+  shape: number
+  drawnStrokes: number
+  expectedStrokes: number
+  inOrder: number
+  correctDirection: number
+  matches: Array<{
+    drawnIndex: number
+    refIndex: number
+    score: number
+    correctDirection: boolean
+  }>
+  recognized: Array<{ hanzi: string; accuracy: number }>
+}
+
 export interface Deck {
   id: string
   name: string
@@ -185,6 +204,12 @@ const STUDY_FIELDS = `
       relatedItems { key kind hanzi pinyin definition frequencyRank hskLevel }
     }
   }
+`
+
+const DRAWING_FIELDS = `
+  accuracy shape drawnStrokes expectedStrokes inOrder correctDirection
+  matches { drawnIndex refIndex score correctDirection }
+  recognized { hanzi accuracy }
 `
 
 export const api = {
@@ -277,6 +302,32 @@ export const api = {
       `query($cardId: ID!) { relatedItems(cardId: $cardId) { key kind hanzi pinyin definition frequencyRank hskLevel } }`,
       { cardId },
     ).then((d) => d.relatedItems),
+
+  scoreDrawing: (hanzi: string, strokes: Array<DrawnStroke>) =>
+    gql<{ scoreDrawing: DrawingResult }>(
+      `query($hanzi: String!, $strokes: GenericScalar!) { scoreDrawing(hanzi: $hanzi, strokes: $strokes) { ${DRAWING_FIELDS} } }`,
+      { hanzi, strokes },
+    ).then((d) => d.scoreDrawing),
+
+  submitFreeDrawing: (
+    remediationId: string,
+    hanzi: string,
+    strokes: Array<DrawnStroke>,
+  ) =>
+    gql<{
+      submitFreeDrawing: {
+        counted: boolean
+        result: DrawingResult
+        study: StudyState
+      }
+    }>(
+      `mutation($remediationId: ID!, $hanzi: String!, $strokes: GenericScalar!) {
+        submitFreeDrawing(remediationId: $remediationId, hanzi: $hanzi, strokes: $strokes) {
+          counted result { ${DRAWING_FIELDS} } study { ${STUDY_FIELDS} }
+        }
+      }`,
+      { remediationId, hanzi, strokes },
+    ).then((d) => d.submitFreeDrawing),
 
   addToDeck: (deckId: string, hanzi: string) =>
     gql(
