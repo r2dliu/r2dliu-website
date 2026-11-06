@@ -17,14 +17,30 @@ export async function gql<T>(
   query: string,
   variables: Record<string, unknown> = {},
 ): Promise<T> {
-  const resp = await fetch(`${apiUrl()}/graphql`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ query, variables }),
-  })
-  const body = await resp.json()
+  let resp: Response
+  try {
+    resp = await fetch(`${apiUrl()}/graphql`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query, variables }),
+    })
+  } catch {
+    throw new Error(
+      "Couldn't reach the flashcards server. Check your connection and try again.",
+    )
+  }
+  // GraphQL errors still come back as JSON; anything else (an HTML error page
+  // from a proxy or a crash) would make resp.json() throw a cryptic error
+  let body: { data?: T; errors?: Array<{ message: string }> }
+  try {
+    body = await resp.json()
+  } catch {
+    throw new Error(
+      `The flashcards server returned an unexpected response (HTTP ${resp.status}). Try again in a moment.`,
+    )
+  }
   if (body.errors?.length) {
     throw new Error(body.errors[0].message)
   }
