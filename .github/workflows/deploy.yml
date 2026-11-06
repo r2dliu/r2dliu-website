@@ -6,6 +6,8 @@ on:
       - main
       - dev
   pull_request:
+  # Run from the Actions tab to redeploy everything
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -68,8 +70,8 @@ jobs:
 
   deploy:
     needs: [lint, typecheck]
-    # Pull requests only lint and typecheck; deploys come from branch pushes
-    if: github.event_name == 'push'
+    # Pull requests only run checks; deploys come from pushes or manual runs
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -110,3 +112,123 @@ jobs:
         run: |
           chmod +x deploy.sh
           ./deploy.sh us-central1
+
+  api-test:
+    name: 🐍 API tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      CORS_ALLOWED_ORIGINS: http://localhost:3000
+      ALLOWED_HOSTS: localhost
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: api/requirements.txt
+
+      - name: 📥 Install deps
+        run: pip install -r requirements.txt
+
+      - name: 🧪 Test
+        run: python manage.py test
+
+  deploy-api:
+    name: 🐍 Deploy API
+    needs: [api-test]
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: api
+
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Skip when a push doesn't touch the API; manual runs always deploy
+      - name: 🔎 Check for API changes
+        id: changes
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [ -n "$BEFORE" ] && git cat-file -e "$BEFORE^{commit}" 2>/dev/null \
+            && git diff --quiet "$BEFORE" HEAD -- .; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No API changes; skipping deploy"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 🔐 Google Auth
+        if: steps.changes.outputs.changed == 'true'
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
+          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}'
+
+      - name: ☁️ Set up Cloud SDK
+        if: steps.changes.outputs.changed == 'true'
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: '${{ secrets.GCP_PROJECT_ID }}'
+
+      - name: 🐍 Setup python
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: api/requirements.txt
+
+      - name: 📥 Install deps
+        if: steps.changes.outputs.changed == 'true'
+        run: pip install -r requirements.txt
+
+      # Uses the production settings (the django-settings secret) to reach the database
+      - name: 🗃️ Migrate database
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          gcloud secrets versions access latest --secret=django-settings > .env
+          python manage.py migrate --noinput
+          rm .env
+
+      - name: 🚀 Deploy to App Engine
+        if: steps.changes.outputs.changed == 'true'
+        run: gcloud app deploy app.yaml --quiet --promote
+
+      # App Engine caps the number of versions; keep the newest few
+      - name: 🧹 Delete old versions
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          gcloud app versions list --service=default --filter="traffic_split=0" \
+            --sort-by=~last_deployed_time --format="value(id)" \
+            | tail -n +4 | xargs -r gcloud app versions delete --service=default --quiet
