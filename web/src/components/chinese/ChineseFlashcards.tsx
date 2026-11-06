@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import cn from 'classnames'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useStudyStore } from '../../stores/chinese/studyStore'
 import { CardBack, CardFront } from './CardFace'
@@ -80,30 +80,53 @@ function Counts() {
   )
 }
 
+// Same size whether active (outlined) or not, so toggling doesn't shift layout
+const toggleClass = (active: boolean) =>
+  cn('min-h-10', { '!border-2 !border-solid !border-transparent': !active })
+
 /** Optional extras after revealing a card; they don't affect scheduling. */
 function Practice({ card }: { card: Card }) {
   const [open, setOpen] = useState<'draw' | 'related' | null>(null)
   const toggle = (panel: 'draw' | 'related') =>
     setOpen(open === panel ? null : panel)
 
+  // Never let the panel area shrink for this card: if the page got shorter
+  // while scrolled down, the browser would snap the scroll position and the
+  // buttons would jump.
+  const panelRef = useRef<HTMLDivElement>(null)
+  const [minHeight, setMinHeight] = useState(0)
+  useEffect(() => {
+    const el = panelRef.current
+    if (!el) return
+    const observer = new ResizeObserver(() =>
+      setMinHeight((h) => Math.max(h, el.offsetHeight)),
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap justify-center gap-3">
         <Btn
           variant={open === 'draw' ? 'outlined' : 'text'}
+          className={toggleClass(open === 'draw')}
           onClick={() => toggle('draw')}
         >
           Practice drawing
         </Btn>
         <Btn
           variant={open === 'related' ? 'outlined' : 'text'}
+          className={toggleClass(open === 'related')}
           onClick={() => toggle('related')}
         >
           Related vocab
         </Btn>
       </div>
-      {open === 'draw' && <PracticeDrawing card={card} />}
-      {open === 'related' && <PracticeRelated card={card} />}
+      <div ref={panelRef} style={{ minHeight }}>
+        {open === 'draw' && <PracticeDrawing card={card} />}
+        {open === 'related' && <PracticeRelated card={card} />}
+      </div>
     </div>
   )
 }
