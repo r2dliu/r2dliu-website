@@ -6,11 +6,12 @@ declare global {
   }
 }
 
-function apiUrl() {
-  return (window.API_URL || import.meta.env.VITE_API_URL || '').replace(
-    /\/$/,
-    '',
-  )
+/** The GraphQL endpoint. API_URL may be the API root or already end in /graphql. */
+function graphqlUrl() {
+  const base = (window.API_URL || import.meta.env.VITE_API_URL || '')
+    .replace(/\/+$/, '')
+    .replace(/\/graphql$/, '')
+  return `${base}/graphql`
 }
 
 export async function gql<T>(
@@ -19,7 +20,7 @@ export async function gql<T>(
 ): Promise<T> {
   let resp: Response
   try {
-    resp = await fetch(`${apiUrl()}/graphql`, {
+    resp = await fetch(graphqlUrl(), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
