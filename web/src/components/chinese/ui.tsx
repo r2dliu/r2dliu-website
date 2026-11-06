@@ -22,7 +22,7 @@ export function Btn({
       className={cn(
         "cursor-pointer px-4 py-1.5 font-['HelveticaNeueMedium'] text-sm uppercase tracking-wide text-white transition-colors disabled:cursor-default disabled:opacity-40",
         {
-          'border-2 border-white bg-black enabled:hover:bg-white enabled:hover:text-black':
+          'min-h-10 border-2 border-white bg-black enabled:hover:bg-white enabled:hover:text-black':
             variant === 'outlined',
           'border-0 bg-transparent enabled:hover:underline': variant === 'text',
         },
@@ -52,7 +52,7 @@ function Field({
 }
 
 const controlClass =
-  'border border-zinc-600 bg-black px-3 py-2 text-base text-white outline-none focus:border-white'
+  'h-10 border border-zinc-600 bg-black px-3 text-base text-white outline-none focus:border-white'
 
 export function Input({
   label,

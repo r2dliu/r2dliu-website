@@ -17,7 +17,9 @@ ENV NODE_ENV=production
 ENV NODE_OPTIONS=--max-old-space-size=4096
 # Clean any existing build artifacts to prevent hash mismatches
 RUN rm -rf .output .nitro
-RUN npm run build
+# VITE_* values are baked into the bundle at build time; deploy.sh writes
+# them to build.env because `gcloud run deploy --source` can't pass build args
+RUN set -a; [ ! -f build.env ] || . ./build.env; set +a; npm run build
 
 # Production stage
 FROM node:24-alpine

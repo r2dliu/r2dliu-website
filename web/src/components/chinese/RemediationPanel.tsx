@@ -268,7 +268,7 @@ function TypePinyinStep({ card, remediation, step }: StepProps) {
       <div className="line-clamp-2 font-['HelveticaNeueLight'] text-zinc-300">
         {definition}
       </div>
-      <div className="flex gap-3">
+      <div className="flex items-end gap-3">
         <Input
           autoFocus
           label="Pinyin with tones (ni3hao3 or nǐhǎo)"

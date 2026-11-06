@@ -1,0 +1,8 @@
+# Files not uploaded by `gcloud run deploy --source`. Without this file gcloud
+# falls back to .gitignore, which would also drop build.env.
+.git
+.gitignore
+node_modules/
+.output/
+.nitro/
+.env

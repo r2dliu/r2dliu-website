@@ -23,7 +23,7 @@ function NewDeckForm({ onDone }: { onDone?: () => void }) {
 
   return (
     <form
-      className="flex flex-wrap items-center gap-3"
+      className="flex flex-wrap items-end gap-3"
       onSubmit={async (e) => {
         e.preventDefault()
         await createDeck({ name, cardKind })
@@ -34,6 +34,7 @@ function NewDeckForm({ onDone }: { onDone?: () => void }) {
         label="Deck name"
         value={name}
         onChange={(e) => setName(e.target.value)}
+        className="max-md:w-full"
       />
       <Select
         label="Cards"
@@ -45,12 +46,12 @@ function NewDeckForm({ onDone }: { onDone?: () => void }) {
             kind === 'WORD' ? 'Most common words' : 'Most common characters',
           )
         }}
-        className="w-48"
+        className="w-48 max-md:w-full"
       >
         <option value="CHARACTER">Characters (字)</option>
         <option value="WORD">Vocab words (词)</option>
       </Select>
-      <Btn type="submit" variant="outlined">
+      <Btn type="submit" variant="outlined" className="max-md:w-full">
         Create deck
       </Btn>
     </form>

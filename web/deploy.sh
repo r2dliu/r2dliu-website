@@ -44,6 +44,10 @@ echo ""
 # Set the project
 gcloud config set project "$PROJECT_ID"
 
+# Build-time values for the client bundle (read by the Dockerfile)
+printf 'VITE_API_URL=%s\nVITE_GA_TRACKING_ID=%s\n' "$API_URL" "$GA_TRACKING_ID" > build.env
+trap 'rm -f build.env' EXIT
+
 # Build and deploy in one command (Cloud Run will build from source)
 gcloud run deploy "$SERVICE_NAME" \
   --source . \
