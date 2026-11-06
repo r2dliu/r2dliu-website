@@ -235,6 +235,11 @@ jobs:
           python manage.py migrate --noinput
           rm .env
 
+      # App Engine serves /static from api/static (Django admin CSS/JS)
+      - name: 🎨 Collect static files
+        if: steps.changes.outputs.changed == 'true'
+        run: python manage.py collectstatic --noinput
+
       - name: 🚀 Deploy to App Engine
         if: steps.changes.outputs.changed == 'true'
         run: gcloud app deploy app.yaml --quiet --promote
