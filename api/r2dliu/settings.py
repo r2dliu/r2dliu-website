@@ -114,6 +114,8 @@ DATABASES = {
         "PASSWORD": os.environ.get("DB_PASSWORD"),
         "HOST": os.environ.get("DB_HOST"),
         "PORT": os.environ.get("DB_PORT"),
+        # Hosted Postgres (Aiven) requires SSL; "prefer" keeps local dev working
+        "OPTIONS": {"sslmode": os.environ.get("DB_SSLMODE", "prefer")},
     }
 }
 
