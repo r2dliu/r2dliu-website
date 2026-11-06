@@ -70,8 +70,8 @@ jobs:
 
   deploy:
     needs: [lint, typecheck]
-    # Pull requests only run checks; deploys come from pushes or manual runs
-    if: github.event_name != 'pull_request'
+    # Only main deploys; pull requests and other branches just run checks
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -159,7 +159,7 @@ jobs:
   deploy-api:
     name: 🐍 Deploy API
     needs: [api-test]
-    if: github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
