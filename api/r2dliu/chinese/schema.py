@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from graphql import GraphQLError
 
 from r2dliu.chinese import remediation, scheduler, study
-from r2dliu.chinese.models import Card, Character, Deck, Word
+from r2dliu.chinese.models import Card, Character, Deck, Review, Word
 
 
 def get_deck(info, deck_id) -> Deck:
@@ -147,7 +147,11 @@ class CardType(graphene.ObjectType):
     def resolve_interval_preview(card: Card, info):
         preview = scheduler.preview(card, card.deck, timezone.now())
         return [
-            IntervalPreviewType(rating=r, seconds=d.total_seconds(), label=_humanize(d))
+            IntervalPreviewType(
+                rating=r,
+                seconds=d.total_seconds(),
+                label="never" if r == Review.Rating.KNOWN else _humanize(d),
+            )
             for r, d in preview.items()
         ]
 

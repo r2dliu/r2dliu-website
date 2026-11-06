@@ -124,6 +124,8 @@ class Card(AbstractBaseModel):
         LEARNING = "LEARNING"
         REVIEW = "REVIEW"
         RELEARNING = "RELEARNING"
+        # Marked as already known; never shown again
+        KNOWN = "KNOWN"
 
     deck = models.ForeignKey(Deck, on_delete=models.CASCADE, related_name="cards")
     character = models.ForeignKey(
@@ -175,6 +177,7 @@ class Review(AbstractBaseModel):
         HARD = "HARD"
         GOOD = "GOOD"
         EASY = "EASY"
+        KNOWN = "KNOWN"
 
     card = models.ForeignKey(Card, on_delete=models.CASCADE, related_name="reviews")
     rating = models.CharField(max_length=8, choices=Rating.choices)

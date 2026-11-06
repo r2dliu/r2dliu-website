@@ -15,6 +15,8 @@ const RATINGS: Array<{ rating: Rating; label: string; className: string }> = [
   { rating: 'HARD', label: 'Hard', className: '!border-orange-400' },
   { rating: 'GOOD', label: 'Good', className: '!border-green-500' },
   { rating: 'EASY', label: 'Easy', className: '!border-sky-400' },
+  // Never shown again
+  { rating: 'KNOWN', label: 'Known', className: '!border-zinc-400' },
 ]
 
 function NewDeckForm({ onDone }: { onDone?: () => void }) {
@@ -118,7 +120,7 @@ function StudyPanel() {
       if (!revealed && (e.key === ' ' || e.key === 'Enter')) {
         e.preventDefault()
         reveal()
-      } else if (revealed && ['1', '2', '3', '4'].includes(e.key)) {
+      } else if (revealed && ['1', '2', '3', '4', '5'].includes(e.key)) {
         answer(RATINGS[Number(e.key) - 1].rating)
       }
     }
@@ -172,7 +174,7 @@ function StudyPanel() {
         <>
           <hr className="border-zinc-800" />
           <CardBack card={card} />
-          <div className="grid grid-cols-4 gap-3 pt-2 max-md:gap-2">
+          <div className="grid grid-cols-5 gap-3 pt-2 max-md:gap-2">
             {RATINGS.map(({ rating, label, className }, i) => (
               <Btn
                 key={rating}

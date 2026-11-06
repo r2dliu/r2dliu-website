@@ -138,7 +138,11 @@ def get_state(deck: Deck, now: datetime | None = None) -> StudyState:
     )
     next_due = None
     if not card:
-        upcoming = deck.cards.exclude(state=State.NEW).order_by("due").first()
+        upcoming = (
+            deck.cards.exclude(state__in=[State.NEW, State.KNOWN])
+            .order_by("due")
+            .first()
+        )
         next_due = upcoming.due if upcoming else None
     return StudyState(deck, card, None, counts, next_due)
 

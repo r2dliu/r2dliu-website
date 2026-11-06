@@ -74,6 +74,11 @@ class SchedulerTests(TestCase):
         s = scheduler.schedule(s, GOOD, self.deck, self.now)
         self.assertEqual((s.state, s.interval_days), ("REVIEW", 5))
 
+    def test_known_retires_card(self):
+        for state in ("NEW", "LEARNING", "REVIEW", "RELEARNING"):
+            s = scheduler.schedule(self.s(state, 10), "KNOWN", self.deck, self.now)
+            self.assertEqual(s.state, "KNOWN")
+
     def test_review_intervals_grow(self):
         good = scheduler.schedule(self.s("REVIEW", 10), GOOD, self.deck, self.now)
         hard = scheduler.schedule(self.s("REVIEW", 10), HARD, self.deck, self.now)
@@ -286,6 +291,22 @@ class StudyFlowTests(TestCase):
         )
         self.assertIsNone(errors)
         self.assertEqual(self.study(deck_id)["card"]["hanzi"], "们")
+
+    def test_known_card_never_comes_back(self):
+        deck_id = self.create_deck("CHARACTER", [])
+        card = self.study(deck_id)["card"]
+        self.assertEqual(card["hanzi"], "好")
+        labels = {p["rating"]: p["label"] for p in card["intervalPreview"]}
+        self.assertEqual(labels["KNOWN"], "never")
+        data, errors = self.answer(card["id"], "KNOWN")
+        self.assertIsNone(errors)
+        self.assertIsNone(data["answerCard"]["study"]["remediation"])
+        self.assertEqual(data["answerCard"]["study"]["card"]["hanzi"], "你")
+        self.assertEqual(Card.objects.get(pk=card["id"]).state, "KNOWN")
+        # Nothing about it is due later either
+        Deck.objects.filter(pk=deck_id).update(new_cards_per_day=1)
+        state = self.study(deck_id)
+        self.assertIsNone(state["card"])
 
     def test_keep_going_allows_more_new_cards(self):
         deck_id = self.create_deck("CHARACTER", [])
