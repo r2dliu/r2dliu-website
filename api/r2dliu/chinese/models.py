@@ -105,6 +105,9 @@ class Deck(AbstractBaseModel):
     easy_interval_days = models.FloatField(default=4)
     # How long a failed review card waits before it is shown again
     relearn_delay_minutes = models.PositiveIntegerField(default=60)
+    # "Keep going": extra new cards allowed on extra_new_date beyond the limit
+    extra_new_cards = models.PositiveIntegerField(default=0)
+    extra_new_date = models.DateField(null=True, blank=True)
     # Ordered list of tasks required after pressing "Again", e.g.
     # [{"type": "DRAW_STROKES", "repetitions": 1, ...},
     #  {"type": "EXPLORE_RELATED", "minOpened": 3, ...}]
