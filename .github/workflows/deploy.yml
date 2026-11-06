@@ -73,6 +73,8 @@ jobs:
     # Only main deploys; pull requests and other branches just run checks
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    env:
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
     permissions:
       contents: read
       id-token: write
@@ -112,6 +114,24 @@ jobs:
         run: |
           chmod +x deploy.sh
           ./deploy.sh us-central1
+
+      # CloudFront caches pages; clear it so visitors don't get old HTML that
+      # points at the previous build's (now deleted) asset files.
+      # Skipped until the AWS secrets are set.
+      - name: 🔐 AWS Auth
+        if: env.AWS_ROLE_ARN != ''
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: 🧹 Invalidate CloudFront
+        if: env.AWS_ROLE_ARN != ''
+        env:
+          DISTRIBUTION_ID: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          aws cloudfront create-invalidation --distribution-id "$DISTRIBUTION_ID" \
+            --paths "/*" --query "Invalidation.Id" --output text
 
   api-test:
     name: 🐍 API tests
