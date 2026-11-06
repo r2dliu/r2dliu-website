@@ -24,6 +24,8 @@ interface ChineseStudyState {
   deleteDeck: () => Promise<void>
   refresh: () => Promise<void>
   reveal: () => void
+  /** Allow 10 more new cards today */
+  studyMore: () => Promise<void>
   answer: (rating: Rating) => Promise<void>
   /** Apply a study state returned by a remediation mutation */
   setStudy: (study: StudyState) => void
@@ -111,6 +113,13 @@ export const useStudyStore = create<ChineseStudyState>()(
     },
 
     reveal: () => set({ revealed: true }),
+
+    studyMore: async () => {
+      const { deckId } = get()
+      if (!deckId) return
+      const study = await get().run(() => api.studyMore(deckId))
+      if (study) get().setStudy(study)
+    },
 
     answer: async (rating) => {
       const card = get().study?.card

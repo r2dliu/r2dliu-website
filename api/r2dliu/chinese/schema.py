@@ -255,6 +255,13 @@ class Query(graphene.ObjectType):
     decks = graphene.List(graphene.NonNull(DeckType), required=True)
     deck = graphene.Field(DeckType, id=graphene.ID(required=True))
     study = graphene.Field(StudyStateType, deck_id=graphene.ID(required=True))
+    related_items = graphene.List(
+        graphene.NonNull(RelatedItemType),
+        required=True,
+        card_id=graphene.ID(required=True),
+        limit=graphene.Int(default_value=12),
+        description="Vocab sharing characters with a card, most common first",
+    )
     failure_step_types = graphene.List(
         graphene.NonNull(FailureStepTypeInfo), required=True
     )
@@ -273,6 +280,11 @@ class Query(graphene.ObjectType):
 
     def resolve_study(root, info, deck_id):
         return study.get_state(get_deck(info, deck_id))
+
+    def resolve_related_items(root, info, card_id, limit):
+        card = get_card(info, card_id)
+        items = remediation.related_items(card, max(1, min(limit, 50)))
+        return [RelatedItemType.build(item) for item in items]
 
     def resolve_failure_step_types(root, info):
         return [
@@ -382,6 +394,21 @@ class AnswerCard(graphene.Mutation):
         return AnswerCard(study=study.get_state(card.deck))
 
 
+class StudyMore(graphene.Mutation):
+    """Allow more new cards today beyond the deck's daily limit."""
+
+    class Arguments:
+        deck_id = graphene.ID(required=True)
+        count = graphene.Int(default_value=10)
+
+    study = graphene.Field(StudyStateType, required=True)
+
+    def mutate(root, info, deck_id, count):
+        deck = get_deck(info, deck_id)
+        study.study_more(deck, max(1, min(count, 100)))
+        return StudyMore(study=study.get_state(deck))
+
+
 class AddToDeck(graphene.Mutation):
     """Add a character/word (e.g. from a related list) as a new card."""
 
@@ -476,6 +503,7 @@ class Mutation(graphene.ObjectType):
     update_deck = UpdateDeck.Field()
     delete_deck = DeleteDeck.Field()
     answer_card = AnswerCard.Field()
+    study_more = StudyMore.Field()
     add_to_deck = AddToDeck.Field()
     complete_stroke_quiz = CompleteStrokeQuiz.Field()
     open_related_item = OpenRelatedItem.Field()

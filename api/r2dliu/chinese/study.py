@@ -49,6 +49,25 @@ def _start_of_day(now: datetime) -> datetime:
     return local.replace(hour=0, minute=0, second=0, microsecond=0)
 
 
+def _today(now: datetime):
+    return now.astimezone(DAY_TIMEZONE).date()
+
+
+def new_limit_today(deck: Deck, now: datetime) -> int:
+    extra = deck.extra_new_cards if deck.extra_new_date == _today(now) else 0
+    return deck.new_cards_per_day + extra
+
+
+def study_more(deck: Deck, count: int, now: datetime | None = None) -> None:
+    """Allow `count` more new cards today, on top of what's left."""
+    now = now or timezone.now()
+    used = new_introduced_today(deck, now)
+    target = max(new_limit_today(deck, now), used) + count
+    deck.extra_new_cards = target - deck.new_cards_per_day
+    deck.extra_new_date = _today(now)
+    deck.save(update_fields=["extra_new_cards", "extra_new_date"])
+
+
 def new_introduced_today(deck: Deck, now: datetime) -> int:
     return Review.objects.filter(
         card__deck=deck,
@@ -99,7 +118,7 @@ def get_state(deck: Deck, now: datetime | None = None) -> StudyState:
     learning_states = [State.LEARNING, State.RELEARNING]
     due_learning = _cards(deck).filter(state__in=learning_states, due__lte=now)
     due_review = _cards(deck).filter(state=State.REVIEW, due__lte=now)
-    new_left = max(0, deck.new_cards_per_day - new_introduced_today(deck, now))
+    new_left = max(0, new_limit_today(deck, now) - new_introduced_today(deck, now))
     counts = QueueCounts(
         new=new_left, learning=due_learning.count(), review=due_review.count()
     )

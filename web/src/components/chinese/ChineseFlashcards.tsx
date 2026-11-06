@@ -5,9 +5,10 @@ import { useEffect, useState } from 'react'
 import { useStudyStore } from '../../stores/chinese/studyStore'
 import { CardBack, CardFront } from './CardFace'
 import { DeckSettings } from './DeckSettings'
+import { PracticeDrawing, PracticeRelated } from './PracticePanel'
 import { RemediationPanel } from './RemediationPanel'
 import { Btn, Input, Select } from './ui'
-import type { CardKind, Rating } from '../../helpers/chinese/api'
+import type { Card, CardKind, Rating } from '../../helpers/chinese/api'
 
 const RATINGS: Array<{ rating: Rating; label: string; className: string }> = [
   { rating: 'AGAIN', label: 'Again', className: '!border-red-500' },
@@ -77,8 +78,37 @@ function Counts() {
   )
 }
 
+/** Optional extras after revealing a card; they don't affect scheduling. */
+function Practice({ card }: { card: Card }) {
+  const [open, setOpen] = useState<'draw' | 'related' | null>(null)
+  const toggle = (panel: 'draw' | 'related') =>
+    setOpen(open === panel ? null : panel)
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap justify-center gap-3">
+        <Btn
+          variant={open === 'draw' ? 'outlined' : 'text'}
+          onClick={() => toggle('draw')}
+        >
+          Practice drawing
+        </Btn>
+        <Btn
+          variant={open === 'related' ? 'outlined' : 'text'}
+          onClick={() => toggle('related')}
+        >
+          Related vocab
+        </Btn>
+      </div>
+      {open === 'draw' && <PracticeDrawing card={card} />}
+      {open === 'related' && <PracticeRelated card={card} />}
+    </div>
+  )
+}
+
 function StudyPanel() {
-  const { study, revealed, reveal, answer, busy, refresh } = useStudyStore()
+  const { study, revealed, reveal, answer, busy, refresh, studyMore } =
+    useStudyStore()
 
   // Space reveals, 1-4 answer — like Anki
   useEffect(() => {
@@ -115,9 +145,14 @@ function StudyPanel() {
             : 'No cards are scheduled.'}
           {study.counts.new === 0 && ' New card limit reached for today.'}
         </div>
-        <Btn variant="outlined" onClick={refresh}>
-          Check again
-        </Btn>
+        <div className="flex flex-wrap gap-3">
+          <Btn variant="outlined" onClick={studyMore} disabled={busy}>
+            Keep going (+10 new cards)
+          </Btn>
+          <Btn variant="text" onClick={refresh}>
+            Check again
+          </Btn>
+        </div>
       </div>
     )
   }
@@ -154,6 +189,7 @@ function StudyPanel() {
               </Btn>
             ))}
           </div>
+          <Practice key={card.id} card={card} />
         </>
       ) : (
         <Btn variant="outlined" onClick={reveal} className="self-center">
@@ -177,13 +213,26 @@ export function ChineseFlashcards() {
   return (
     <div className="h-full w-full overflow-y-auto overflow-x-hidden">
       <div className="mx-auto flex max-w-4xl flex-col gap-6 p-4 md:p-10">
-        <Link
-          to="/"
-          className="self-start text-sm text-zinc-400 no-underline hover:text-white"
-        >
-          ← r2dliu.com
-        </Link>
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex items-center gap-2">
+          <Link
+            to="/"
+            className="text-sm text-zinc-400 no-underline hover:text-white"
+          >
+            ← r2dliu.com
+          </Link>
+          <div className="flex-1" />
+          {deck && mode === 'study' && (
+            <Btn variant="text" onClick={() => setMode('settings')}>
+              Settings
+            </Btn>
+          )}
+          {decks.length > 0 && mode !== 'new' && (
+            <Btn variant="text" onClick={() => setMode('new')}>
+              New deck
+            </Btn>
+          )}
+        </div>
+        <div className="flex flex-wrap items-end gap-4">
           <div className="font-['HelveticaNeueBold'] text-4xl max-md:text-3xl">
             中文 Flashcards
           </div>
@@ -204,16 +253,6 @@ export function ChineseFlashcards() {
                 </option>
               ))}
             </Select>
-          )}
-          {deck && mode === 'study' && (
-            <Btn variant="text" onClick={() => setMode('settings')}>
-              Settings
-            </Btn>
-          )}
-          {decks.length > 0 && mode !== 'new' && (
-            <Btn variant="text" onClick={() => setMode('new')}>
-              New deck
-            </Btn>
           )}
         </div>
 

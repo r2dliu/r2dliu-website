@@ -3,16 +3,15 @@ import { useEffect, useState } from 'react'
 
 import { useStudyStore } from '../../stores/chinese/studyStore'
 import { api } from '../../helpers/chinese/api'
-import { CardBack, Definition, Meta } from './CardFace'
-import { HanziCanvas } from './HanziCanvas'
+import { CardBack } from './CardFace'
+import { DrawingPad } from './DrawingPad'
+import { RelatedList } from './RelatedList'
 import { Btn, Input } from './ui'
 import type {
   Card,
-  Character,
   RelatedItem,
   Remediation,
   RemediationStep,
-  Word,
 } from '../../helpers/chinese/api'
 
 export const STEP_LABELS: Record<string, string> = {
@@ -61,14 +60,12 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
   return (
     <div className="flex gap-6 max-md:flex-col max-md:items-center">
       <div className="flex flex-col items-center gap-2">
-        <HanziCanvas
+        <DrawingPad
           key={`${current}-${attempt}`}
           hanzi={current}
-          mode="quiz"
-          size={260}
           showOutline={Boolean(step.config.showOutline)}
-          onQuizMistake={setMistakes}
-          onQuizComplete={onComplete}
+          onMistake={setMistakes}
+          onComplete={onComplete}
         />
         <div
           className={cn('text-sm', {
@@ -116,68 +113,14 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
 // EXPLORE_RELATED
 // ---------------------------------------------------------------------------
 
-function RelatedDetail({ item }: { item: RelatedItem }) {
-  const [detail, setDetail] = useState<
-    (Character & { words?: Array<Word> }) | Word | null
-  >(null)
-  useEffect(() => {
-    const load =
-      item.kind === 'CHARACTER'
-        ? api.character(item.hanzi)
-        : api.word(item.hanzi)
-    load.then(setDetail).catch(() => setDetail(null))
-  }, [item])
-
-  const chars =
-    detail && 'characters' in detail
-      ? detail.characters
-      : [{ hanzi: item.hanzi } as Character]
-  return (
-    <div className="flex flex-col gap-3 pt-3">
-      <Definition text={item.definition} />
-      <div className="flex flex-wrap gap-3">
-        {chars.map((c, i) => (
-          <HanziCanvas
-            key={`${c.hanzi}-${i}`}
-            hanzi={c.hanzi}
-            mode="animate"
-            size={90}
-          />
-        ))}
-      </div>
-      {detail && 'words' in detail && detail.words?.length ? (
-        <div className="text-sm text-zinc-400">
-          Also in:{' '}
-          {detail.words.map((w) => `${w.simplified} (${w.pinyin})`).join(', ')}
-        </div>
-      ) : null}
-    </div>
-  )
-}
-
 function ExploreRelatedStep({ remediation, step }: StepProps) {
-  const { run, setStudy, deckId, study } = useStudyStore()
-  const [expanded, setExpanded] = useState<string | null>(null)
-  const [added, setAdded] = useState<Set<string>>(new Set())
+  const { run, setStudy } = useStudyStore()
   const opened = new Set(step.openedKeys ?? [])
-  const items = step.relatedItems ?? []
-  const deckKind = study?.deck.cardKind
 
   const open = async (item: RelatedItem) => {
-    setExpanded(expanded === item.key ? null : item.key)
     if (opened.has(item.key)) return
     const next = await run(() => api.openRelatedItem(remediation.id, item.key))
     if (next) setStudy(next)
-  }
-
-  const add = async (item: RelatedItem) => {
-    if (!deckId) return
-    const ok = await run(() => api.addToDeck(deckId, item.hanzi))
-    if (ok) setAdded(new Set([...added, item.key]))
-  }
-
-  if (!items.length) {
-    return <div className="text-zinc-400">No related vocab found.</div>
   }
 
   return (
@@ -186,54 +129,11 @@ function ExploreRelatedStep({ remediation, step }: StepProps) {
         Open at least {step.required} of these — they share characters with the
         card. Opened {step.done} / {step.required}.
       </div>
-      <ul className="flex flex-col divide-y divide-zinc-800 border border-zinc-800">
-        {items.map((item) => (
-          <li key={item.key} className="px-4 py-3">
-            <button
-              type="button"
-              onClick={() => open(item)}
-              className="flex w-full cursor-pointer items-baseline gap-4 bg-transparent text-left text-white"
-            >
-              <span
-                className={cn('w-4 text-sm', {
-                  'text-green-400': opened.has(item.key),
-                  'text-zinc-600': !opened.has(item.key),
-                })}
-              >
-                {opened.has(item.key) ? '✓' : '○'}
-              </span>
-              <span className="min-w-16 text-2xl">{item.hanzi}</span>
-              <span className="min-w-24 font-['HelveticaNeueMedium']">
-                {item.pinyin}
-              </span>
-              <span className="flex-1 truncate font-['HelveticaNeueLight'] text-zinc-300">
-                {item.definition.split('\n')[0]}
-              </span>
-              <span className="max-md:hidden">
-                <Meta
-                  frequencyRank={item.frequencyRank}
-                  hskLevel={item.hskLevel}
-                />
-              </span>
-            </button>
-            {expanded === item.key && (
-              <div className="pl-8">
-                <RelatedDetail item={item} />
-                {item.kind === deckKind && (
-                  <Btn
-                    variant="outlined"
-                    className="mt-3"
-                    disabled={added.has(item.key)}
-                    onClick={() => add(item)}
-                  >
-                    {added.has(item.key) ? 'Added to deck' : 'Add to deck'}
-                  </Btn>
-                )}
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
+      <RelatedList
+        items={step.relatedItems ?? []}
+        opened={opened}
+        onOpen={open}
+      />
     </div>
   )
 }

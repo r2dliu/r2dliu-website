@@ -287,6 +287,34 @@ class StudyFlowTests(TestCase):
         self.assertIsNone(errors)
         self.assertEqual(self.study(deck_id)["card"]["hanzi"], "们")
 
+    def test_keep_going_allows_more_new_cards(self):
+        deck_id = self.create_deck("CHARACTER", [])
+        Deck.objects.filter(pk=deck_id).update(new_cards_per_day=1)
+        self.answer(self.study(deck_id)["card"]["id"], "EASY")
+        self.assertIsNone(self.study(deck_id)["card"])
+
+        data, errors = self.gql(
+            """mutation($d: ID!) { studyMore(deckId: $d, count: 2) {
+                study { card { hanzi } counts { new } } } }""",
+            d=deck_id,
+        )
+        self.assertIsNone(errors)
+        state = data["studyMore"]["study"]
+        self.assertEqual(state["counts"]["new"], 2)
+        self.assertEqual(state["card"]["hanzi"], "你")
+
+    def test_related_items_for_any_card(self):
+        deck_id = self.create_deck("WORD", [])
+        card = self.study(deck_id)["card"]
+        data, errors = self.gql(
+            "query($c: ID!) { relatedItems(cardId: $c) { hanzi kind } }",
+            c=card["id"],
+        )
+        self.assertIsNone(errors)
+        hanzi = [i["hanzi"] for i in data["relatedItems"]]
+        self.assertEqual(hanzi[:2], ["你", "好"])
+        self.assertIn("你们", hanzi)
+
     def test_new_card_daily_limit(self):
         deck_id = self.create_deck("CHARACTER", [])
         Deck.objects.filter(pk=deck_id).update(new_cards_per_day=1)

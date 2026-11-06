@@ -266,6 +266,18 @@ export const api = {
       { remediationId, answer },
     ).then((d) => d.submitPinyin),
 
+  studyMore: (deckId: string, count = 10) =>
+    gql<{ studyMore: { study: StudyState } }>(
+      `mutation($deckId: ID!, $count: Int) { studyMore(deckId: $deckId, count: $count) { study { ${STUDY_FIELDS} } } }`,
+      { deckId, count },
+    ).then((d) => d.studyMore.study),
+
+  relatedItems: (cardId: string) =>
+    gql<{ relatedItems: Array<RelatedItem> }>(
+      `query($cardId: ID!) { relatedItems(cardId: $cardId) { key kind hanzi pinyin definition frequencyRank hskLevel } }`,
+      { cardId },
+    ).then((d) => d.relatedItems),
+
   addToDeck: (deckId: string, hanzi: string) =>
     gql(
       `mutation($deckId: ID!, $hanzi: String!) { addToDeck(deckId: $deckId, hanzi: $hanzi) { card { id } } }`,
