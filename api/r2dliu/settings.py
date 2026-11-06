@@ -59,6 +59,7 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
     "r2dliu",
     "r2dliu.courses",
+    "r2dliu.chinese",
     "graphene_django",
     "corsheaders",
     "django_filters",
@@ -113,6 +114,8 @@ DATABASES = {
         "PASSWORD": os.environ.get("DB_PASSWORD"),
         "HOST": os.environ.get("DB_HOST"),
         "PORT": os.environ.get("DB_PORT"),
+        # Hosted Postgres (Aiven) requires SSL; "prefer" keeps local dev working
+        "OPTIONS": {"sslmode": os.environ.get("DB_SSLMODE", "prefer")},
     }
 }
 

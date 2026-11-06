@@ -68,6 +68,8 @@ jobs:
 
   deploy:
     needs: [lint, typecheck]
+    # Pull requests only lint and typecheck; deploys come from branch pushes
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       contents: read

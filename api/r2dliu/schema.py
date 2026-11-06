@@ -3,6 +3,7 @@ from graphene import relay
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
+from r2dliu.chinese import schema as chinese_schema
 from r2dliu.courses.models import Class, Course
 
 
@@ -33,7 +34,7 @@ class ClassConnection(relay.Connection):
         node = ClassType
 
 
-class Query(graphene.ObjectType):
+class Query(chinese_schema.Query, graphene.ObjectType):
     classes = DjangoFilterConnectionField(ClassType)
     hello = graphene.String(default_value="Hi!")
 
@@ -42,4 +43,8 @@ class Query(graphene.ObjectType):
         return Class.objects.all()
 
 
-schema = graphene.Schema(query=Query)
+class Mutation(chinese_schema.Mutation, graphene.ObjectType):
+    pass
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation)

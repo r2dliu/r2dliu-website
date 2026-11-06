@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StackerRouteImport } from './routes/stacker'
+import { Route as ChineseRouteImport } from './routes/chinese'
 import { Route as CanvasRouteImport } from './routes/_canvas'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ArticlesArticleRouteImport } from './routes/articles.$article'
@@ -22,6 +23,11 @@ import { Route as CanvasAboutRouteImport } from './routes/_canvas.about'
 const StackerRoute = StackerRouteImport.update({
   id: '/stacker',
   path: '/stacker',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChineseRoute = ChineseRouteImport.update({
+  id: '/chinese',
+  path: '/chinese',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CanvasRoute = CanvasRouteImport.update({
@@ -66,6 +72,7 @@ const CanvasAboutRoute = CanvasAboutRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/chinese': typeof ChineseRoute
   '/stacker': typeof StackerRoute
   '/about': typeof CanvasAboutRoute
   '/articles': typeof CanvasArticlesRoute
@@ -76,6 +83,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/chinese': typeof ChineseRoute
   '/stacker': typeof StackerRoute
   '/about': typeof CanvasAboutRoute
   '/articles': typeof CanvasArticlesRoute
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_canvas': typeof CanvasRouteWithChildren
+  '/chinese': typeof ChineseRoute
   '/stacker': typeof StackerRoute
   '/_canvas/about': typeof CanvasAboutRoute
   '/_canvas/articles': typeof CanvasArticlesRoute
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/chinese'
     | '/stacker'
     | '/about'
     | '/articles'
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/chinese'
     | '/stacker'
     | '/about'
     | '/articles'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_canvas'
+    | '/chinese'
     | '/stacker'
     | '/_canvas/about'
     | '/_canvas/articles'
@@ -133,6 +145,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CanvasRoute: typeof CanvasRouteWithChildren
+  ChineseRoute: typeof ChineseRoute
   StackerRoute: typeof StackerRoute
   ArticlesArticleRoute: typeof ArticlesArticleRoute
 }
@@ -144,6 +157,13 @@ declare module '@tanstack/react-router' {
       path: '/stacker'
       fullPath: '/stacker'
       preLoaderRoute: typeof StackerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chinese': {
+      id: '/chinese'
+      path: '/chinese'
+      fullPath: '/chinese'
+      preLoaderRoute: typeof ChineseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_canvas': {
@@ -227,6 +247,7 @@ const CanvasRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CanvasRoute: CanvasRouteWithChildren,
+  ChineseRoute: ChineseRoute,
   StackerRoute: StackerRoute,
   ArticlesArticleRoute: ArticlesArticleRoute,
 }
