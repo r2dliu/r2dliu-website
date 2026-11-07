@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 
 import { useStudyStore } from '../../stores/chinese/studyStore'
 import { api } from '../../helpers/chinese/api'
+import { useDefinition, useT } from '../../helpers/chinese/i18n'
 import { CardBack } from './CardFace'
 import { DrawingPad } from './DrawingPad'
 import { FreeDrawPad } from './FreeDrawPad'
@@ -13,14 +14,7 @@ import type {
   RelatedItem,
   Remediation,
   RemediationStep,
-  StudyState,
 } from '../../helpers/chinese/api'
-
-export const STEP_LABELS: Record<string, string> = {
-  DRAW_STROKES: 'Draw the character',
-  EXPLORE_RELATED: 'Explore related vocab',
-  TYPE_PINYIN: 'Type the pinyin',
-}
 
 interface StepProps {
   card: Card
@@ -34,6 +28,7 @@ interface StepProps {
 
 function DrawStrokesStep({ card, remediation, step }: StepProps) {
   const { run, setStudy } = useStudyStore()
+  const t = useT()
   const targets = step.drawTargets ?? []
   const progress = step.drawProgress ?? {}
   const reps = Number(step.config.repetitions)
@@ -41,60 +36,64 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
   const minAccuracy = Number(step.config.minAccuracy)
   // Steps saved before free draw existed have no mode: they were traced
   const free = step.config.mode === 'FREE'
-  // Free draw: hold the next state until the learner has seen their score
-  const [pending, setPending] = useState<StudyState | null>(null)
-  const current = targets.find((t) => (progress[t] ?? 0) < reps) ?? targets[0]
+  const current = targets.find((h) => (progress[h] ?? 0) < reps) ?? targets[0]
+  // The character on the pad. Progress updates as soon as a drawing counts,
+  // but the pad keeps showing that drawing's result until "Draw again".
+  const [target, setTarget] = useState(current)
   const [attempt, setAttempt] = useState(0)
   const [mistakes, setMistakes] = useState(0)
   const [message, setMessage] = useState<string | null>(null)
 
-  useEffect(() => setMistakes(0), [current, attempt])
+  useEffect(() => setMistakes(0), [target, attempt])
+
+  const nextDrawing = () => {
+    setTarget(current)
+    setAttempt((a) => a + 1)
+  }
 
   const onComplete = async (totalMistakes: number) => {
     const result = await run(() =>
-      api.completeStrokeQuiz(remediation.id, current, totalMistakes),
+      api.completeStrokeQuiz(remediation.id, target, totalMistakes),
     )
     if (!result) return
     setMessage(
-      result.counted
-        ? `Nice — ${current} drawn with ${totalMistakes} mistake${totalMistakes === 1 ? '' : 's'}.`
-        : `${totalMistakes} mistakes (max ${maxMistakes}). Try ${current} again.`,
+      t(result.counted ? 'tracedOk' : 'tracedBad', {
+        c: target,
+        m: totalMistakes,
+        max: maxMistakes,
+      }),
     )
-    setAttempt((a) => a + 1)
     setStudy(result.study)
+    // Tracing has no result to look at: go straight to the next one
+    nextDrawing()
   }
+
+  // Tracing moves on by itself; keep its pad on the character still to do
+  useEffect(() => {
+    if (!free) setTarget(current)
+  }, [free, current])
 
   return (
     <div className="flex gap-6 max-md:flex-col max-md:items-center">
       {free ? (
         <FreeDrawPad
-          key={`${current}-${attempt}`}
-          hanzi={current}
+          key={`${target}-${attempt}`}
+          hanzi={target}
+          onReset={nextDrawing}
           onSubmit={async (strokes) => {
             const r = await run(() =>
-              api.submitFreeDrawing(remediation.id, current, strokes),
+              api.submitFreeDrawing(remediation.id, target, strokes),
             )
             if (!r) return null
-            setPending(r.counted ? r.study : null)
-            if (!r.counted) setStudy(r.study)
+            setStudy(r.study)
             return r.result
           }}
           footer={(r) =>
             r.accuracy >= minAccuracy ? (
-              <Btn
-                variant="outlined"
-                className="mt-1"
-                onClick={() => {
-                  if (pending) setStudy(pending)
-                  setPending(null)
-                  setAttempt((a) => a + 1)
-                }}
-              >
-                Passed — continue
-              </Btn>
+              <div className="text-sm text-green-400">{t('counted')}</div>
             ) : (
               <div className="text-sm text-red-300">
-                Needs {minAccuracy}% to count — draw it again
+                {t('needsAccuracy', { n: minAccuracy })}
               </div>
             )
           }
@@ -102,8 +101,8 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
       ) : (
         <div className="flex flex-col items-center gap-2">
           <DrawingPad
-            key={`${current}-${attempt}`}
-            hanzi={current}
+            key={`${target}-${attempt}`}
+            hanzi={target}
             showOutline={Boolean(step.config.showOutline)}
             onMistake={setMistakes}
             onComplete={onComplete}
@@ -114,35 +113,33 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
               'text-zinc-400': mistakes <= maxMistakes,
             })}
           >
-            Mistakes: {mistakes} / {maxMistakes} allowed
+            {t('mistakesAllowed', { m: mistakes, max: maxMistakes })}
           </div>
         </div>
       )}
       <div className="flex flex-1 flex-col gap-3">
         <div className="flex flex-wrap gap-2">
-          {targets.map((t) => (
+          {targets.map((h) => (
             <span
-              key={t}
+              key={h}
               className={cn('border px-3 py-1 text-xl', {
-                'border-white': t === current,
-                'border-zinc-700 text-zinc-500': t !== current,
-                'border-green-500 text-green-400': (progress[t] ?? 0) >= reps,
+                'border-white': h === target,
+                'border-zinc-700 text-zinc-500': h !== target,
+                'border-green-500 text-green-400': (progress[h] ?? 0) >= reps,
               })}
             >
-              {t} {Math.min(progress[t] ?? 0, reps)}/{reps}
+              {h} {Math.min(progress[h] ?? 0, reps)}/{reps}
             </span>
           ))}
         </div>
         {message && <div className="text-zinc-300">{message}</div>}
         <div className="text-sm text-zinc-400">
-          {free
-            ? `Draw the whole character, then Check. ${minAccuracy}% accuracy counts.`
-            : 'Draw each stroke in order on the grid.'}
-          {!free && !step.config.showOutline && ' No outline — from memory!'}
+          {free ? t('drawHintFree', { n: minAccuracy }) : t('drawHintTrace')}
+          {!free && !step.config.showOutline && t('noOutline')}
         </div>
         <details className="text-zinc-300">
           <summary className="cursor-pointer text-sm text-zinc-400">
-            Show the card again
+            {t('showCardAgain')}
           </summary>
           <div className="pt-3">
             <CardBack card={card} />
@@ -159,10 +156,34 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
 
 function ExploreRelatedStep({ remediation, step }: StepProps) {
   const { run, setStudy } = useStudyStore()
+  const t = useT()
   const opened = new Set(step.openedKeys ?? [])
 
   const open = async (item: RelatedItem) => {
     if (opened.has(item.key)) return
+    // Count it straight away; the server's answer follows
+    const { study } = useStudyStore.getState()
+    if (study?.remediation) {
+      const done = step.done + 1
+      useStudyStore.setState({
+        study: {
+          ...study,
+          remediation: {
+            ...study.remediation,
+            steps: study.remediation.steps.map((s) =>
+              s.index === step.index
+                ? {
+                    ...s,
+                    done,
+                    satisfied: done >= s.required,
+                    openedKeys: [...(s.openedKeys ?? []), item.key],
+                  }
+                : s,
+            ),
+          },
+        },
+      })
+    }
     const next = await run(() => api.openRelatedItem(remediation.id, item.key))
     if (next) setStudy(next)
   }
@@ -170,8 +191,7 @@ function ExploreRelatedStep({ remediation, step }: StepProps) {
   return (
     <div className="flex flex-col gap-3">
       <div className="text-zinc-300">
-        Open at least {step.required} of these — they share characters with the
-        card. Opened {step.done} / {step.required}.
+        {t('exploreHint', { n: step.required, d: step.done })}
       </div>
       <RelatedList
         items={step.relatedItems ?? []}
@@ -188,9 +208,11 @@ function ExploreRelatedStep({ remediation, step }: StepProps) {
 
 function TypePinyinStep({ card, remediation, step }: StepProps) {
   const { run, setStudy } = useStudyStore()
+  const t = useT()
+  const definition = useDefinition()
   const [answer, setAnswer] = useState('')
   const [feedback, setFeedback] = useState<string | null>(null)
-  const definition = card.character?.definition ?? card.word?.definition ?? ''
+  const item = card.character ?? card.word
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -198,9 +220,7 @@ function TypePinyinStep({ card, remediation, step }: StepProps) {
     const result = await run(() => api.submitPinyin(remediation.id, answer))
     if (!result) return
     setFeedback(
-      result.correct
-        ? 'Correct!'
-        : `Not quite — it's ${result.expected}. Type it again.`,
+      result.correct ? t('correct') : t('notQuite', { x: result.expected }),
     )
     setAnswer('')
     setStudy(result.study)
@@ -209,25 +229,27 @@ function TypePinyinStep({ card, remediation, step }: StepProps) {
   return (
     <form onSubmit={submit} className="flex flex-col gap-4">
       <div className="text-[72px] leading-none">{card.hanzi}</div>
-      <div className="line-clamp-2 font-['HelveticaNeueLight'] text-zinc-300">
-        {definition}
-      </div>
+      {item && (
+        <div className="line-clamp-2 font-['HelveticaNeueLight'] text-zinc-300">
+          {definition(item)}
+        </div>
+      )}
       <div className="flex items-end gap-3">
         <Input
           autoFocus
-          label="Pinyin with tones (ni3hao3 or nǐhǎo)"
+          label={t('pinyinLabel')}
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
           className="w-80 max-md:flex-1"
           autoComplete="off"
         />
         <Btn type="submit" variant="outlined">
-          Check
+          {t('check')}
         </Btn>
       </div>
       <div className="text-sm text-zinc-400">
-        Correct {step.done} / {step.required}
-        {step.attempts ? ` · ${step.attempts} attempts` : ''}
+        {t('correctCount', { d: step.done, n: step.required })}
+        {step.attempts ? t('attempts', { n: step.attempts }) : ''}
       </div>
       {feedback && <div>{feedback}</div>}
     </form>
@@ -242,6 +264,11 @@ const STEP_COMPONENTS = {
   TYPE_PINYIN: TypePinyinStep,
 }
 
+/**
+ * The tasks for a missed card. A finished task stays on screen (to look at
+ * the result or keep exploring) until Next; after the last one, Next moves on
+ * to the next card.
+ */
 export function RemediationPanel({
   card,
   remediation,
@@ -249,14 +276,20 @@ export function RemediationPanel({
   card: Card
   remediation: Remediation
 }) {
-  const step = remediation.steps[remediation.currentStep]
+  const t = useT()
+  const pendingNext = useStudyStore((s) => s.pendingNext)
+  const advance = useStudyStore((s) => s.advance)
+  const [viewIndex, setViewIndex] = useState(remediation.currentStep)
+  const step = remediation.steps[viewIndex] ?? remediation.steps[0]
   const StepComponent = STEP_COMPONENTS[step.type]
+  const allDone = !!pendingNext
+  const canGoOn = allDone || remediation.currentStep > viewIndex
 
   return (
     <div className="flex flex-col gap-5">
       <div className="border-l-4 border-red-500 pl-4">
         <div className="font-['HelveticaNeueBold'] text-xl">
-          Missed {card.hanzi} — finish these before moving on
+          {t('missed', { hanzi: card.hanzi })}
         </div>
         <ol className="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-sm">
           {remediation.steps.map((s) => (
@@ -265,12 +298,13 @@ export function RemediationPanel({
               className={cn({
                 'text-green-400': s.satisfied,
                 "font-['HelveticaNeueBold'] text-white":
-                  s.index === remediation.currentStep,
-                'text-zinc-500':
-                  !s.satisfied && s.index !== remediation.currentStep,
+                  s.index === viewIndex && !s.satisfied,
+                "font-['HelveticaNeueBold']": s.index === viewIndex,
+                'text-zinc-500': !s.satisfied && s.index !== viewIndex,
               })}
             >
-              {s.index + 1}. {STEP_LABELS[s.type]} ({s.done}/{s.required})
+              {s.index + 1}. {t(s.type)} ({Math.min(s.done, s.required)}/
+              {s.required})
             </li>
           ))}
         </ol>
@@ -281,6 +315,21 @@ export function RemediationPanel({
         remediation={remediation}
         step={step}
       />
+      {canGoOn && (
+        <div className="sticky bottom-0 flex items-center gap-3 border-t border-zinc-800 bg-black py-3">
+          <div className="flex-1 text-sm text-green-400">
+            {allDone ? t('allDone') : `✓ ${t(step.type)}`}
+          </div>
+          <Btn
+            variant="outlined"
+            onClick={() =>
+              allDone ? advance() : setViewIndex(remediation.currentStep)
+            }
+          >
+            {t('next')}
+          </Btn>
+        </div>
+      )}
     </div>
   )
 }

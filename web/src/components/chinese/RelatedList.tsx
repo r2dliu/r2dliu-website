@@ -3,12 +3,15 @@ import { useEffect, useState } from 'react'
 
 import { useStudyStore } from '../../stores/chinese/studyStore'
 import { api } from '../../helpers/chinese/api'
+import { useDefinition, useT } from '../../helpers/chinese/i18n'
 import { Definition, Meta } from './CardFace'
 import { HanziCanvas } from './HanziCanvas'
 import { Btn } from './ui'
 import type { Character, RelatedItem, Word } from '../../helpers/chinese/api'
 
 function RelatedDetail({ item }: { item: RelatedItem }) {
+  const t = useT()
+  const definition = useDefinition()
   const [detail, setDetail] = useState<
     (Character & { words?: Array<Word> }) | Word | null
   >(null)
@@ -26,7 +29,7 @@ function RelatedDetail({ item }: { item: RelatedItem }) {
       : [{ hanzi: item.hanzi } as Character]
   return (
     <div className="flex flex-col gap-3 pt-3">
-      <Definition text={item.definition} />
+      <Definition text={definition(item)} />
       <div className="flex flex-wrap gap-3">
         {chars.map((c, i) => (
           <HanziCanvas
@@ -39,12 +42,26 @@ function RelatedDetail({ item }: { item: RelatedItem }) {
       </div>
       {detail && 'words' in detail && detail.words?.length ? (
         <div className="text-sm text-zinc-400">
-          Also in:{' '}
+          {t('alsoIn')}
           {detail.words.map((w) => `${w.simplified} (${w.pinyin})`).join(', ')}
         </div>
       ) : null}
     </div>
   )
+}
+
+/**
+ * First line of a definition worth showing in a row: skips reading headers
+ * ("méi") and sense numbers ("⒈ ").
+ */
+function summary(definition: string) {
+  const line =
+    definition
+      .split('\n')
+      .find(
+        (l) => l.trim() && !/^[a-zāáǎàēéěèīíǐìōóǒòūúǔùüǖǘǚǜ\s]+$/i.test(l),
+      ) ?? ''
+  return line.replace(/^[⒈-⒛]\s*/, '')
 }
 
 /**
@@ -61,6 +78,8 @@ export function RelatedList({
   onOpen?: (item: RelatedItem) => void
 }) {
   const { run, deckId, study } = useStudyStore()
+  const t = useT()
+  const definition = useDefinition()
   const [expanded, setExpanded] = useState<string | null>(null)
   const [added, setAdded] = useState<Set<string>>(new Set())
   const deckKind = study?.deck.cardKind
@@ -72,7 +91,7 @@ export function RelatedList({
   }
 
   if (!items.length) {
-    return <div className="text-zinc-400">No related vocab found.</div>
+    return <div className="text-zinc-400">{t('noRelated')}</div>
   }
 
   return (
@@ -102,7 +121,7 @@ export function RelatedList({
               {item.pinyin}
             </span>
             <span className="flex-1 truncate font-['HelveticaNeueLight'] text-zinc-300">
-              {item.definition.split('\n')[0]}
+              {summary(definition(item))}
             </span>
             <span className="max-md:hidden">
               <Meta
@@ -121,7 +140,7 @@ export function RelatedList({
                   disabled={added.has(item.key)}
                   onClick={() => add(item)}
                 >
-                  {added.has(item.key) ? 'Added to deck' : 'Add to deck'}
+                  {added.has(item.key) ? t('addedToDeck') : t('addToDeck')}
                 </Btn>
               )}
             </div>

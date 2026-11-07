@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 
 import { useStudyStore } from '../../stores/chinese/studyStore'
 import { api } from '../../helpers/chinese/api'
+import { useT } from '../../helpers/chinese/i18n'
 import { DrawingPad } from './DrawingPad'
 import { FreeDrawPad } from './FreeDrawPad'
 import { RelatedList } from './RelatedList'
@@ -50,6 +51,7 @@ export function PracticeDrawing({
   size?: number
 }) {
   const run = useStudyStore((s) => s.run)
+  const t = useT()
   const chars = card.character
     ? [card.character]
     : (card.word?.characters ?? [])
@@ -63,7 +65,7 @@ export function PracticeDrawing({
   const [result, setResult] = useState<string | null>(null)
 
   if (!unique.length) {
-    return <div className="text-zinc-400">No stroke data for this card.</div>
+    return <div className="text-zinc-400">{t('noStrokeData')}</div>
   }
 
   return (
@@ -71,8 +73,8 @@ export function PracticeDrawing({
       <div className="flex flex-wrap justify-center gap-4">
         <Choice
           options={[
-            ['free', 'Free draw'],
-            ['guided', 'Guided'],
+            ['free', t('freeDraw')],
+            ['guided', t('guided')],
           ]}
           value={mode}
           onChange={setMode}
@@ -108,12 +110,10 @@ export function PracticeDrawing({
               setMistakes(m)
               if (m === 0) setResult(null)
             }}
-            onComplete={(m) =>
-              setResult(`Done with ${m} mistake${m === 1 ? '' : 's'}.`)
-            }
+            onComplete={(m) => setResult(t('guidedDone', { m }))}
           />
           <div className="text-sm text-zinc-400">
-            {result ?? `Mistakes: ${mistakes}`}
+            {result ?? t('mistakes', { m: mistakes })}
           </div>
         </>
       )}

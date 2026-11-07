@@ -15,6 +15,8 @@ class Character(AbstractBaseModel):
     # Same readings with tone numbers; used to check typed answers
     pinyin_numbered = models.JSONField(default=list)
     definition = models.TextField(blank=True)
+    # Chinese-language definition (Xinhua dictionary); blank if none found
+    definition_zh = models.TextField(blank=True)
     # Rank in SUBTLEX-CH (film subtitles, i.e. spoken usage). 1 = most common.
     frequency_rank = models.PositiveIntegerField(null=True, db_index=True)
     # Rank in Jun Da's Modern Chinese character list (written usage).
@@ -59,6 +61,8 @@ class Word(AbstractBaseModel):
     pinyin = models.CharField(max_length=128)
     pinyin_numbered = models.JSONField(default=list)
     definition = models.TextField()
+    # Chinese-language definition; blank if none found
+    definition_zh = models.TextField(blank=True)
     frequency_rank = models.PositiveIntegerField(null=True, db_index=True)
     hsk_level = models.PositiveSmallIntegerField(null=True)
     characters = models.ManyToManyField(
@@ -84,6 +88,37 @@ class WordCharacter(models.Model):
                 fields=["word", "position"], name="unique_word_position"
             )
         ]
+
+
+class Sentence(models.Model):
+    """A Chinese sentence with an English translation, from Tatoeba."""
+
+    # Tatoeba's sentence id, so reloads update rows in place
+    id = models.PositiveIntegerField(primary_key=True)
+    chinese = models.TextField()
+    # Tone-marked pinyin, one entry per segmented word/punctuation token:
+    # [[token, pinyin], ...]
+    tokens = models.JSONField(default=list)
+    english = models.TextField()
+
+    def __str__(self):
+        return self.chinese
+
+
+class Example(models.Model):
+    """Links a word or character to one of its example sentences."""
+
+    sentence = models.ForeignKey(Sentence, on_delete=models.CASCADE)
+    word = models.ForeignKey(
+        Word, null=True, on_delete=models.CASCADE, related_name="examples"
+    )
+    character = models.ForeignKey(
+        Character, null=True, on_delete=models.CASCADE, related_name="examples"
+    )
+    position = models.PositiveSmallIntegerField()
+
+    class Meta:
+        ordering = ["position"]
 
 
 # ---------------------------------------------------------------------------

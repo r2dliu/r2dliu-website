@@ -47,6 +47,9 @@ class CharacterType(graphene.ObjectType):
     traditional = graphene.String()
     pinyin = graphene.List(graphene.NonNull(graphene.String), required=True)
     definition = graphene.String(required=True)
+    definition_zh = graphene.String(
+        required=True, description="Chinese definition; empty if none"
+    )
     frequency_rank = graphene.Int()
     written_frequency_rank = graphene.Int()
     hsk_level = graphene.Int()
@@ -83,6 +86,9 @@ class WordType(graphene.ObjectType):
     traditional = graphene.String()
     pinyin = graphene.String(required=True)
     definition = graphene.String(required=True)
+    definition_zh = graphene.String(
+        required=True, description="Chinese definition; empty if none"
+    )
     frequency_rank = graphene.Int()
     hsk_level = graphene.Int()
     characters = graphene.List(graphene.NonNull(CharacterType), required=True)
@@ -97,6 +103,7 @@ class RelatedItemType(graphene.ObjectType):
     hanzi = graphene.String(required=True)
     pinyin = graphene.String(required=True)
     definition = graphene.String(required=True)
+    definition_zh = graphene.String(required=True)
     frequency_rank = graphene.Int()
     hsk_level = graphene.Int()
     character = graphene.Field(CharacterType)
@@ -111,11 +118,27 @@ class RelatedItemType(graphene.ObjectType):
             hanzi=item.hanzi if is_char else item.simplified,
             pinyin=" / ".join(item.pinyin) if is_char else item.pinyin,
             definition=item.definition,
+            definition_zh=item.definition_zh,
             frequency_rank=item.frequency_rank,
             hsk_level=item.hsk_level,
             character=item if is_char else None,
             word=None if is_char else item,
         )
+
+
+class SentenceTokenType(graphene.ObjectType):
+    text = graphene.String(required=True)
+    pinyin = graphene.String(required=True, description="Empty for punctuation")
+
+
+class SentenceType(graphene.ObjectType):
+    id = graphene.ID(required=True)
+    chinese = graphene.String(required=True)
+    english = graphene.String(required=True)
+    tokens = graphene.List(graphene.NonNull(SentenceTokenType), required=True)
+
+    def resolve_tokens(sentence, info):
+        return [SentenceTokenType(text=t, pinyin=p) for t, p in sentence.tokens]
 
 
 # ---------------------------------------------------------------------------
@@ -143,6 +166,15 @@ class CardType(graphene.ObjectType):
     interval_preview = graphene.List(
         graphene.NonNull(IntervalPreviewType), required=True
     )
+    examples = graphene.List(
+        graphene.NonNull(SentenceType),
+        required=True,
+        description="Short example sentences using the card's word/character",
+    )
+
+    def resolve_examples(card: Card, info):
+        item = card.word or card.character
+        return [e.sentence for e in item.examples.select_related("sentence")]
 
     def resolve_interval_preview(card: Card, info):
         preview = scheduler.preview(card, card.deck, timezone.now())

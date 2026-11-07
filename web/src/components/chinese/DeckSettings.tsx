@@ -2,34 +2,19 @@ import { useEffect, useState } from 'react'
 
 import { useStudyStore } from '../../stores/chinese/studyStore'
 import { api } from '../../helpers/chinese/api'
-import { STEP_LABELS } from './RemediationPanel'
+import { useT } from '../../helpers/chinese/i18n'
 import { Btn, Input, Select } from './ui'
+import type { StringKey } from '../../helpers/chinese/i18n'
 import type {
   Deck,
   FailureStep,
   FailureStepType,
 } from '../../helpers/chinese/api'
 
-const OPTION_LABELS: Record<string, string> = {
-  repetitions: 'Times required',
-  showOutline: 'Show outline (guided)',
-  characters: 'Characters to draw',
-  mode: 'Drawing',
-  minAccuracy: 'Min accuracy (%), free draw',
-  maxMistakes: 'Max mistakes, guided',
-  minOpened: 'Must open at least',
-  maxItems: 'Items in list',
-}
-
-const SELECT_OPTIONS: Record<string, Array<[string, string]>> = {
-  characters: [
-    ['ALL', 'All in the card'],
-    ['FIRST', 'Just the first'],
-  ],
-  mode: [
-    ['FREE', 'Free draw'],
-    ['TRACE', 'Guided (stroke by stroke)'],
-  ],
+// Select-style options and their choices (labels are in i18n as choice_*)
+const SELECT_OPTIONS: Record<string, Array<string>> = {
+  characters: ['ALL', 'FIRST'],
+  mode: ['FREE', 'TRACE'],
 }
 
 function StepEditor({
@@ -42,13 +27,15 @@ function StepEditor({
   defaults?: Record<string, unknown>
   onChange: (s: FailureStep) => void
 }) {
+  const t = useT()
   const step = { ...defaults, ...saved }
   return (
     <div className="flex flex-wrap items-center gap-4">
       {Object.entries(step)
         .filter(([key]) => key !== 'type')
         .map(([key, value]) => {
-          const label = OPTION_LABELS[key] ?? key
+          const optionKey = `opt_${key}` as StringKey
+          const label = t(optionKey) || key
           if (typeof value === 'boolean') {
             return (
               <label key={key} className="flex items-center gap-2 pt-4">
@@ -73,9 +60,9 @@ function StepEditor({
                 onChange={(e) => onChange({ ...step, [key]: e.target.value })}
                 className="w-56"
               >
-                {SELECT_OPTIONS[key].map(([v, text]) => (
+                {SELECT_OPTIONS[key].map((v) => (
                   <option key={v} value={v}>
-                    {text}
+                    {t(`choice_${v}` as StringKey)}
                   </option>
                 ))}
               </Select>
@@ -106,6 +93,7 @@ export function DeckSettings({
   onClose: () => void
 }) {
   const { updateDeck, deleteDeck, busy } = useStudyStore()
+  const t = useT()
   const [stepTypes, setStepTypes] = useState<
     Array<{ type: FailureStepType; defaults: Record<string, unknown> }>
   >([])
@@ -148,13 +136,13 @@ export function DeckSettings({
     <div className="flex flex-col gap-6">
       <section className="flex flex-wrap gap-4">
         <Input
-          label="Deck name"
+          label={t('deckName')}
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
         />
         <Input
           type="number"
-          label="New cards / day"
+          label={t('newPerDay')}
           value={form.newCardsPerDay}
           onChange={(e) =>
             setForm({ ...form, newCardsPerDay: Number(e.target.value) })
@@ -162,14 +150,14 @@ export function DeckSettings({
           className="w-36"
         />
         <Input
-          label="Learning steps (minutes)"
+          label={t('learningSteps')}
           value={form.learningSteps}
           onChange={(e) => setForm({ ...form, learningSteps: e.target.value })}
           className="w-48"
         />
         <Input
           type="number"
-          label="Failed review returns in (min)"
+          label={t('relearnDelay')}
           value={form.relearnDelayMinutes}
           onChange={(e) =>
             setForm({ ...form, relearnDelayMinutes: Number(e.target.value) })
@@ -181,17 +169,12 @@ export function DeckSettings({
       <section className="flex flex-col gap-3">
         <div>
           <div className="font-['HelveticaNeueBold'] text-xl">
-            When I press “Again”…
+            {t('whenAgain')}
           </div>
-          <div className="text-sm text-zinc-400">
-            These tasks run in order and must all be finished before the next
-            card. Leave empty for plain Anki behaviour.
-          </div>
+          <div className="text-sm text-zinc-400">{t('whenAgainHint')}</div>
         </div>
         {form.failureSteps.length === 0 && (
-          <div className="text-zinc-500">
-            No tasks — the card just goes back in the queue.
-          </div>
+          <div className="text-zinc-500">{t('noTasks')}</div>
         )}
         {form.failureSteps.map((step, i) => (
           <div
@@ -200,7 +183,7 @@ export function DeckSettings({
           >
             <div className="flex items-center justify-between gap-2">
               <div className="font-['HelveticaNeueMedium']">
-                {i + 1}. {STEP_LABELS[step.type]}
+                {i + 1}. {t(step.type)}
               </div>
               <div className="flex gap-1">
                 <Btn
@@ -225,13 +208,13 @@ export function DeckSettings({
                     setSteps(form.failureSteps.filter((_, j) => j !== i))
                   }
                 >
-                  Remove
+                  {t('remove')}
                 </Btn>
               </div>
             </div>
             <StepEditor
               step={step}
-              defaults={stepTypes.find((t) => t.type === step.type)?.defaults}
+              defaults={stepTypes.find((st) => st.type === step.type)?.defaults}
               onChange={(s) =>
                 setSteps(form.failureSteps.map((x, j) => (j === i ? s : x)))
               }
@@ -247,7 +230,7 @@ export function DeckSettings({
                 setSteps([...form.failureSteps, { ...defaults, type }])
               }
             >
-              + {STEP_LABELS[type]}
+              + {t(type)}
             </Btn>
           ))}
         </div>
@@ -255,22 +238,22 @@ export function DeckSettings({
 
       <div className="flex gap-3">
         <Btn variant="outlined" onClick={save} disabled={busy}>
-          Save
+          {t('save')}
         </Btn>
         <Btn variant="text" onClick={onClose}>
-          Cancel
+          {t('cancel')}
         </Btn>
         <div className="flex-1" />
         <Btn
           variant="text"
           className="text-red-400"
           onClick={() => {
-            if (window.confirm(`Delete “${deck.name}” and its progress?`)) {
+            if (window.confirm(t('confirmDelete', { name: deck.name }))) {
               deleteDeck().then(onClose)
             }
           }}
         >
-          Delete deck
+          {t('deleteDeck')}
         </Btn>
       </div>
     </div>

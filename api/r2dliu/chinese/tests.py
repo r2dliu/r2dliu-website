@@ -472,3 +472,66 @@ class FreeDrawingFlowTests(TestCase):
         data, _ = self.gql(submit, r=rem["id"], s=shifted(SHI))
         self.assertTrue(data["submitFreeDrawing"]["counted"])
         self.assertIsNone(data["submitFreeDrawing"]["study"]["remediation"])
+
+
+class DictionaryParsingTests(TestCase):
+    def test_xinhua_modern_senses(self):
+        from r2dliu.chinese.management.commands.load_chinese_data import (
+            _format_zh_senses,
+            _xinhua_modern,
+        )
+
+        text = (
+            "行 \n\n (象形。本义:道路)\n\n 行háng\n\n ⒈排，队列～列。\n\n ⒉\n\n"
+            " ⒊见xíng。\n\n 行xíng\n\n ⒈走～路。\n\n ⒉做～事。\n\n"
+            " 行hàng 1.刚强貌。"
+        )
+        senses = _xinhua_modern("行", text)
+        self.assertEqual(senses, {"háng": ["排，队列～列。"], "xíng": ["走～路。", "做～事。"]})
+        formatted = _format_zh_senses(senses, ["xíng", "háng"])
+        self.assertTrue(formatted.startswith("xíng\n⒈ 走～路。\n⒉ 做～事。\nháng"))
+
+    def test_inline_senses(self):
+        from r2dliu.chinese.management.commands.load_chinese_data import (
+            _xinhua_modern,
+        )
+
+        senses = _xinhua_modern("的", " 的 ·de放在定语的后面。②助词。")
+        self.assertEqual(senses, {"de": ["放在定语的后面。", "助词。"]})
+
+    def test_segment_prefers_longest_word(self):
+        from r2dliu.chinese.management.commands.load_chinese_data import _segment
+
+        self.assertEqual(
+            _segment("我们试试看！", {"我们", "试试", "试试看"}),
+            ["我们", "试试看", "！"],
+        )
+
+
+class ExampleTests(TestCase):
+    def test_card_examples(self):
+        from r2dliu.chinese.models import Example, Sentence
+        from r2dliu.schema import schema
+
+        char = Character.objects.create(
+            hanzi="好", pinyin=["hǎo"], definition="good", definition_zh="优点多的",
+            frequency_rank=1,
+        )
+        s = Sentence.objects.create(
+            id=1, chinese="很好。", english="Very good.",
+            tokens=[["很", "hěn"], ["好", "hǎo"], ["。", ""]],
+        )
+        Example.objects.create(sentence=s, character=char, position=0)
+        deck = Deck.objects.create(name="d", card_kind=Deck.CardKind.CHARACTER)
+        card = study.add_card(deck, char, timezone.now())
+        result = schema.execute(
+            """query($d: ID!) { study(deckId: $d) { card { id
+                examples { chinese english tokens { text pinyin } }
+                character { definitionZh } } } }""",
+            variables={"d": str(deck.id)},
+        )
+        self.assertIsNone(result.errors)
+        got = result.data["study"]["card"]
+        self.assertEqual(got["id"], str(card.id))
+        self.assertEqual(got["character"]["definitionZh"], "优点多的")
+        self.assertEqual(got["examples"][0]["tokens"][1], {"text": "好", "pinyin": "hǎo"})
