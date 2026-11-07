@@ -228,12 +228,16 @@ class StudyFlowTests(TestCase):
         _, errors = self.answer(card["id"], "GOOD")
         self.assertIn("Finish the failure tasks", errors[0]["message"])
 
-        # Steps must be done in order
-        _, errors = self.gql(
-            'mutation($r: ID!) { submitPinyin(remediationId: $r, answer: "x") { correct } }',
+        # Steps count in order: a later one done early is just practice
+        data, errors = self.gql(
+            """mutation($r: ID!) { submitPinyin(remediationId: $r, answer: "ni3hao3") {
+                correct remediation { currentStep steps { done } } } }""",
             r=rem["id"],
         )
-        self.assertIn("Current step is DRAW_STROKES", errors[0]["message"])
+        self.assertIsNone(errors)
+        self.assertTrue(data["submitPinyin"]["correct"])
+        self.assertEqual(data["submitPinyin"]["remediation"]["currentStep"], 0)
+        self.assertEqual(data["submitPinyin"]["remediation"]["steps"][2]["done"], 0)
 
         draw_q = """mutation($r: ID!, $h: String!, $m: Int!) {
             completeStrokeQuiz(remediationId: $r, hanzi: $h, mistakes: $m) {
@@ -242,6 +246,12 @@ class StudyFlowTests(TestCase):
         self.assertFalse(data["completeStrokeQuiz"]["counted"])
         self.gql(draw_q, r=rem["id"], h="你", m=0)
         data, _ = self.gql(draw_q, r=rem["id"], h="好", m=2)
+        self.assertEqual(data["completeStrokeQuiz"]["remediation"]["currentStep"], 1)
+
+        # Drawing again after moving on is fine, and not counted
+        data, errors = self.gql(draw_q, r=rem["id"], h="你", m=0)
+        self.assertIsNone(errors)
+        self.assertFalse(data["completeStrokeQuiz"]["counted"])
         self.assertEqual(data["completeStrokeQuiz"]["remediation"]["currentStep"], 1)
 
         open_q = """mutation($r: ID!, $k: String!) {

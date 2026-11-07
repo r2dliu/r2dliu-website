@@ -43,6 +43,9 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
   const [attempt, setAttempt] = useState(0)
   const [mistakes, setMistakes] = useState(0)
   const [message, setMessage] = useState<string | null>(null)
+  // Whether the last free drawing counted (after the task is done, drawing
+  // is just practice)
+  const [counted, setCounted] = useState(false)
 
   useEffect(() => setMistakes(0), [target, attempt])
 
@@ -85,17 +88,18 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
               api.submitFreeDrawing(remediation.id, target, strokes),
             )
             if (!r) return null
+            setCounted(r.counted)
             setStudy(r.study)
             return r.result
           }}
           footer={(r) =>
-            r.accuracy >= minAccuracy ? (
+            counted ? (
               <div className="text-sm text-green-400">{t('counted')}</div>
-            ) : (
+            ) : !step.satisfied && r.accuracy < minAccuracy ? (
               <div className="text-sm text-red-300">
                 {t('needsAccuracy', { n: minAccuracy })}
               </div>
-            )
+            ) : null
           }
         />
       ) : (

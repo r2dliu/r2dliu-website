@@ -26,7 +26,8 @@ function RelatedDetail({ item }: { item: RelatedItem }) {
   const chars =
     detail && 'characters' in detail
       ? detail.characters
-      : [{ hanzi: item.hanzi } as Character]
+      : // Until the word loads, one square per character, not the whole word
+        Array.from(item.hanzi, (h) => ({ hanzi: h }) as Character)
   return (
     <div className="flex flex-col gap-3 pt-3">
       <Definition text={definition(item)} />

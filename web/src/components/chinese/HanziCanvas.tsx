@@ -95,7 +95,7 @@ export function HanziCanvas({
 
   return (
     <div
-      className="relative border border-zinc-700 bg-zinc-950"
+      className="relative overflow-hidden border border-zinc-700 bg-zinc-950"
       style={{ width: size, height: size }}
     >
       {/* Rice-paper guide lines */}
