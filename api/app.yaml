@@ -17,9 +17,11 @@
 # [START django_app]
 # [START gaestd_py_django_app_yaml]
 runtime: python311
-# F2: 768 MB and a faster CPU. App Engine's default 4 gunicorn workers use
-# ~115 MB each (Django + numpy + recognition data), too much for F1's 384 MB.
+# F2: 768 MB and a faster CPU. Each gunicorn worker uses ~115 MB (Django +
+# numpy + recognition data). App Engine's default on F2 is 8 workers, which
+# wouldn't fit, so run its usual command with 4.
 instance_class: F2
+entrypoint: gunicorn main:app --workers 4 -c /config/gunicorn.py
 
 env_variables:
   # This setting is used in settings.py to configure your ALLOWED_HOSTS
