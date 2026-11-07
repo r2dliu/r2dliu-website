@@ -40,7 +40,14 @@ function Choice<T extends string>({
 }
 
 /** Optional drawing practice for any card; nothing is recorded. */
-export function PracticeDrawing({ card }: { card: Card }) {
+export function PracticeDrawing({
+  card,
+  size,
+}: {
+  card: Card
+  /** Canvas size in px, to fit the space available */
+  size?: number
+}) {
   const run = useStudyStore((s) => s.run)
   const chars = card.character
     ? [card.character]
@@ -85,6 +92,7 @@ export function PracticeDrawing({ card }: { card: Card }) {
         <FreeDrawPad
           key={current}
           hanzi={current}
+          size={size}
           onSubmit={async (strokes) =>
             (await run(() => api.scoreDrawing(current, strokes))) ?? null
           }
@@ -94,6 +102,7 @@ export function PracticeDrawing({ card }: { card: Card }) {
           <DrawingPad
             key={current}
             hanzi={current}
+            size={size}
             onMistake={(m) => {
               setMistakes(m)
               if (m === 0) setResult(null)

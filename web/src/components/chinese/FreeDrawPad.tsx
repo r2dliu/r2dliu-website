@@ -190,7 +190,7 @@ export function FreeDrawPad({
           </div>
         </div>
       ) : (
-        <div className="flex flex-wrap justify-center gap-2">
+        <div className="flex flex-wrap justify-center gap-2 max-md:gap-1 [&>button]:max-md:!px-2">
           <Btn
             variant="outlined"
             onClick={check}

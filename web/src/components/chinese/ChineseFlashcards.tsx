@@ -94,22 +94,26 @@ type Tab = (typeof TABS)[number][0]
 function CardDetails({ card }: { card: Card }) {
   const [tab, setTab] = useState<Tab>('meaning')
 
-  // The area never shrinks for this card, so switching to a shorter tab
-  // doesn't pull the rating buttons (or the scroll position) up.
+  // The tabs fill whatever height is left on screen; size the drawing canvas
+  // to fit it (leaving room for the mode toggle and buttons).
   const panelRef = useRef<HTMLDivElement>(null)
-  const [minHeight, setMinHeight] = useState(0)
+  const [drawSize, setDrawSize] = useState(260)
   useEffect(() => {
     const el = panelRef.current
     if (!el) return
     const observer = new ResizeObserver(() =>
-      setMinHeight((h) => Math.max(h, el.offsetHeight)),
+      setDrawSize(
+        Math.round(
+          Math.max(160, Math.min(340, el.clientWidth, el.clientHeight - 110)),
+        ),
+      ),
     )
     observer.observe(el)
     return () => observer.disconnect()
   }, [])
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex min-h-0 flex-1 flex-col gap-3">
       <div className="flex border-b border-zinc-800" role="tablist">
         {TABS.map(([key, label]) => (
           <button
@@ -131,9 +135,10 @@ function CardDetails({ card }: { card: Card }) {
           </button>
         ))}
       </div>
-      <div ref={panelRef} style={{ minHeight }}>
+      {/* Only this area scrolls, if a tab's content is taller than the space */}
+      <div ref={panelRef} className="min-h-0 flex-1 overflow-y-auto">
         {tab === 'meaning' && <CardBack card={card} />}
-        {tab === 'draw' && <PracticeDrawing card={card} />}
+        {tab === 'draw' && <PracticeDrawing card={card} size={drawSize} />}
         {tab === 'related' && <PracticeRelated card={card} />}
       </div>
     </div>
@@ -164,7 +169,11 @@ function StudyPanel() {
 
   const { card, remediation } = study
   if (remediation && card) {
-    return <RemediationPanel card={card} remediation={remediation} />
+    return (
+      <div className="min-h-0 flex-1 overflow-y-auto pb-3">
+        <RemediationPanel card={card} remediation={remediation} />
+      </div>
+    )
   }
 
   if (!card) {
@@ -196,22 +205,25 @@ function StudyPanel() {
   )
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex min-h-0 flex-1 flex-col gap-3 md:gap-5">
       <div className="text-xs uppercase tracking-wide text-zinc-500">
         {card.state.toLowerCase()}
         {card.lapses ? ` · ${card.lapses} lapses` : ''}
       </div>
-      <CardFront card={card} />
+      <CardFront card={card} compact={revealed} />
       {revealed ? (
         <>
           <CardDetails key={card.id} card={card} />
-          <div className="grid grid-cols-5 gap-3 pt-2 max-md:gap-2">
+          <div className="grid shrink-0 grid-cols-5 gap-3 pb-3 max-md:gap-1.5">
             {RATINGS.map(({ rating, label, className }, i) => (
               <Btn
                 key={rating}
                 variant="outlined"
                 disabled={busy}
-                className={cn('!flex !flex-col items-center', className)}
+                className={cn(
+                  '!flex !flex-col items-center max-md:!px-1 max-md:!py-1',
+                  className,
+                )}
                 onClick={() => answer(rating)}
               >
                 <span className="text-xs text-zinc-400">{preview[rating]}</span>
@@ -224,9 +236,17 @@ function StudyPanel() {
           </div>
         </>
       ) : (
-        <Btn variant="outlined" onClick={reveal} className="self-center">
-          Show answer
-        </Btn>
+        <>
+          <div className="flex-1" />
+          {/* Where the rating buttons will appear, within thumb reach */}
+          <Btn
+            variant="outlined"
+            onClick={reveal}
+            className="mb-3 shrink-0 self-stretch md:self-center"
+          >
+            Show answer
+          </Btn>
+        </>
       )}
     </div>
   )
@@ -243,9 +263,23 @@ export function ChineseFlashcards() {
   const deck = decks.find((d) => d.id === deckId) ?? study?.deck
 
   return (
-    <div className="h-full w-full overflow-y-auto overflow-x-hidden">
-      <div className="mx-auto flex max-w-4xl flex-col gap-6 p-4 md:p-10">
-        <div className="flex items-center gap-2">
+    // While studying the page is exactly one screen tall and never scrolls;
+    // settings and new-deck screens scroll normally.
+    <div
+      className={cn(
+        'h-dvh w-full overflow-x-hidden',
+        mode === 'study' && decks.length > 0
+          ? 'overflow-hidden'
+          : 'overflow-y-auto',
+      )}
+    >
+      <div
+        className={cn(
+          'mx-auto flex max-w-4xl flex-col gap-3 px-4 pt-3 md:gap-6 md:px-10 md:pt-8',
+          mode === 'study' && decks.length > 0 ? 'h-full' : 'pb-10',
+        )}
+      >
+        <div className="flex shrink-0 items-center gap-2">
           <Link
             to="/"
             className="text-sm text-zinc-400 no-underline hover:text-white"
