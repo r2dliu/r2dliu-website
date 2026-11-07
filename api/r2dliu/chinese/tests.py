@@ -373,13 +373,13 @@ def shifted(strokes, dx=40, dy=-30, scale=0.6):
 
 class DrawingTests(TestCase):
     def setUp(self):
-        drawing._candidates = None  # recognition cache is per database
+        drawing._groups = None  # recognition cache is per database
         self.shi = make_drawn_char("十", SHI, 1)
         make_drawn_char("二", ER, 2)
         make_drawn_char("人", REN, 3)
 
     def tearDown(self):
-        drawing._candidates = None
+        drawing._groups = None
 
     def test_position_and_size_dont_matter(self):
         score = drawing.score_drawing(self.shi, shifted(SHI))
@@ -415,7 +415,7 @@ class DrawingTests(TestCase):
 
 class FreeDrawingFlowTests(TestCase):
     def setUp(self):
-        drawing._candidates = None
+        drawing._groups = None
         make_drawn_char("十", SHI, 1)
         make_drawn_char("二", ER, 2)
 

@@ -24,3 +24,4 @@ sam.yaml
 /cypress/screenshots
 /cypress/videos
 api/data/
+api/r2dliu/chinese/recognition.npz
