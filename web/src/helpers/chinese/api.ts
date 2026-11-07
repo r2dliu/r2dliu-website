@@ -86,9 +86,45 @@ export interface Word {
   characters: Array<Character>
 }
 
+export type CardState =
+  | 'NEW'
+  | 'LEARNING'
+  | 'REVIEW'
+  | 'RELEARNING'
+  | 'KNOWN'
+  | 'UPCOMING'
+
+export type DeckFilter =
+  | 'ALL'
+  | 'NEW'
+  | 'LEARNING'
+  | 'REVIEW'
+  | 'KNOWN'
+  | 'UPCOMING'
+
+export type CardAction = 'STUDY_NOW' | 'KNOWN' | 'RESET'
+
+/** A row in the deck browser */
+export interface DeckItem {
+  key: string
+  hanzi: string
+  pinyin: string
+  definition: string
+  definitionZh: string
+  frequencyRank: number | null
+  hskLevel: number | null
+  state: CardState
+  due: string | null
+  reps: number
+  lapses: number
+  /** Null for UPCOMING items */
+  cardId: string | null
+}
+
 export interface Card {
   id: string
-  state: 'NEW' | 'LEARNING' | 'REVIEW' | 'RELEARNING' | 'KNOWN'
+  /** UPCOMING: a preview of something not in the deck yet */
+  state: CardState
   hanzi: string
   lapses: number
   character: Character | null
@@ -198,20 +234,22 @@ const DECK_FIELDS = `
   graduatingIntervalDays easyIntervalDays failureSteps cardCount
 `
 
+const CARD_FIELDS = `
+  id state hanzi lapses
+  intervalPreview { rating label }
+  examples { id chinese english tokens { text pinyin } }
+  character { ${CHARACTER_FIELDS} }
+  word {
+    simplified traditional pinyin definition definitionZh frequencyRank hskLevel
+    characters { ${CHARACTER_FIELDS} }
+  }
+`
+
 const STUDY_FIELDS = `
   deck { ${DECK_FIELDS} }
   counts { new learning review }
   nextDueAt
-  card {
-    id state hanzi lapses
-    intervalPreview { rating label }
-    examples { id chinese english tokens { text pinyin } }
-    character { ${CHARACTER_FIELDS} }
-    word {
-      simplified traditional pinyin definition definitionZh frequencyRank hskLevel
-      characters { ${CHARACTER_FIELDS} }
-    }
-  }
+  card { ${CARD_FIELDS} }
   remediation {
     id status currentStep
     steps {
@@ -346,10 +384,10 @@ export const api = {
     ).then((d) => d.submitFreeDrawing),
 
   addToDeck: (deckId: string, hanzi: string) =>
-    gql(
-      `mutation($deckId: ID!, $hanzi: String!) { addToDeck(deckId: $deckId, hanzi: $hanzi) { card { id } } }`,
+    gql<{ addToDeck: { card: Card } }>(
+      `mutation($deckId: ID!, $hanzi: String!) { addToDeck(deckId: $deckId, hanzi: $hanzi) { card { ${CARD_FIELDS} } } }`,
       { deckId, hanzi },
-    ),
+    ).then((d) => d.addToDeck.card),
 
   strokeData: (hanzi: string) =>
     gql<{ character: { strokeData: StrokeData } | null }>(
@@ -374,4 +412,38 @@ export const api = {
       } }`,
       { simplified },
     ).then((d) => d.word),
+
+  deckItems: (
+    deckId: string,
+    filter: DeckFilter,
+    query: string,
+    offset: number,
+    limit = 50,
+  ) =>
+    gql<{ deckItems: { total: number; items: Array<DeckItem> } }>(
+      `query($deckId: ID!, $filter: String, $query: String, $offset: Int, $limit: Int) {
+        deckItems(deckId: $deckId, filter: $filter, query: $query, offset: $offset, limit: $limit) {
+          total
+          items { key hanzi pinyin definition definitionZh frequencyRank hskLevel state due reps lapses cardId }
+        }
+      }`,
+      { deckId, filter, query, offset, limit },
+    ).then((d) => d.deckItems),
+
+  /** A card by id, or a preview of hanzi if it isn't in the deck */
+  card: (deckId: string, item: { cardId: string | null; hanzi: string }) =>
+    gql<{ card: Card | null }>(
+      `query($id: ID, $deckId: ID, $hanzi: String) {
+        card(id: $id, deckId: $deckId, hanzi: $hanzi) { ${CARD_FIELDS} }
+      }`,
+      item.cardId ? { id: item.cardId } : { deckId, hanzi: item.hanzi },
+    ).then((d) => d.card),
+
+  editCard: (cardId: string, action: CardAction) =>
+    gql<{ editCard: { card: Card } }>(
+      `mutation($cardId: ID!, $action: String!) {
+        editCard(cardId: $cardId, action: $action) { card { ${CARD_FIELDS} } }
+      }`,
+      { cardId, action },
+    ).then((d) => d.editCard.card),
 }
