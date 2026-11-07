@@ -211,13 +211,21 @@ def active_for_deck(deck_id) -> Remediation | None:
     )
 
 
-def _current(remediation: Remediation, step_type: str) -> tuple[dict, dict]:
-    if remediation.status != Remediation.Status.ACTIVE:
-        raise RemediationError("Remediation is already complete")
-    step = remediation.steps[remediation.current_step]
-    if step["type"] != step_type:
-        raise RemediationError(f"Current step is {step['type']}, not {step_type}")
-    return step, remediation.progress[remediation.current_step]
+def _current(remediation: Remediation, step_type: str) -> tuple[dict, dict | None]:
+    """The step of this type and, if it's the one in progress, its progress.
+
+    Progress is None when the learner is still on a step that's finished (or
+    the whole remediation is): the attempt is practice and isn't recorded.
+    """
+    active = remediation.status == Remediation.Status.ACTIVE
+    if active and remediation.current_step < len(remediation.steps):
+        step = remediation.steps[remediation.current_step]
+        if step["type"] == step_type:
+            return step, remediation.progress[remediation.current_step]
+    for step in remediation.steps:
+        if step["type"] == step_type:
+            return step, None
+    raise RemediationError("This card has no such task")
 
 
 def _locked(remediation_id) -> Remediation:
@@ -233,7 +241,7 @@ def _locked(remediation_id) -> Remediation:
 def complete_stroke_quiz(remediation_id, hanzi: str, mistakes: int):
     """Record one traced drawing. Returns (remediation, counted)."""
     remediation, step, progress = _drawing_step(remediation_id, hanzi)
-    counted = mistakes <= step["maxMistakes"]
+    counted = progress is not None and mistakes <= step["maxMistakes"]
     _count_drawing(remediation, progress, hanzi, counted)
     return remediation, counted
 
@@ -247,7 +255,7 @@ def submit_free_drawing(remediation_id, hanzi: str, strokes):
     except (TypeError, ValueError, IndexError) as e:
         raise RemediationError(f"Invalid drawing: {e}")
     score = drawing.score_drawing(Character.objects.get(hanzi=hanzi), strokes)
-    counted = score.accuracy >= step["minAccuracy"]
+    counted = progress is not None and score.accuracy >= step["minAccuracy"]
     _count_drawing(remediation, progress, hanzi, counted)
     return remediation, score, counted
 
@@ -255,8 +263,10 @@ def submit_free_drawing(remediation_id, hanzi: str, strokes):
 def _drawing_step(remediation_id, hanzi: str):
     remediation = _locked(remediation_id)
     step, progress = _current(remediation, DRAW_STROKES)
-    if hanzi not in progress["completed"]:
+    if hanzi not in remediation.card.hanzi:
         raise RemediationError(f"{hanzi} is not part of this card")
+    if progress is not None and hanzi not in progress["completed"]:
+        progress = None  # Part of the card but not one to draw: practice
     return remediation, step, progress
 
 
@@ -271,6 +281,8 @@ def _count_drawing(remediation, progress, hanzi: str, counted: bool) -> None:
 def open_related(remediation_id, key: str) -> Remediation:
     remediation = _locked(remediation_id)
     _step, progress = _current(remediation, EXPLORE_RELATED)
+    if progress is None:
+        return remediation  # Exploring after the task is done: nothing to count
     if key not in progress["items"]:
         raise RemediationError("That item isn't in the related list")
     if key not in progress["opened"]:
@@ -287,11 +299,12 @@ def submit_pinyin(remediation_id, answer: str):
     _step, progress = _current(remediation, TYPE_PINYIN)
     subject = remediation.card.subject
     correct = pinyin.matches(answer, subject.pinyin_numbered)
-    progress["attempts"] += 1
-    if correct:
-        progress["correct"] += 1
-        _advance(remediation)
-    remediation.save()
+    if progress is not None:
+        progress["attempts"] += 1
+        if correct:
+            progress["correct"] += 1
+            _advance(remediation)
+        remediation.save()
     expected = (
         subject.pinyin if isinstance(subject, Word) else " / ".join(subject.pinyin)
     )
