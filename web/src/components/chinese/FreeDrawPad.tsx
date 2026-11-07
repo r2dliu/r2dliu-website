@@ -1,8 +1,9 @@
+import cn from 'classnames'
 import { useEffect, useRef, useState } from 'react'
 
 import { useT } from '../../helpers/chinese/i18n'
 import { HanziCanvas, loadStrokes } from './HanziCanvas'
-import { Btn } from './ui'
+import { Btn, NO_SELECT, noSelectWhileDrawing } from './ui'
 import type {
   DrawingResult,
   DrawnStroke,
@@ -113,8 +114,8 @@ export function FreeDrawPad({
   }
 
   return (
-    <div className="flex flex-col items-center gap-3">
-      <div className="relative">
+    <div className={cn('flex flex-col items-center gap-3', NO_SELECT)}>
+      <div className="relative" {...noSelectWhileDrawing()}>
         <svg
           ref={svgRef}
           width={size}

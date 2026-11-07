@@ -159,3 +159,30 @@ export function Expandable({
     </div>
   )
 }
+
+/**
+ * While a finger or pen is down on a drawing surface, stop the page from
+ * selecting text (a stroke that strays off the canvas otherwise highlights
+ * whatever it crosses). Spread the result onto the drawing's container.
+ */
+export function noSelectWhileDrawing() {
+  return {
+    onPointerDownCapture: () => {
+      const root = document.documentElement
+      window.getSelection()?.removeAllRanges()
+      root.style.setProperty('user-select', 'none')
+      root.style.setProperty('-webkit-user-select', 'none')
+      const release = () => {
+        root.style.removeProperty('user-select')
+        root.style.removeProperty('-webkit-user-select')
+        window.removeEventListener('pointerup', release)
+        window.removeEventListener('pointercancel', release)
+      }
+      window.addEventListener('pointerup', release)
+      window.addEventListener('pointercancel', release)
+    },
+  }
+}
+
+/** Classes for drawing areas: no text selection or iOS long-press menu */
+export const NO_SELECT = 'select-none [-webkit-touch-callout:none]'
