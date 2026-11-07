@@ -7,7 +7,7 @@ import { useT } from '../../helpers/chinese/i18n'
 import { DrawingPad } from './DrawingPad'
 import { FreeDrawPad } from './FreeDrawPad'
 import { RelatedList } from './RelatedList'
-import { Spinner } from './ui'
+import { NO_SELECT, Spinner } from './ui'
 import type { Card, RelatedItem } from '../../helpers/chinese/api'
 
 function Choice<T extends string>({
@@ -69,7 +69,7 @@ export function PracticeDrawing({
   }
 
   return (
-    <div className="flex flex-col items-center gap-3">
+    <div className={cn('flex flex-col items-center gap-3', NO_SELECT)}>
       <div className="flex flex-wrap justify-center gap-4">
         <Choice
           options={[
