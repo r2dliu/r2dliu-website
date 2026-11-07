@@ -4,7 +4,7 @@ from graphene.types.generic import GenericScalar
 from django.core.exceptions import ValidationError
 from graphql import GraphQLError
 
-from r2dliu.chinese import drawing, remediation, scheduler, study
+from r2dliu.chinese import browse, drawing, remediation, scheduler, study
 from r2dliu.chinese.models import Card, Character, Deck, Review, Word
 
 
@@ -15,7 +15,34 @@ def get_deck(info, deck_id) -> Deck:
         raise GraphQLError("Deck not found")
 
 
-def get_card(info, card_id) -> Card:
+PREVIEW = "preview:"
+
+
+def preview_card(deck: Deck, hanzi: str) -> Card:
+    """The deck's card for hanzi, or an unsaved one if it isn't in the deck."""
+    is_word = deck.card_kind == Deck.CardKind.WORD
+    subject = (
+        Word.objects.filter(simplified=hanzi).first()
+        if is_word
+        else Character.objects.filter(hanzi=hanzi).first()
+    )
+    if not subject:
+        raise GraphQLError(f"{hanzi} not found")
+    field = "word" if is_word else "character"
+    existing = deck.cards.filter(**{field: subject}).select_related(
+        "deck", "character", "word"
+    )
+    if existing.exists():
+        return existing.get()
+    # Not in the deck yet: an unsaved card, just for viewing
+    return Card(id=None, deck=deck, state="UPCOMING", **{field: subject})
+
+
+def get_card(info, card_id, allow_preview=False) -> Card:
+    """A card by id. Preview ids (cards not in the deck) only if allowed."""
+    if allow_preview and card_id.startswith(PREVIEW):
+        deck_id, _, hanzi = card_id[len(PREVIEW) :].partition(":")
+        return preview_card(get_deck(info, deck_id), hanzi)
     try:
         return Card.objects.select_related("deck", "character", "word").get(pk=card_id)
     except (Card.DoesNotExist, ValidationError):
@@ -172,11 +199,19 @@ class CardType(graphene.ObjectType):
         description="Short example sentences using the card's word/character",
     )
 
+    def resolve_id(card: Card, info):
+        return card.pk or f"{PREVIEW}{card.deck_id}:{card.hanzi}"
+
+    def resolve_due(card: Card, info):
+        return card.due or timezone.now()
+
     def resolve_examples(card: Card, info):
         item = card.word or card.character
         return [e.sentence for e in item.examples.select_related("sentence")]
 
     def resolve_interval_preview(card: Card, info):
+        if not card.pk:
+            return []
         preview = scheduler.preview(card, card.deck, timezone.now())
         return [
             IntervalPreviewType(
@@ -328,11 +363,75 @@ class FailureStepTypeInfo(graphene.ObjectType):
 # ---------------------------------------------------------------------------
 
 
+class DeckItemType(graphene.ObjectType):
+    """A row in the deck browser: a card, or something not in the deck yet."""
+
+    key = graphene.String(required=True)
+    hanzi = graphene.String(required=True)
+    pinyin = graphene.String(required=True)
+    definition = graphene.String(required=True)
+    definition_zh = graphene.String(required=True)
+    frequency_rank = graphene.Int()
+    hsk_level = graphene.Int()
+    state = graphene.String(
+        required=True, description="Card state, or UPCOMING if not in the deck"
+    )
+    due = graphene.DateTime()
+    reps = graphene.Int(required=True)
+    lapses = graphene.Int(required=True)
+    card_id = graphene.ID()
+
+    @staticmethod
+    def build(item):
+        card = item if isinstance(item, Card) else None
+        subject = card.subject if card else item
+        is_char = isinstance(subject, Character)
+        return DeckItemType(
+            key=str(card.pk) if card else f"upcoming-{subject.pk}",
+            hanzi=subject.hanzi if is_char else subject.simplified,
+            pinyin=" / ".join(subject.pinyin) if is_char else subject.pinyin,
+            definition=subject.definition,
+            definition_zh=subject.definition_zh,
+            frequency_rank=subject.frequency_rank,
+            hsk_level=subject.hsk_level,
+            state=card.state if card else "UPCOMING",
+            due=card.due if card else None,
+            reps=card.reps if card else 0,
+            lapses=card.lapses if card else 0,
+            card_id=card.pk if card else None,
+        )
+
+
+class DeckItemsType(graphene.ObjectType):
+    total = graphene.Int(required=True)
+    items = graphene.List(graphene.NonNull(DeckItemType), required=True)
+
+
 class Query(graphene.ObjectType):
     character = graphene.Field(CharacterType, hanzi=graphene.String(required=True))
     word = graphene.Field(WordType, simplified=graphene.String(required=True))
     decks = graphene.List(graphene.NonNull(DeckType), required=True)
     deck = graphene.Field(DeckType, id=graphene.ID(required=True))
+    deck_items = graphene.Field(
+        DeckItemsType,
+        required=True,
+        deck_id=graphene.ID(required=True),
+        filter=graphene.String(default_value="ALL"),
+        query=graphene.String(default_value=""),
+        offset=graphene.Int(default_value=0),
+        limit=graphene.Int(default_value=50),
+        description="Browse a deck's cards (or, with UPCOMING, what's next)",
+    )
+    card = graphene.Field(
+        CardType,
+        id=graphene.ID(),
+        deck_id=graphene.ID(),
+        hanzi=graphene.String(),
+        description=(
+            "A card by id, or a preview of a character/word not in the deck "
+            "yet (deckId + hanzi)"
+        ),
+    )
     study = graphene.Field(StudyStateType, deck_id=graphene.ID(required=True))
     related_items = graphene.List(
         graphene.NonNull(RelatedItemType),
@@ -365,6 +464,23 @@ class Query(graphene.ObjectType):
     def resolve_deck(root, info, id):
         return get_deck(info, id)
 
+    def resolve_deck_items(root, info, deck_id, filter, query, offset, limit):
+        deck = get_deck(info, deck_id)
+        try:
+            page = browse.browse(deck, filter, query, offset, limit)
+        except browse.BrowseError as e:
+            raise GraphQLError(str(e))
+        return DeckItemsType(
+            total=page.total, items=[DeckItemType.build(i) for i in page.items]
+        )
+
+    def resolve_card(root, info, id=None, deck_id=None, hanzi=None):
+        if id:
+            return get_card(info, id, allow_preview=True)
+        if not (deck_id and hanzi):
+            raise GraphQLError("Give id, or deckId and hanzi")
+        return preview_card(get_deck(info, deck_id), hanzi)
+
     def resolve_study(root, info, deck_id):
         return study.get_state(get_deck(info, deck_id))
 
@@ -379,7 +495,7 @@ class Query(graphene.ObjectType):
         return DrawingResultType.build(drawing.score_drawing(char, strokes), strokes)
 
     def resolve_related_items(root, info, card_id, limit):
-        card = get_card(info, card_id)
+        card = get_card(info, card_id, allow_preview=True)
         items = remediation.related_items(card, max(1, min(limit, 50)))
         return [RelatedItemType.build(item) for item in items]
 
@@ -527,6 +643,23 @@ class AddToDeck(graphene.Mutation):
         return AddToDeck(card=study.add_card(deck, subject, timezone.now()))
 
 
+class EditCard(graphene.Mutation):
+    """Change a card from the deck browser: STUDY_NOW, KNOWN or RESET."""
+
+    class Arguments:
+        card_id = graphene.ID(required=True)
+        action = graphene.String(required=True)
+
+    card = graphene.Field(CardType, required=True)
+
+    def mutate(root, info, card_id, action):
+        card = get_card(info, card_id)
+        try:
+            return EditCard(card=browse.apply_action(card, action))
+        except browse.BrowseError as e:
+            raise GraphQLError(str(e))
+
+
 def _remediation_call(fn, *args):
     try:
         return fn(*args)
@@ -627,6 +760,7 @@ class Mutation(graphene.ObjectType):
     answer_card = AnswerCard.Field()
     study_more = StudyMore.Field()
     add_to_deck = AddToDeck.Field()
+    edit_card = EditCard.Field()
     complete_stroke_quiz = CompleteStrokeQuiz.Field()
     submit_free_drawing = SubmitFreeDrawing.Field()
     open_related_item = OpenRelatedItem.Field()

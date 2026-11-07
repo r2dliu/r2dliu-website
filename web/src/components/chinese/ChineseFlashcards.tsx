@@ -1,15 +1,16 @@
 import { Link } from '@tanstack/react-router'
 import cn from 'classnames'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useStudyStore } from '../../stores/chinese/studyStore'
 import { useT } from '../../helpers/chinese/i18n'
-import { CardBack, CardFront } from './CardFace'
+import { CardFront } from './CardFace'
+import { DeckBrowser } from './DeckBrowser'
 import { DeckSettings } from './DeckSettings'
-import { PracticeDrawing, PracticeRelated } from './PracticePanel'
+import { CardDetails } from './CardDetails'
 import { RemediationPanel } from './RemediationPanel'
 import { Btn, Input, Select, Spinner } from './ui'
-import type { Card, CardKind, Rating } from '../../helpers/chinese/api'
+import type { CardKind, Rating } from '../../helpers/chinese/api'
 
 const RATINGS: Array<{ rating: Rating; className: string }> = [
   { rating: 'AGAIN', className: '!border-red-500' },
@@ -85,76 +86,6 @@ function Counts() {
       <span className="text-green-400" title={t('countReview')}>
         {counts.review}
       </span>
-    </div>
-  )
-}
-
-const TABS = ['meaning', 'draw', 'related'] as const
-type Tab = (typeof TABS)[number]
-
-/**
- * The revealed card's details. Meaning, drawing practice and related vocab
- * share one space as tabs instead of stacking. None of them affect scheduling.
- */
-function CardDetails({ card }: { card: Card }) {
-  const [tab, setTab] = useState<Tab>('meaning')
-  const t = useT()
-
-  // The tabs fill whatever height is left on screen; size the drawing canvas
-  // to fit it (leaving room for the mode toggle and buttons).
-  const panelRef = useRef<HTMLDivElement>(null)
-  const [drawSize, setDrawSize] = useState(260)
-  useEffect(() => {
-    const el = panelRef.current
-    if (!el) return
-    const observer = new ResizeObserver(() =>
-      setDrawSize(
-        Math.round(
-          // Reserve room for the mode toggle, the result lines and buttons
-          Math.max(140, Math.min(340, el.clientWidth, el.clientHeight - 156)),
-        ),
-      ),
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
-
-  return (
-    <div className="flex min-h-0 flex-1 flex-col gap-3">
-      <div className="flex border-b border-zinc-800" role="tablist">
-        {TABS.map((key) => (
-          <button
-            key={key}
-            type="button"
-            role="tab"
-            aria-selected={tab === key}
-            onClick={() => setTab(key)}
-            className={cn(
-              "-mb-px flex-1 cursor-pointer border-0 border-b-2 border-solid bg-transparent py-2 font-['HelveticaNeueMedium'] text-sm uppercase tracking-wide",
-              {
-                'border-white text-white': tab === key,
-                'border-transparent text-zinc-500 hover:text-zinc-300':
-                  tab !== key,
-              },
-            )}
-          >
-            {t(key)}
-          </button>
-        ))}
-      </div>
-      {/* Fills the space between the tabs and the rating buttons */}
-      <div
-        ref={panelRef}
-        className={cn(
-          'min-h-0 flex-1',
-          // The draw tab is sized to fit; the others may scroll if long
-          tab === 'draw' ? 'overflow-hidden' : 'overflow-y-auto',
-        )}
-      >
-        {tab === 'meaning' && <CardBack card={card} />}
-        {tab === 'draw' && <PracticeDrawing card={card} size={drawSize} />}
-        {tab === 'related' && <PracticeRelated card={card} />}
-      </div>
     </div>
   )
 }
@@ -304,9 +235,14 @@ export function ChineseFlashcards() {
     study,
     language,
     setLanguage,
+    refresh,
   } = useStudyStore()
   const t = useT()
-  const [mode, setMode] = useState<'study' | 'settings' | 'new'>('study')
+  const [mode, setMode] = useState<'study' | 'settings' | 'new' | 'browse'>(
+    'study',
+  )
+  // Study and the deck browser fill exactly one screen; the rest scroll
+  const fullHeight = (mode === 'study' || mode === 'browse') && decks.length > 0
 
   useEffect(() => {
     loadDecks()
@@ -320,15 +256,13 @@ export function ChineseFlashcards() {
     <div
       className={cn(
         'h-dvh w-full overflow-x-hidden',
-        mode === 'study' && decks.length > 0
-          ? 'overflow-hidden'
-          : 'overflow-y-auto',
+        fullHeight ? 'overflow-hidden' : 'overflow-y-auto',
       )}
     >
       <div
         className={cn(
           'mx-auto flex max-w-4xl flex-col gap-3 px-4 pt-3 md:gap-6 md:px-10 md:pt-8',
-          mode === 'study' && decks.length > 0 ? 'h-full' : 'pb-10',
+          fullHeight ? 'h-full' : 'pb-10',
         )}
       >
         <div className="flex shrink-0 items-center gap-2">
@@ -371,6 +305,16 @@ export function ChineseFlashcards() {
               </Btn>
             )}
           </div>
+        ) : mode === 'browse' && deck ? (
+          <DeckBrowser
+            key={deck.id}
+            deck={deck}
+            onClose={() => {
+              setMode('settings')
+              // Cards may have been queued or marked known
+              refresh()
+            }}
+          />
         ) : mode === 'settings' && deck ? (
           <div className="flex flex-col gap-6">
             <div className="flex flex-wrap items-end gap-3">
@@ -397,6 +341,9 @@ export function ChineseFlashcards() {
                   ))}
                 </Select>
               )}
+              <Btn variant="outlined" onClick={() => setMode('browse')}>
+                {t('editDeck')}
+              </Btn>
               <Btn variant="outlined" onClick={() => setMode('new')}>
                 {t('newDeck')}
               </Btn>

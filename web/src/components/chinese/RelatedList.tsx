@@ -54,7 +54,7 @@ function RelatedDetail({ item }: { item: RelatedItem }) {
  * First line of a definition worth showing in a row: skips reading headers
  * ("méi") and sense numbers ("⒈ ").
  */
-function summary(definition: string) {
+export function summary(definition: string) {
   const line =
     definition
       .split('\n')

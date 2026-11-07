@@ -535,3 +535,76 @@ class ExampleTests(TestCase):
         self.assertEqual(got["id"], str(card.id))
         self.assertEqual(got["character"]["definitionZh"], "优点多的")
         self.assertEqual(got["examples"][0]["tokens"][1], {"text": "好", "pinyin": "hǎo"})
+
+
+class BrowseTests(TestCase):
+    """The deck browser: filters, search, previews and card actions."""
+
+    setUp = StudyFlowTests.setUp
+    gql = StudyFlowTests.gql
+    create_deck = StudyFlowTests.create_deck
+    study = StudyFlowTests.study
+    answer = StudyFlowTests.answer
+    STUDY = StudyFlowTests.STUDY
+
+    ITEMS = """query($d: ID!, $f: String, $q: String) {
+        deckItems(deckId: $d, filter: $f, query: $q) {
+            total items { hanzi state cardId } } }"""
+
+    def items(self, deck_id, f="ALL", q=""):
+        data, errors = self.gql(self.ITEMS, d=deck_id, f=f, q=q)
+        self.assertIsNone(errors)
+        return data["deckItems"]
+
+    def test_filters_search_and_actions(self):
+        deck_id = self.create_deck("WORD", [])
+        card = self.study(deck_id)["card"]  # 你好 becomes a card
+        self.answer(card["id"], "GOOD")
+
+        # Answering introduced the next new card (你们) too
+        all_items = self.items(deck_id)["items"]
+        self.assertEqual([i["hanzi"] for i in all_items], ["你好", "你们"])
+        self.assertEqual([i["state"] for i in all_items], ["LEARNING", "NEW"])
+        upcoming = self.items(deck_id, "UPCOMING")
+        self.assertEqual([i["hanzi"] for i in upcoming["items"]], ["好人"])
+        self.assertEqual(upcoming["items"][0]["state"], "UPCOMING")
+        # Pinyin without tones or spaces, English, and hanzi all match
+        self.assertEqual(self.items(deck_id, "UPCOMING", "haoren")["total"], 1)
+        self.assertEqual(self.items(deck_id, "ALL", "nihao")["total"], 1)
+        self.assertEqual(self.items(deck_id, "ALL", "def of 你们")["total"], 0)
+        self.assertEqual(self.items(deck_id, "ALL", "们")["total"], 1)
+        self.assertEqual(self.items(deck_id, "REVIEW")["total"], 0)
+
+        # Preview a word that isn't in the deck, with its related items
+        data, errors = self.gql(
+            """query($d: ID!) { card(deckId: $d, hanzi: "好人") { id state } }""",
+            d=deck_id,
+        )
+        self.assertIsNone(errors)
+        preview = data["card"]
+        self.assertEqual(preview["state"], "UPCOMING")
+        data, errors = self.gql(
+            "query($c: ID!) { relatedItems(cardId: $c) { hanzi } }", c=preview["id"]
+        )
+        self.assertIsNone(errors)
+        self.assertIn("好", [i["hanzi"] for i in data["relatedItems"]])
+        # ...but it can't be answered
+        _, errors = self.answer(preview["id"], "GOOD")
+        self.assertIsNotNone(errors)
+
+        edit = """mutation($c: ID!, $a: String!) {
+            editCard(cardId: $c, action: $a) { card { state } } }"""
+        data, _ = self.gql(edit, c=card["id"], a="KNOWN")
+        self.assertEqual(data["editCard"]["card"]["state"], "KNOWN")
+        self.assertEqual(self.items(deck_id, "KNOWN")["total"], 1)
+        data, _ = self.gql(edit, c=card["id"], a="STUDY_NOW")
+        self.assertEqual(data["editCard"]["card"]["state"], "REVIEW")
+        self.assertEqual(self.study(deck_id)["card"]["hanzi"], "你好")
+        # A new card asked for now goes straight into learning
+        new_id = all_items[1]["cardId"]
+        data, _ = self.gql(edit, c=new_id, a="STUDY_NOW")
+        self.assertEqual(data["editCard"]["card"]["state"], "LEARNING")
+        data, _ = self.gql(edit, c=card["id"], a="RESET")
+        self.assertEqual(data["editCard"]["card"]["state"], "NEW")
+        _, errors = self.gql(edit, c=card["id"], a="NOPE")
+        self.assertIsNotNone(errors)
