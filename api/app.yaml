@@ -22,6 +22,10 @@ runtime: python311
 # wouldn't fit, so run its usual command with 4.
 instance_class: F2
 entrypoint: gunicorn main:app --workers 4 -c /config/gunicorn.py
+# Cap costs: at most 2 instances however much traffic arrives. See also
+# infra/api-spend-shutoff, which stops the app once it costs anything.
+automatic_scaling:
+  max_instances: 2
 
 env_variables:
   # This setting is used in settings.py to configure your ALLOWED_HOSTS
