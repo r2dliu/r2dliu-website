@@ -1,5 +1,6 @@
 // Plain Tailwind form controls in the site's black/white style (like the
 // stacker game's buttons), so the feature doesn't depend on MUI form styling.
+import CircularProgress from '@mui/material/CircularProgress'
 import cn from 'classnames'
 import type {
   ButtonHTMLAttributes,
@@ -78,5 +79,17 @@ export function Select({
         {children}
       </select>
     </Field>
+  )
+}
+
+/**
+ * Loading indicator for the flashcards page: the same white MUI
+ * CircularProgress the old climbing classes page used.
+ */
+export function Spinner({ className }: { className?: string }) {
+  return (
+    <div className={cn('flex items-center justify-center py-16', className)}>
+      <CircularProgress sx={{ color: 'white' }} aria-label="Loading" />
+    </div>
   )
 }

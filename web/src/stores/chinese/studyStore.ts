@@ -11,6 +11,8 @@ import type {
 
 interface ChineseStudyState {
   decks: Array<Deck>
+  /** False until the first deck list arrives; until then decks is unknown */
+  decksLoaded: boolean
   deckId: string | null
   study: StudyState | null
   revealed: boolean
@@ -35,6 +37,7 @@ interface ChineseStudyState {
 export const useStudyStore = create<ChineseStudyState>()(
   devtools((set, get) => ({
     decks: [],
+    decksLoaded: false,
     deckId: null,
     study: null,
     revealed: false,
@@ -69,7 +72,7 @@ export const useStudyStore = create<ChineseStudyState>()(
     loadDecks: async () => {
       const decks = await get().run(api.decks)
       if (!decks) return
-      set({ decks })
+      set({ decks, decksLoaded: true })
       if (!get().deckId && decks.length) {
         await get().selectDeck(decks[0].id)
       }
