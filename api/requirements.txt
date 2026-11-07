@@ -54,8 +54,12 @@ grpcio==1.62.1
     #   grpcio-status
 grpcio-status==1.62.1
     # via google-api-core
+gunicorn==22.0.0
+    # via api
 idna==3.6
     # via requests
+numpy==1.26.4
+    # via api
 promise==2.3
     # via graphene-django
 proto-plus==1.23.0

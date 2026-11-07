@@ -12,7 +12,7 @@ import type {
 
 const OPTION_LABELS: Record<string, string> = {
   repetitions: 'Times required',
-  showOutline: 'Show outline while drawing',
+  showOutline: 'Show outline (guided)',
   characters: 'Characters to draw',
   mode: 'Drawing',
   minAccuracy: 'Min accuracy (%), free draw',

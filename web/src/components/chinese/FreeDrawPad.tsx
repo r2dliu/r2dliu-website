@@ -18,13 +18,11 @@ const PAD = 8
 export function FreeDrawPad({
   hanzi,
   size = 280,
-  showOutline = true,
   onSubmit,
   footer,
 }: {
   hanzi: string
   size?: number
-  showOutline?: boolean
   /** Score the drawing; resolve to null if it failed */
   onSubmit: (strokes: Array<DrawnStroke>) => Promise<DrawingResult | null>
   /** Extra line under the result, e.g. whether it counted */
@@ -128,10 +126,11 @@ export function FreeDrawPad({
           <line x1={size / 2} y1={0} x2={size / 2} y2={size} />
           <line x1={0} y1={size / 2} x2={size} y2={size / 2} />
         </g>
-        {reference && (showOutline || result) && (
+        {/* The reference only appears with the result, never while drawing */}
+        {reference && result && (
           <g
             transform={`translate(${PAD}, ${size - PAD - 124 * scale}) scale(${scale}, ${-scale})`}
-            fill={result ? '#52525b' : '#3f3f46'}
+            fill="#52525b"
           >
             {reference.strokes.map((d, i) => (
               <path key={i} d={d} />

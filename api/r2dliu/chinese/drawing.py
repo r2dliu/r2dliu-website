@@ -12,6 +12,9 @@ stroke count and returns the closest matches.
 
 import math
 from dataclasses import dataclass, field
+from pathlib import Path
+
+import numpy as np
 
 from r2dliu.chinese.models import Character, Stroke
 
@@ -210,44 +213,82 @@ def score_drawing(char: Character, strokes: list[Polyline]) -> DrawingScore:
 # Recognition
 # ---------------------------------------------------------------------------
 
-# hanzi -> prepared reference strokes, for common characters. Loaded lazily.
-Candidate = tuple[str, list[Polyline], list[Polyline]]  # hanzi, full, coarse
-_candidates: dict[int, list[Candidate]] | None = None
+# Common characters' prepared reference strokes, grouped by stroke count:
+# n -> (names, full (C, n, RESAMPLE_POINTS, 2), coarse (C, n, 4, 2)).
+# numpy keeps this to a few MB per worker; built once, ideally from the file
+# CI writes with `manage.py export_recognition_data`.
+Group = tuple[list[str], np.ndarray, np.ndarray]
+_groups: dict[int, Group] | None = None
+DATA_FILE = Path(__file__).with_name("recognition.npz")
+COARSE_POINTS = 4
 
 
-def _load_candidates() -> dict[int, list[Candidate]]:
-    global _candidates
-    if _candidates is None:
-        by_char: dict[str, list[Polyline]] = {}
-        rows = (
-            Stroke.objects.filter(character__frequency_rank__lte=RECOGNITION_MAX_RANK)
-            .order_by("character__frequency_rank", "order")
-            .values_list("character__hanzi", "median")
-        )
-        for hanzi, median in rows.iterator(chunk_size=5000):
-            by_char.setdefault(hanzi, []).append([tuple(p) for p in median])
-        grouped: dict[int, list[Candidate]] = {}
-        for hanzi, strokes in by_char.items():
-            prepared = _prepare(strokes)
-            grouped.setdefault(len(strokes), []).append(
-                (hanzi, prepared, _coarse(prepared))
-            )
-        _candidates = grouped
-    return _candidates
+def build_groups() -> dict[int, Group]:
+    """Prepare every common character's strokes from the database."""
+    by_char: dict[str, list[Polyline]] = {}
+    rows = (
+        Stroke.objects.filter(character__frequency_rank__lte=RECOGNITION_MAX_RANK)
+        .order_by("character__frequency_rank", "order")
+        .values_list("character__hanzi", "median")
+    )
+    for hanzi, median in rows.iterator(chunk_size=5000):
+        by_char.setdefault(hanzi, []).append([tuple(p) for p in median])
+    lists: dict[int, tuple[list[str], list]] = {}
+    for hanzi, strokes in by_char.items():
+        names, arrays = lists.setdefault(len(strokes), ([], []))
+        names.append(hanzi)
+        arrays.append(_prepare(strokes))
+    groups = {}
+    for n, (names, arrays) in lists.items():
+        full = np.asarray(arrays, dtype=np.float32)
+        groups[n] = (names, full, _coarse_array(full))
+    return groups
 
 
-def _coarse(strokes: list[Polyline]) -> list[Polyline]:
-    step = (RESAMPLE_POINTS - 1) // 3
-    return [s[::step] for s in strokes]
+def _coarse_array(full: np.ndarray) -> np.ndarray:
+    idx = np.linspace(0, RESAMPLE_POINTS - 1, COARSE_POINTS).round().astype(int)
+    return np.ascontiguousarray(full[..., idx, :])
 
 
-def _quick_distance(drawn: list[Polyline], ref: list[Polyline]) -> float:
-    """Cheap, order-independent comparison used to shortlist candidates:
-    how far each stroke is from its nearest counterpart, both ways."""
-    dist = [[_stroke_distance(d, r)[0] for r in ref] for d in drawn]
-    to_ref = sum(min(row) for row in dist) / len(drawn)
-    to_drawn = sum(min(col) for col in zip(*dist)) / len(ref)
-    return to_ref + to_drawn
+def save_groups(groups: dict[int, Group], path: Path = DATA_FILE) -> None:
+    arrays = {}
+    for n, (names, full, _) in groups.items():
+        arrays[f"names_{n}"] = np.asarray(names)
+        arrays[f"full_{n}"] = full
+    np.savez_compressed(path, **arrays)
+
+
+def _load_file(path: Path) -> dict[int, Group]:
+    groups = {}
+    with np.load(path) as data:
+        for key in data.files:
+            if key.startswith("names_"):
+                n = int(key.removeprefix("names_"))
+                full = data[f"full_{n}"]
+                groups[n] = (data[key].tolist(), full, _coarse_array(full))
+    return groups
+
+
+def _load_groups() -> dict[int, Group]:
+    global _groups
+    if _groups is None:
+        _groups = _load_file(DATA_FILE) if DATA_FILE.exists() else build_groups()
+    return _groups
+
+
+def _shortlist_distances(drawn: np.ndarray, refs: np.ndarray) -> np.ndarray:
+    """Order-independent distance from the drawing to each candidate.
+
+    drawn: (m, P, 2); refs: (C, n, P, 2). For every pair of strokes take the
+    mean point distance (either direction), then average how far each stroke
+    is from its nearest counterpart, both ways.
+    """
+    diff = drawn[None, :, None] - refs[:, None]  # (C, m, n, P, 2)
+    forward = np.linalg.norm(diff, axis=-1).mean(-1)
+    diff = drawn[None, :, None, ::-1] - refs[:, None]
+    backward = np.linalg.norm(diff, axis=-1).mean(-1)
+    dist = np.minimum(forward, backward)  # (C, m, n)
+    return dist.min(axis=2).mean(axis=1) + dist.min(axis=1).mean(axis=1)
 
 
 def recognise(strokes: list[Polyline], limit: int = 5) -> list[tuple[str, float]]:
@@ -255,19 +296,23 @@ def recognise(strokes: list[Polyline], limit: int = 5) -> list[tuple[str, float]
     if not strokes:
         return []
     drawn = _prepare(strokes)
-    groups = _load_candidates()
-    pool = [
-        c
-        for n in range(
-            len(drawn) - RECOGNITION_STROKE_SLACK,
-            len(drawn) + RECOGNITION_STROKE_SLACK + 1,
-        )
-        for c in groups.get(n, [])
+    coarse = _coarse_array(np.asarray([drawn], dtype=np.float32))[0]
+    pool: list[tuple[float, str, np.ndarray]] = []
+    for n in range(
+        len(drawn) - RECOGNITION_STROKE_SLACK,
+        len(drawn) + RECOGNITION_STROKE_SLACK + 1,
+    ):
+        group = _load_groups().get(n)
+        if not group:
+            continue
+        names, full, refs = group
+        distances = _shortlist_distances(coarse, refs)
+        for i in np.argsort(distances)[:RECOGNITION_SHORTLIST]:
+            pool.append((float(distances[i]), names[i], full[i]))
+    pool.sort(key=lambda c: c[0])
+    scored = [
+        (hanzi, score_prepared(drawn, ref.tolist()).accuracy)
+        for _, hanzi, ref in pool[:RECOGNITION_SHORTLIST]
     ]
-    coarse = _coarse(drawn)
-    shortlist = sorted(pool, key=lambda c: _quick_distance(coarse, c[2]))[
-        :RECOGNITION_SHORTLIST
-    ]
-    scored = [(h, score_prepared(drawn, ref).accuracy) for h, ref, _ in shortlist]
     scored.sort(key=lambda x: -x[1])
     return scored[:limit]

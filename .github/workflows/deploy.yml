@@ -233,6 +233,8 @@ jobs:
         run: |
           gcloud secrets versions access latest --secret=django-settings > .env
           python manage.py migrate --noinput
+          # Precomputed handwriting recognition data, shipped with the API
+          python manage.py export_recognition_data
           rm .env
 
       # App Engine serves /static from api/static (Django admin CSS/JS)

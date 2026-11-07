@@ -70,7 +70,6 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
         <FreeDrawPad
           key={`${current}-${attempt}`}
           hanzi={current}
-          showOutline={Boolean(step.config.showOutline)}
           onSubmit={async (strokes) => {
             const r = await run(() =>
               api.submitFreeDrawing(remediation.id, current, strokes),
@@ -139,7 +138,7 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
           {free
             ? `Draw the whole character, then Check. ${minAccuracy}% accuracy counts.`
             : 'Draw each stroke in order on the grid.'}
-          {step.config.showOutline ? '' : ' No outline — from memory!'}
+          {!free && !step.config.showOutline && ' No outline — from memory!'}
         </div>
         <details className="text-zinc-300">
           <summary className="cursor-pointer text-sm text-zinc-400">

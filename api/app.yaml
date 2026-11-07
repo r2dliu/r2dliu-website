@@ -17,6 +17,9 @@
 # [START django_app]
 # [START gaestd_py_django_app_yaml]
 runtime: python311
+# Instances have 384 MB; each worker uses ~115 MB (Django + numpy +
+# recognition data), so run 2 workers with threads instead of the default 4
+entrypoint: gunicorn -b :$PORT --workers 2 --threads 4 --timeout 60 main:app
 
 env_variables:
   # This setting is used in settings.py to configure your ALLOWED_HOSTS
