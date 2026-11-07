@@ -7,7 +7,7 @@ import { CardBack, CardFront } from './CardFace'
 import { DeckSettings } from './DeckSettings'
 import { PracticeDrawing, PracticeRelated } from './PracticePanel'
 import { RemediationPanel } from './RemediationPanel'
-import { Btn, Input, Select } from './ui'
+import { Btn, Input, Select, Spinner } from './ui'
 import type { Card, CardKind, Rating } from '../../helpers/chinese/api'
 
 const RATINGS: Array<{ rating: Rating; label: string; className: string }> = [
@@ -21,6 +21,7 @@ const RATINGS: Array<{ rating: Rating; label: string; className: string }> = [
 
 function NewDeckForm({ onDone }: { onDone?: () => void }) {
   const createDeck = useStudyStore((s) => s.createDeck)
+  const busy = useStudyStore((s) => s.busy)
   const [name, setName] = useState('Most common characters')
   const [cardKind, setCardKind] = useState<CardKind>('CHARACTER')
 
@@ -54,7 +55,12 @@ function NewDeckForm({ onDone }: { onDone?: () => void }) {
         <option value="CHARACTER">Characters (字)</option>
         <option value="WORD">Vocab words (词)</option>
       </Select>
-      <Btn type="submit" variant="outlined" className="max-md:w-full">
+      <Btn
+        type="submit"
+        variant="outlined"
+        className="max-md:w-full"
+        disabled={busy}
+      >
         Create deck
       </Btn>
     </form>
@@ -104,7 +110,8 @@ function CardDetails({ card }: { card: Card }) {
     const observer = new ResizeObserver(() =>
       setDrawSize(
         Math.round(
-          Math.max(160, Math.min(340, el.clientWidth, el.clientHeight - 110)),
+          // Reserve room for the mode toggle, the result lines and buttons
+          Math.max(140, Math.min(340, el.clientWidth, el.clientHeight - 150)),
         ),
       ),
     )
@@ -135,8 +142,15 @@ function CardDetails({ card }: { card: Card }) {
           </button>
         ))}
       </div>
-      {/* Only this area scrolls, if a tab's content is taller than the space */}
-      <div ref={panelRef} className="min-h-0 flex-1 overflow-y-auto">
+      {/* Fills the space between the tabs and the rating buttons */}
+      <div
+        ref={panelRef}
+        className={cn(
+          'min-h-0 flex-1',
+          // The draw tab is sized to fit; the others may scroll if long
+          tab === 'draw' ? 'overflow-hidden' : 'overflow-y-auto',
+        )}
+      >
         {tab === 'meaning' && <CardBack card={card} />}
         {tab === 'draw' && <PracticeDrawing card={card} size={drawSize} />}
         {tab === 'related' && <PracticeRelated card={card} />}
@@ -165,7 +179,7 @@ function StudyPanel() {
     return () => window.removeEventListener('keydown', onKey)
   }, [study, revealed, reveal, answer])
 
-  if (!study) return <div className="text-zinc-400">Loading…</div>
+  if (!study) return <Spinner />
 
   const { card, remediation } = study
   if (remediation && card) {
@@ -253,7 +267,8 @@ function StudyPanel() {
 }
 
 export function ChineseFlashcards() {
-  const { decks, deckId, selectDeck, loadDecks, error, study } = useStudyStore()
+  const { decks, decksLoaded, deckId, selectDeck, loadDecks, error, study } =
+    useStudyStore()
   const [mode, setMode] = useState<'study' | 'settings' | 'new'>('study')
 
   useEffect(() => {
@@ -300,7 +315,10 @@ export function ChineseFlashcards() {
           </div>
         )}
 
-        {decks.length === 0 || mode === 'new' ? (
+        {!decksLoaded ? (
+          // Until decks arrive we don't know if any exist: don't offer to create one
+          <Spinner />
+        ) : decks.length === 0 || mode === 'new' ? (
           <div className="flex flex-col gap-4">
             <div className="font-['HelveticaNeueLight'] text-xl text-zinc-300">
               Cards are introduced from most to least common (SUBTLEX-CH

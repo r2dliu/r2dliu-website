@@ -109,65 +109,70 @@ export function FreeDrawPad({
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <svg
-        ref={svgRef}
-        width={size}
-        height={size}
-        viewBox={`0 0 ${size} ${size}`}
-        className="touch-none select-none border border-zinc-700 bg-zinc-950"
-        onPointerDown={onDown}
-        onPointerMove={onMove}
-        onPointerUp={onUp}
-        onPointerCancel={onUp}
-      >
-        <g stroke="#27272a" strokeDasharray="4 4">
-          <line x1={0} y1={0} x2={size} y2={size} />
-          <line x1={size} y1={0} x2={0} y2={size} />
-          <line x1={size / 2} y1={0} x2={size / 2} y2={size} />
-          <line x1={0} y1={size / 2} x2={size} y2={size / 2} />
-        </g>
-        {/* The reference only appears with the result, never while drawing */}
-        {reference && result && (
-          <g
-            transform={`translate(${PAD}, ${size - PAD - 124 * scale}) scale(${scale}, ${-scale})`}
-            fill="#52525b"
-          >
-            {reference.strokes.map((d, i) => (
-              <path key={i} d={d} />
-            ))}
+      <div className="relative">
+        <svg
+          ref={svgRef}
+          width={size}
+          height={size}
+          viewBox={`0 0 ${size} ${size}`}
+          className="touch-none select-none border border-zinc-700 bg-zinc-950"
+          onPointerDown={onDown}
+          onPointerMove={onMove}
+          onPointerUp={onUp}
+          onPointerCancel={onUp}
+        >
+          <g stroke="#27272a" strokeDasharray="4 4">
+            <line x1={0} y1={0} x2={size} y2={size} />
+            <line x1={size} y1={0} x2={0} y2={size} />
+            <line x1={size / 2} y1={0} x2={size / 2} y2={size} />
+            <line x1={0} y1={size / 2} x2={size} y2={size / 2} />
           </g>
-        )}
-        {strokes.map((s, i) => (
-          <polyline
-            key={i}
-            points={s.map((p) => p.join(',')).join(' ')}
-            fill="none"
-            stroke={result ? colour(strokeScore(i)) : '#ffffff'}
-            strokeWidth={6}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        ))}
-      </svg>
-
-      {result ? (
-        <div className="flex w-full max-w-sm flex-col items-center gap-1 text-center">
-          <div className="font-['HelveticaNeueBold'] text-3xl">
+          {/* The reference only appears with the result, never while drawing */}
+          {reference && result && (
+            <g
+              transform={`translate(${PAD}, ${size - PAD - 124 * scale}) scale(${scale}, ${-scale})`}
+              fill="#52525b"
+            >
+              {reference.strokes.map((d, i) => (
+                <path key={i} d={d} />
+              ))}
+            </g>
+          )}
+          {strokes.map((s, i) => (
+            <polyline
+              key={i}
+              points={s.map((p) => p.join(',')).join(' ')}
+              fill="none"
+              stroke={result ? colour(strokeScore(i)) : '#ffffff'}
+              strokeWidth={6}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          ))}
+        </svg>
+        {/* Score sits on the canvas so the result adds little height */}
+        {result && (
+          <div className="pointer-events-none absolute left-2 top-1 font-['HelveticaNeueBold'] text-2xl">
             {Math.round(result.accuracy)}%
           </div>
-          <div className="text-sm text-zinc-400">
+        )}
+      </div>
+
+      {result ? (
+        <div className="flex w-full max-w-sm flex-col items-center gap-0.5 text-center text-xs text-zinc-400">
+          <div>
             Strokes {result.drawnStrokes}/{result.expectedStrokes} · Order{' '}
             {result.inOrder}/{result.expectedStrokes} · Direction{' '}
             {result.correctDirection}/{result.expectedStrokes}
           </div>
           {result.recognized.length > 0 && (
-            <div className="text-sm text-zinc-400">
+            <div>
               {result.recognized[0].hanzi === hanzi ? (
                 <>Recognised as {hanzi} ✓</>
               ) : (
                 <>
                   Looks more like{' '}
-                  <span className="text-lg text-white">
+                  <span className="text-base text-white">
                     {result.recognized[0].hanzi}
                   </span>
                 </>
@@ -180,7 +185,7 @@ export function FreeDrawPad({
             </div>
           )}
           {footer?.(result)}
-          <div className="flex gap-2 pt-1">
+          <div className="flex gap-2 pt-1.5">
             <Btn variant="outlined" onClick={reset}>
               Draw again
             </Btn>

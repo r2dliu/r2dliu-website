@@ -6,6 +6,7 @@ import { api } from '../../helpers/chinese/api'
 import { DrawingPad } from './DrawingPad'
 import { FreeDrawPad } from './FreeDrawPad'
 import { RelatedList } from './RelatedList'
+import { Spinner } from './ui'
 import type { Card, RelatedItem } from '../../helpers/chinese/api'
 
 function Choice<T extends string>({
@@ -130,6 +131,6 @@ export function PracticeRelated({ card }: { card: Card }) {
     run(() => api.relatedItems(card.id)).then((r) => setItems(r ?? []))
   }, [card.id, run])
 
-  if (!items) return <div className="text-zinc-400">Loading…</div>
+  if (!items) return <Spinner />
   return <RelatedList items={items} />
 }
