@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { useT } from '../../helpers/chinese/i18n'
 import { HanziCanvas } from './HanziCanvas'
 import { Btn } from './ui'
 
@@ -20,6 +21,7 @@ export function DrawingPad({
   onComplete?: (totalMistakes: number) => void
   onMistake?: (totalMistakes: number) => void
 }) {
+  const t = useT()
   const [showing, setShowing] = useState(false)
   const [attempt, setAttempt] = useState(0)
 
@@ -30,7 +32,7 @@ export function DrawingPad({
   }
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-3">
       <HanziCanvas
         key={`${hanzi}-${attempt}-${showing}`}
         hanzi={hanzi}
@@ -43,15 +45,15 @@ export function DrawingPad({
       <div className="flex gap-2">
         {showing ? (
           <Btn variant="text" onClick={restart}>
-            Back to drawing
+            {t('backToDrawing')}
           </Btn>
         ) : (
           <>
             <Btn variant="text" onClick={() => setShowing(true)}>
-              Show strokes
+              {t('showStrokes')}
             </Btn>
             <Btn variant="text" onClick={restart}>
-              Start over
+              {t('startOver')}
             </Btn>
           </>
         )}

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { useT } from '../../helpers/chinese/i18n'
 import { HanziCanvas, loadStrokes } from './HanziCanvas'
 import { Btn } from './ui'
 import type {
@@ -19,15 +20,19 @@ export function FreeDrawPad({
   hanzi,
   size = 280,
   onSubmit,
+  onReset,
   footer,
 }: {
   hanzi: string
   size?: number
   /** Score the drawing; resolve to null if it failed */
   onSubmit: (strokes: Array<DrawnStroke>) => Promise<DrawingResult | null>
+  /** Called by "Draw again" after a result, e.g. to move to the next character */
+  onReset?: () => void
   /** Extra line under the result, e.g. whether it counted */
   footer?: (result: DrawingResult) => React.ReactNode
 }) {
+  const t = useT()
   const scale = (size - 2 * PAD) / 1024
   const [strokes, setStrokes] = useState<Array<Array<[number, number]>>>([])
   const [result, setResult] = useState<DrawingResult | null>(null)
@@ -98,17 +103,17 @@ export function FreeDrawPad({
 
   if (showing) {
     return (
-      <div className="flex flex-col items-center gap-2">
+      <div className="flex flex-col items-center gap-3">
         <HanziCanvas hanzi={hanzi} mode="animate" size={size} />
         <Btn variant="text" onClick={() => setShowing(false)}>
-          Back to drawing
+          {t('backToDrawing')}
         </Btn>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-3">
       <div className="relative">
         <svg
           ref={svgRef}
@@ -161,36 +166,47 @@ export function FreeDrawPad({
       {result ? (
         <div className="flex w-full max-w-sm flex-col items-center gap-0.5 text-center text-xs text-zinc-400">
           <div>
-            Strokes {result.drawnStrokes}/{result.expectedStrokes} · Order{' '}
-            {result.inOrder}/{result.expectedStrokes} · Direction{' '}
-            {result.correctDirection}/{result.expectedStrokes}
+            {t('strokesLine', {
+              s: result.drawnStrokes,
+              e: result.expectedStrokes,
+              o: result.inOrder,
+              d: result.correctDirection,
+            })}
           </div>
           {result.recognized.length > 0 && (
             <div>
               {result.recognized[0].hanzi === hanzi ? (
-                <>Recognised as {hanzi} ✓</>
+                <>{t('recognised', { h: hanzi })}</>
               ) : (
                 <>
-                  Looks more like{' '}
+                  {t('looksLike')}{' '}
                   <span className="text-base text-white">
                     {result.recognized[0].hanzi}
                   </span>
                 </>
               )}
               {result.recognized.length > 1 &&
-                ` · also ${result.recognized
-                  .slice(1, 4)
-                  .map((r) => r.hanzi)
-                  .join(' ')}`}
+                t('also', {
+                  list: result.recognized
+                    .slice(1, 4)
+                    .map((r) => r.hanzi)
+                    .join(' '),
+                })}
             </div>
           )}
           {footer?.(result)}
           <div className="flex gap-2 pt-1.5">
-            <Btn variant="outlined" onClick={reset}>
-              Draw again
+            <Btn
+              variant="outlined"
+              onClick={() => {
+                reset()
+                onReset?.()
+              }}
+            >
+              {t('drawAgain')}
             </Btn>
             <Btn variant="text" onClick={() => setShowing(true)}>
-              Show strokes
+              {t('showStrokes')}
             </Btn>
           </div>
         </div>
@@ -201,20 +217,20 @@ export function FreeDrawPad({
             onClick={check}
             disabled={!strokes.length || checking}
           >
-            {checking ? 'Checking…' : 'Check'}
+            {checking ? t('checking') : t('check')}
           </Btn>
           <Btn
             variant="text"
             onClick={() => setStrokes((s) => s.slice(0, -1))}
             disabled={!strokes.length}
           >
-            Undo
+            {t('undo')}
           </Btn>
           <Btn variant="text" onClick={reset} disabled={!strokes.length}>
-            Clear
+            {t('clear')}
           </Btn>
           <Btn variant="text" onClick={() => setShowing(true)}>
-            Show strokes
+            {t('showStrokes')}
           </Btn>
         </div>
       )}

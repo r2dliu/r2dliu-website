@@ -3,6 +3,7 @@ import cn from 'classnames'
 import { useEffect, useRef, useState } from 'react'
 
 import { useStudyStore } from '../../stores/chinese/studyStore'
+import { useT } from '../../helpers/chinese/i18n'
 import { CardBack, CardFront } from './CardFace'
 import { DeckSettings } from './DeckSettings'
 import { PracticeDrawing, PracticeRelated } from './PracticePanel'
@@ -10,18 +11,19 @@ import { RemediationPanel } from './RemediationPanel'
 import { Btn, Input, Select, Spinner } from './ui'
 import type { Card, CardKind, Rating } from '../../helpers/chinese/api'
 
-const RATINGS: Array<{ rating: Rating; label: string; className: string }> = [
-  { rating: 'AGAIN', label: 'Again', className: '!border-red-500' },
-  { rating: 'HARD', label: 'Hard', className: '!border-orange-400' },
-  { rating: 'GOOD', label: 'Good', className: '!border-green-500' },
-  { rating: 'EASY', label: 'Easy', className: '!border-sky-400' },
+const RATINGS: Array<{ rating: Rating; className: string }> = [
+  { rating: 'AGAIN', className: '!border-red-500' },
+  { rating: 'HARD', className: '!border-orange-400' },
+  { rating: 'GOOD', className: '!border-green-500' },
+  { rating: 'EASY', className: '!border-sky-400' },
   // Never shown again
-  { rating: 'KNOWN', label: 'Known', className: '!border-zinc-400' },
+  { rating: 'KNOWN', className: '!border-zinc-400' },
 ]
 
 function NewDeckForm({ onDone }: { onDone?: () => void }) {
   const createDeck = useStudyStore((s) => s.createDeck)
   const busy = useStudyStore((s) => s.busy)
+  const t = useT()
   const [name, setName] = useState('Most common characters')
   const [cardKind, setCardKind] = useState<CardKind>('CHARACTER')
 
@@ -35,13 +37,13 @@ function NewDeckForm({ onDone }: { onDone?: () => void }) {
       }}
     >
       <Input
-        label="Deck name"
+        label={t('deckName')}
         value={name}
         onChange={(e) => setName(e.target.value)}
         className="max-md:w-full"
       />
       <Select
-        label="Cards"
+        label={t('cards')}
         value={cardKind}
         onChange={(e) => {
           const kind = e.target.value as CardKind
@@ -52,8 +54,8 @@ function NewDeckForm({ onDone }: { onDone?: () => void }) {
         }}
         className="w-48 max-md:w-full"
       >
-        <option value="CHARACTER">Characters (字)</option>
-        <option value="WORD">Vocab words (词)</option>
+        <option value="CHARACTER">{t('cardsCharacter')}</option>
+        <option value="WORD">{t('cardsWord')}</option>
       </Select>
       <Btn
         type="submit"
@@ -61,37 +63,34 @@ function NewDeckForm({ onDone }: { onDone?: () => void }) {
         className="max-md:w-full"
         disabled={busy}
       >
-        Create deck
+        {t('createDeck')}
       </Btn>
     </form>
   )
 }
 
 function Counts() {
-  const study = useStudyStore((s) => s.study)
+  const study = useStudyStore((s) => s.pendingNext ?? s.study)
+  const t = useT()
   if (!study) return null
   const { counts } = study
   return (
     <div className="flex gap-3 px-2 font-['HelveticaNeueMedium']">
-      <span className="text-sky-400" title="New cards left today">
+      <span className="text-sky-400" title={t('countNew')}>
         {counts.new}
       </span>
-      <span className="text-red-400" title="Learning">
+      <span className="text-red-400" title={t('countLearning')}>
         {counts.learning}
       </span>
-      <span className="text-green-400" title="Reviews due">
+      <span className="text-green-400" title={t('countReview')}>
         {counts.review}
       </span>
     </div>
   )
 }
 
-const TABS = [
-  ['meaning', 'Meaning'],
-  ['draw', 'Draw'],
-  ['related', 'Related'],
-] as const
-type Tab = (typeof TABS)[number][0]
+const TABS = ['meaning', 'draw', 'related'] as const
+type Tab = (typeof TABS)[number]
 
 /**
  * The revealed card's details. Meaning, drawing practice and related vocab
@@ -99,6 +98,7 @@ type Tab = (typeof TABS)[number][0]
  */
 function CardDetails({ card }: { card: Card }) {
   const [tab, setTab] = useState<Tab>('meaning')
+  const t = useT()
 
   // The tabs fill whatever height is left on screen; size the drawing canvas
   // to fit it (leaving room for the mode toggle and buttons).
@@ -111,7 +111,7 @@ function CardDetails({ card }: { card: Card }) {
       setDrawSize(
         Math.round(
           // Reserve room for the mode toggle, the result lines and buttons
-          Math.max(140, Math.min(340, el.clientWidth, el.clientHeight - 150)),
+          Math.max(140, Math.min(340, el.clientWidth, el.clientHeight - 156)),
         ),
       ),
     )
@@ -122,7 +122,7 @@ function CardDetails({ card }: { card: Card }) {
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">
       <div className="flex border-b border-zinc-800" role="tablist">
-        {TABS.map(([key, label]) => (
+        {TABS.map((key) => (
           <button
             key={key}
             type="button"
@@ -138,7 +138,7 @@ function CardDetails({ card }: { card: Card }) {
               },
             )}
           >
-            {label}
+            {t(key)}
           </button>
         ))}
       </div>
@@ -159,9 +159,30 @@ function CardDetails({ card }: { card: Card }) {
   )
 }
 
+/** '10m' -> '10分钟', '3.5d' -> '3.5天' */
+function intervalZh(label: string | undefined) {
+  if (!label) return label
+  const units: Record<string, string> = {
+    m: '分钟',
+    h: '小时',
+    d: '天',
+    mo: '个月',
+  }
+  return label.replace(/(mo|m|h|d)$/, (u) => units[u])
+}
+
 function StudyPanel() {
-  const { study, revealed, reveal, answer, busy, refresh, studyMore } =
-    useStudyStore()
+  const {
+    study,
+    revealed,
+    reveal,
+    answer,
+    busy,
+    refresh,
+    studyMore,
+    language,
+  } = useStudyStore()
+  const t = useT()
 
   // Space reveals, 1-4 answer — like Anki
   useEffect(() => {
@@ -194,20 +215,20 @@ function StudyPanel() {
     return (
       <div className="flex flex-col items-start gap-3 py-10">
         <div className="font-['HelveticaNeueBold'] text-3xl">
-          Done for now 🎉
+          {t('doneForNow')}
         </div>
         <div className="text-zinc-400">
           {study.nextDueAt
-            ? `Next card is due ${new Date(study.nextDueAt).toLocaleString()}.`
-            : 'No cards are scheduled.'}
-          {study.counts.new === 0 && ' New card limit reached for today.'}
+            ? t('nextDue', { when: new Date(study.nextDueAt).toLocaleString() })
+            : t('noneScheduled')}
+          {study.counts.new === 0 && t('limitReached')}
         </div>
         <div className="flex flex-wrap gap-3">
           <Btn variant="outlined" onClick={studyMore} disabled={busy}>
-            Keep going (+10 new cards)
+            {t('keepGoing')}
           </Btn>
           <Btn variant="text" onClick={refresh}>
-            Check again
+            {t('checkAgain')}
           </Btn>
         </div>
       </div>
@@ -221,15 +242,15 @@ function StudyPanel() {
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3 md:gap-5">
       <div className="text-xs uppercase tracking-wide text-zinc-500">
-        {card.state.toLowerCase()}
-        {card.lapses ? ` · ${card.lapses} lapses` : ''}
+        {t(`state_${card.state}`)}
+        {card.lapses ? ` · ${t('lapses', { n: card.lapses })}` : ''}
       </div>
       <CardFront card={card} compact={revealed} />
       {revealed ? (
         <>
           <CardDetails key={card.id} card={card} />
           <div className="grid shrink-0 grid-cols-5 gap-3 pb-3 max-md:gap-1.5">
-            {RATINGS.map(({ rating, label, className }, i) => (
+            {RATINGS.map(({ rating, className }, i) => (
               <Btn
                 key={rating}
                 variant="outlined"
@@ -240,8 +261,14 @@ function StudyPanel() {
                 )}
                 onClick={() => answer(rating)}
               >
-                <span className="text-xs text-zinc-400">{preview[rating]}</span>
-                <span>{label}</span>
+                <span className="text-xs text-zinc-400">
+                  {rating === 'KNOWN'
+                    ? t('never')
+                    : language === 'zh'
+                      ? intervalZh(preview[rating])
+                      : preview[rating]}
+                </span>
+                <span>{t(rating)}</span>
                 <span className="text-[10px] text-zinc-500 max-md:hidden">
                   {i + 1}
                 </span>
@@ -258,7 +285,7 @@ function StudyPanel() {
             onClick={reveal}
             className="mb-3 shrink-0 self-stretch md:self-center"
           >
-            Show answer
+            {t('showAnswer')}
           </Btn>
         </>
       )}
@@ -267,8 +294,18 @@ function StudyPanel() {
 }
 
 export function ChineseFlashcards() {
-  const { decks, decksLoaded, deckId, selectDeck, loadDecks, error, study } =
-    useStudyStore()
+  const {
+    decks,
+    decksLoaded,
+    deckId,
+    selectDeck,
+    loadDecks,
+    error,
+    study,
+    language,
+    setLanguage,
+  } = useStudyStore()
+  const t = useT()
   const [mode, setMode] = useState<'study' | 'settings' | 'new'>('study')
 
   useEffect(() => {
@@ -305,7 +342,7 @@ export function ChineseFlashcards() {
           {mode === 'study' && <Counts />}
           {deck && mode === 'study' && (
             <Btn variant="text" onClick={() => setMode('settings')}>
-              Settings
+              {t('settings')}
             </Btn>
           )}
         </div>
@@ -321,9 +358,7 @@ export function ChineseFlashcards() {
         ) : decks.length === 0 || mode === 'new' ? (
           <div className="flex flex-col gap-4">
             <div className="font-['HelveticaNeueLight'] text-xl text-zinc-300">
-              Cards are introduced from most to least common (SUBTLEX-CH
-              frequency). Failing a card can require extra work before you move
-              on — configure it in the deck settings.
+              {t('intro')}
             </div>
             <NewDeckForm onDone={() => setMode('study')} />
             {decks.length > 0 && (
@@ -332,16 +367,25 @@ export function ChineseFlashcards() {
                 className="self-start"
                 onClick={() => setMode('study')}
               >
-                Cancel
+                {t('cancel')}
               </Btn>
             )}
           </div>
         ) : mode === 'settings' && deck ? (
           <div className="flex flex-col gap-6">
             <div className="flex flex-wrap items-end gap-3">
+              <Select
+                label={t('language')}
+                value={language}
+                onChange={(e) => setLanguage(e.target.value as 'en' | 'zh')}
+                className="w-40 max-md:w-full"
+              >
+                <option value="en">English</option>
+                <option value="zh">中文</option>
+              </Select>
               {decks.length > 1 && (
                 <Select
-                  label="Deck"
+                  label={t('deck')}
                   value={deckId ?? ''}
                   onChange={(e) => selectDeck(e.target.value)}
                   className="w-64 max-md:w-full"
@@ -354,7 +398,7 @@ export function ChineseFlashcards() {
                 </Select>
               )}
               <Btn variant="outlined" onClick={() => setMode('new')}>
-                New deck
+                {t('newDeck')}
               </Btn>
             </div>
             <DeckSettings

@@ -67,6 +67,8 @@ export interface Character {
   traditional: string | null
   pinyin: Array<string>
   definition: string
+  /** Chinese definition; empty when the dictionaries have none */
+  definitionZh: string
   frequencyRank: number | null
   hskLevel: number | null
   strokeCount: number
@@ -77,6 +79,8 @@ export interface Word {
   traditional: string | null
   pinyin: string
   definition: string
+  /** Chinese definition; empty when the dictionaries have none */
+  definitionZh: string
   frequencyRank: number | null
   hskLevel: number | null
   characters: Array<Character>
@@ -90,6 +94,15 @@ export interface Card {
   character: Character | null
   word: Word | null
   intervalPreview: Array<{ rating: Rating; label: string }>
+  examples: Array<Sentence>
+}
+
+export interface Sentence {
+  id: string
+  chinese: string
+  english: string
+  /** Segmented words with their pinyin (empty for punctuation) */
+  tokens: Array<{ text: string; pinyin: string }>
 }
 
 export interface RelatedItem {
@@ -98,6 +111,8 @@ export interface RelatedItem {
   hanzi: string
   pinyin: string
   definition: string
+  /** Chinese definition; empty when the dictionaries have none */
+  definitionZh: string
   frequencyRank: number | null
   hskLevel: number | null
 }
@@ -175,7 +190,7 @@ export type DeckInput = Partial<Omit<Deck, 'id' | 'cardCount'>>
 // ---------------------------------------------------------------------------
 
 const CHARACTER_FIELDS = `
-  hanzi traditional pinyin definition frequencyRank hskLevel strokeCount
+  hanzi traditional pinyin definition definitionZh frequencyRank hskLevel strokeCount
 `
 
 const DECK_FIELDS = `
@@ -190,9 +205,10 @@ const STUDY_FIELDS = `
   card {
     id state hanzi lapses
     intervalPreview { rating label }
+    examples { id chinese english tokens { text pinyin } }
     character { ${CHARACTER_FIELDS} }
     word {
-      simplified traditional pinyin definition frequencyRank hskLevel
+      simplified traditional pinyin definition definitionZh frequencyRank hskLevel
       characters { ${CHARACTER_FIELDS} }
     }
   }
@@ -201,7 +217,7 @@ const STUDY_FIELDS = `
     steps {
       index type config required done satisfied
       drawTargets drawProgress openedKeys attempts
-      relatedItems { key kind hanzi pinyin definition frequencyRank hskLevel }
+      relatedItems { key kind hanzi pinyin definition definitionZh frequencyRank hskLevel }
     }
   }
 `
@@ -299,7 +315,7 @@ export const api = {
 
   relatedItems: (cardId: string) =>
     gql<{ relatedItems: Array<RelatedItem> }>(
-      `query($cardId: ID!) { relatedItems(cardId: $cardId) { key kind hanzi pinyin definition frequencyRank hskLevel } }`,
+      `query($cardId: ID!) { relatedItems(cardId: $cardId) { key kind hanzi pinyin definition definitionZh frequencyRank hskLevel } }`,
       { cardId },
     ).then((d) => d.relatedItems),
 
@@ -345,7 +361,7 @@ export const api = {
     gql<{ character: (Character & { words: Array<Word> }) | null }>(
       `query($hanzi: String!) { character(hanzi: $hanzi) {
         ${CHARACTER_FIELDS}
-        words(limit: 8) { simplified pinyin definition frequencyRank hskLevel characters { hanzi } }
+        words(limit: 8) { simplified pinyin definition definitionZh frequencyRank hskLevel characters { hanzi } }
       } }`,
       { hanzi },
     ).then((d) => d.character),
@@ -353,7 +369,7 @@ export const api = {
   word: (simplified: string) =>
     gql<{ word: Word | null }>(
       `query($simplified: String!) { word(simplified: $simplified) {
-        simplified traditional pinyin definition frequencyRank hskLevel
+        simplified traditional pinyin definition definitionZh frequencyRank hskLevel
         characters { ${CHARACTER_FIELDS} }
       } }`,
       { simplified },
