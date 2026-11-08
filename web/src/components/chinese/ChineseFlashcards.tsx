@@ -281,8 +281,18 @@ export function ChineseFlashcards() {
           )}
         </div>
         {error && (
-          <div className="border border-red-500 px-4 py-2 text-red-300">
-            {error}
+          // Over the page rather than in it, so an error never shifts the
+          // layout (e.g. the drawing canvas)
+          <div className="fixed inset-x-4 top-3 z-50 mx-auto flex max-w-xl items-start gap-3 border border-red-500 bg-black px-4 py-2 text-red-300 shadow-lg">
+            <div className="flex-1">{error}</div>
+            <button
+              type="button"
+              aria-label={t('dismiss')}
+              onClick={() => useStudyStore.setState({ error: null })}
+              className="cursor-pointer border-0 bg-transparent p-0 text-lg leading-none text-red-300"
+            >
+              ×
+            </button>
           </div>
         )}
 

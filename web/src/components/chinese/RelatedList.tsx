@@ -7,7 +7,12 @@ import { useDefinition, useT } from '../../helpers/chinese/i18n'
 import { Definition, Meta } from './CardFace'
 import { HanziCanvas } from './HanziCanvas'
 import { Btn } from './ui'
-import type { Character, RelatedItem, Word } from '../../helpers/chinese/api'
+import type {
+  Character,
+  RelatedGroup,
+  RelatedItem,
+  Word,
+} from '../../helpers/chinese/api'
 
 function RelatedDetail({ item }: { item: RelatedItem }) {
   const t = useT()
@@ -149,5 +154,71 @@ export function RelatedList({
         </li>
       ))}
     </ul>
+  )
+}
+
+/**
+ * Related vocab with one tab per character of the card (no tabs when there's
+ * only one). During a remediation each tab shows how many are opened of the
+ * number it needs.
+ */
+export function RelatedTabs({
+  groups,
+  opened,
+  onOpen,
+}: {
+  groups: Array<RelatedGroup>
+  opened?: Set<string>
+  onOpen?: (item: RelatedItem) => void
+}) {
+  // Start on the first tab that still needs opening
+  const [active, setActive] = useState(() =>
+    Math.max(
+      0,
+      groups.findIndex((g) => g.done < g.required),
+    ),
+  )
+  if (!groups.length) return <RelatedList items={[]} />
+  const group = groups[Math.min(active, groups.length - 1)]
+
+  return (
+    <div className="flex flex-col gap-3">
+      {groups.length > 1 && (
+        <div className="flex gap-2" role="tablist">
+          {groups.map((g, i) => {
+            const complete = g.required > 0 && g.done >= g.required
+            return (
+              <button
+                key={`${g.hanzi}-${i}`}
+                type="button"
+                role="tab"
+                aria-selected={i === active}
+                onClick={() => setActive(i)}
+                className={cn(
+                  'flex cursor-pointer items-baseline gap-2 border bg-black px-4 py-1.5',
+                  i === active
+                    ? 'border-white text-white'
+                    : 'border-zinc-700 text-zinc-500',
+                  complete && 'border-green-500 text-green-400',
+                )}
+              >
+                <span className="text-xl">{g.hanzi}</span>
+                {g.required > 0 && (
+                  <span className="text-xs">
+                    {Math.min(g.done, g.required)}/{g.required}
+                  </span>
+                )}
+              </button>
+            )
+          })}
+        </div>
+      )}
+      <RelatedList
+        key={active}
+        items={group.items}
+        opened={opened}
+        onOpen={onOpen}
+      />
+    </div>
   )
 }

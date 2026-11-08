@@ -36,7 +36,9 @@ STEP_DEFAULTS = {
         # Show the faint character outline while drawing
         "showOutline": True,
     },
-    # Browse related vocab that shares characters with the failed card
+    # Browse related vocab that shares characters with the failed card. Each
+    # character of the card gets its own list (a tab); the minimum applies to
+    # each list, so a two-character word needs 2 x minOpened.
     EXPLORE_RELATED: {
         "minOpened": 3,
         "maxItems": 12,
@@ -102,25 +104,58 @@ def item_key(obj: Character | Word) -> str:
     return f"{'C' if isinstance(obj, Character) else 'W'}:{obj.pk}"
 
 
-def related_items(card: Card, limit: int) -> list[Character | Word]:
-    """Vocab sharing characters with the card, most common first.
+def related_groups(card: Card, limit: int) -> list[tuple[str, list]]:
+    """Vocab sharing each of the card's characters, most common first.
 
-    For a character card: words containing it. For a word card: its component
-    characters, then other words sharing any of them.
+    One group per character: [(hanzi, items)], in the card's order. A
+    character card's group is the words containing it. For a word card each
+    character's group starts with the character itself, then other words
+    containing it. A word containing several of the card's characters (女朋友
+    for 朋友) is listed once, under the rarer character, so every group
+    has its own words to open.
     """
-    chars = card.subject_characters()
-    items: list[Character | Word] = []
-    if card.word:
-        # Single characters that are part of the word
-        items.extend(dict.fromkeys(chars))
-    words = (
-        Word.objects.filter(characters__in=chars, frequency_rank__isnull=False)
-        .exclude(simplified=card.hanzi)
-        .distinct()
-        .order_by("frequency_rank")[: limit * 2]
-    )
-    items.extend(words)
-    return items[:limit]
+    chars = list(dict.fromkeys(card.subject_characters()))
+    candidates = {
+        c: list(
+            Word.objects.filter(characters=c, frequency_rank__isnull=False)
+            # Not the card itself, nor the character again as a one-character word
+            .exclude(simplified__in=[card.hanzi, c.hanzi])
+            .distinct()
+            .order_by("frequency_rank")[: limit * 3]
+        )
+        for c in chars
+    }
+    taken: set = set()
+    words: dict = {}
+    # Characters with the fewest words pick first
+    for c in sorted(chars, key=lambda c: len(candidates[c])):
+        words[c] = [w for w in candidates[c] if w.pk not in taken]
+        taken.update(w.pk for w in words[c][:limit])
+    groups = []
+    for c in chars:
+        items: list[Character | Word] = [c] if card.word else []
+        items.extend(words[c])
+        groups.append((c.hanzi, items[:limit]))
+    return groups
+
+
+def related_items(card: Card, limit: int) -> list[Character | Word]:
+    """All of the card's related vocab in one list (see related_groups)."""
+    seen: dict[str, Character | Word] = {}
+    for _hanzi, items in related_groups(card, limit):
+        for item in items:
+            seen.setdefault(item_key(item), item)
+    return list(seen.values())
+
+
+def explore_groups(progress: dict) -> list[dict]:
+    """[{"hanzi", "items"}] for an EXPLORE_RELATED step's progress.
+
+    Remediations started before items were grouped have one flat list.
+    """
+    if "groups" in progress:
+        return progress["groups"]
+    return [{"hanzi": "", "items": progress["items"]}]
 
 
 def load_items(keys: list[str]) -> list[Character | Word]:
@@ -146,8 +181,14 @@ def _initial_progress(card: Card, step: dict) -> dict:
     if step["type"] == DRAW_STROKES:
         return {"completed": {c: 0 for c in _draw_targets(card, step)}}
     if step["type"] == EXPLORE_RELATED:
-        items = related_items(card, step["maxItems"])
-        return {"items": [item_key(i) for i in items], "opened": []}
+        groups = related_groups(card, step["maxItems"])
+        return {
+            "groups": [
+                {"hanzi": hanzi, "items": [item_key(i) for i in items]}
+                for hanzi, items in groups
+            ],
+            "opened": [],
+        }
     if step["type"] == TYPE_PINYIN:
         return {"correct": 0, "attempts": 0}
     raise RemediationError(step["type"])
@@ -158,7 +199,9 @@ def required_count(step: dict, progress: dict) -> int:
     if step["type"] == DRAW_STROKES:
         return step["repetitions"] * len(progress["completed"])
     if step["type"] == EXPLORE_RELATED:
-        return min(step["minOpened"], len(progress["items"]))
+        return sum(
+            min(step["minOpened"], len(g["items"])) for g in explore_groups(progress)
+        )
     return step["repetitions"]
 
 
@@ -166,7 +209,11 @@ def done_count(step: dict, progress: dict) -> int:
     if step["type"] == DRAW_STROKES:
         return sum(min(n, step["repetitions"]) for n in progress["completed"].values())
     if step["type"] == EXPLORE_RELATED:
-        return len(progress["opened"])
+        opened = set(progress["opened"])
+        return sum(
+            min(step["minOpened"], len(g["items"]), len(opened & set(g["items"])))
+            for g in explore_groups(progress)
+        )
     return progress["correct"]
 
 
@@ -283,7 +330,7 @@ def open_related(remediation_id, key: str) -> Remediation:
     _step, progress = _current(remediation, EXPLORE_RELATED)
     if progress is None:
         return remediation  # Exploring after the task is done: nothing to count
-    if key not in progress["items"]:
+    if not any(key in g["items"] for g in explore_groups(progress)):
         raise RemediationError("That item isn't in the related list")
     if key not in progress["opened"]:
         progress["opened"].append(key)

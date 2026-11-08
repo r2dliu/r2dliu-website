@@ -31,6 +31,9 @@ function completed(study: StudyState): StudyState {
         ...s,
         done: Math.max(s.done, s.required),
         satisfied: true,
+        relatedGroups: s.relatedGroups
+          ? s.relatedGroups.map((g) => ({ ...g, done: g.required }))
+          : s.relatedGroups,
         drawProgress: s.drawTargets
           ? Object.fromEntries(
               s.drawTargets.map((t) => [

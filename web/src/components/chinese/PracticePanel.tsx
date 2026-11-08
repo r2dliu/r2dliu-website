@@ -6,9 +6,9 @@ import { api } from '../../helpers/chinese/api'
 import { useT } from '../../helpers/chinese/i18n'
 import { DrawingPad } from './DrawingPad'
 import { FreeDrawPad } from './FreeDrawPad'
-import { RelatedList } from './RelatedList'
+import { RelatedTabs } from './RelatedList'
 import { NO_SELECT, Spinner } from './ui'
-import type { Card, RelatedItem } from '../../helpers/chinese/api'
+import type { Card, RelatedGroup } from '../../helpers/chinese/api'
 
 function Choice<T extends string>({
   options,
@@ -124,13 +124,13 @@ export function PracticeDrawing({
 /** Optional related vocab for any card. */
 export function PracticeRelated({ card }: { card: Card }) {
   const run = useStudyStore((s) => s.run)
-  const [items, setItems] = useState<Array<RelatedItem> | null>(null)
+  const [groups, setGroups] = useState<Array<RelatedGroup> | null>(null)
 
   useEffect(() => {
-    setItems(null)
-    run(() => api.relatedItems(card.id)).then((r) => setItems(r ?? []))
+    setGroups(null)
+    run(() => api.relatedGroups(card.id)).then((r) => setGroups(r ?? []))
   }, [card.id, run])
 
-  if (!items) return <Spinner />
-  return <RelatedList items={items} />
+  if (!groups) return <Spinner />
+  return <RelatedTabs groups={groups} />
 }

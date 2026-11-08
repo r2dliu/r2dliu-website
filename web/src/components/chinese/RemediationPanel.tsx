@@ -7,10 +7,11 @@ import { useDefinition, useT } from '../../helpers/chinese/i18n'
 import { CardBack } from './CardFace'
 import { DrawingPad } from './DrawingPad'
 import { FreeDrawPad } from './FreeDrawPad'
-import { RelatedList } from './RelatedList'
+import { RelatedTabs } from './RelatedList'
 import { Btn, Input } from './ui'
 import type {
   Card,
+  RelatedGroup,
   RelatedItem,
   Remediation,
   RemediationStep,
@@ -38,7 +39,8 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
   const free = step.config.mode === 'FREE'
   const current = targets.find((h) => (progress[h] ?? 0) < reps) ?? targets[0]
   // The character on the pad. Progress updates as soon as a drawing counts,
-  // but the pad keeps showing that drawing's result until "Draw again".
+  // but the pad stays on that character (and its result) until the learner
+  // moves on with Next or picks another character.
   const [target, setTarget] = useState(current)
   const [attempt, setAttempt] = useState(0)
   const [mistakes, setMistakes] = useState(0)
@@ -49,10 +51,15 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
 
   useEffect(() => setMistakes(0), [target, attempt])
 
-  const nextDrawing = () => {
-    setTarget(current)
+  const drawCharacter = (h: string) => {
+    setTarget(h)
     setAttempt((a) => a + 1)
   }
+  const nextDrawing = () => drawCharacter(current)
+  // A character of the word still to draw, other than the one on the pad
+  const remaining = targets.find(
+    (h) => (progress[h] ?? 0) < reps && h !== target,
+  )
 
   const onComplete = async (totalMistakes: number) => {
     const result = await run(() =>
@@ -82,7 +89,14 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
         <FreeDrawPad
           key={`${target}-${attempt}`}
           hanzi={target}
-          onReset={nextDrawing}
+          next={
+            remaining
+              ? {
+                  label: t('drawNext', { h: remaining }),
+                  onClick: () => drawCharacter(remaining),
+                }
+              : undefined
+          }
           onSubmit={async (strokes) => {
             const r = await run(() =>
               api.submitFreeDrawing(remediation.id, target, strokes),
@@ -124,16 +138,21 @@ function DrawStrokesStep({ card, remediation, step }: StepProps) {
       <div className="flex flex-1 flex-col gap-3">
         <div className="flex flex-wrap gap-2">
           {targets.map((h) => (
-            <span
+            // Free draw: tap a character to draw it
+            <button
               key={h}
-              className={cn('border px-3 py-1 text-xl', {
-                'border-white': h === target,
+              type="button"
+              disabled={!free || h === target}
+              onClick={() => drawCharacter(h)}
+              className={cn('border bg-black px-3 py-1 text-xl', {
+                'cursor-pointer': free && h !== target,
+                'border-white text-white': h === target,
                 'border-zinc-700 text-zinc-500': h !== target,
                 'border-green-500 text-green-400': (progress[h] ?? 0) >= reps,
               })}
             >
               {h} {Math.min(progress[h] ?? 0, reps)}/{reps}
-            </span>
+            </button>
           ))}
         </div>
         {message && <div className="text-zinc-300">{message}</div>}
@@ -162,13 +181,27 @@ function ExploreRelatedStep({ remediation, step }: StepProps) {
   const { run, setStudy } = useStudyStore()
   const t = useT()
   const opened = new Set(step.openedKeys ?? [])
+  // Steps from before grouping have one flat list
+  const groups: Array<RelatedGroup> = step.relatedGroups ?? [
+    {
+      hanzi: '',
+      items: step.relatedItems ?? [],
+      required: step.required,
+      done: step.done,
+    },
+  ]
 
   const open = async (item: RelatedItem) => {
     if (opened.has(item.key)) return
-    // Count it straight away; the server's answer follows
+    // Count it straight away in every tab it's in; the server's answer follows
     const { study } = useStudyStore.getState()
     if (study?.remediation) {
-      const done = step.done + 1
+      const nextGroups = groups.map((g) =>
+        g.items.some((i) => i.key === item.key)
+          ? { ...g, done: Math.min(g.required, g.done + 1) }
+          : g,
+      )
+      const done = nextGroups.reduce((n, g) => n + g.done, 0)
       useStudyStore.setState({
         study: {
           ...study,
@@ -180,6 +213,7 @@ function ExploreRelatedStep({ remediation, step }: StepProps) {
                     ...s,
                     done,
                     satisfied: done >= s.required,
+                    relatedGroups: s.relatedGroups ? nextGroups : null,
                     openedKeys: [...(s.openedKeys ?? []), item.key],
                   }
                 : s,
@@ -195,13 +229,15 @@ function ExploreRelatedStep({ remediation, step }: StepProps) {
   return (
     <div className="flex flex-col gap-3">
       <div className="text-zinc-300">
-        {t('exploreHint', { n: step.required, d: step.done })}
+        {groups.length > 1
+          ? t('exploreHintTabs', {
+              n: Number(step.config.minOpened),
+              d: step.done,
+              r: step.required,
+            })
+          : t('exploreHint', { n: step.required, d: step.done })}
       </div>
-      <RelatedList
-        items={step.relatedItems ?? []}
-        opened={opened}
-        onOpen={open}
-      />
+      <RelatedTabs groups={groups} opened={opened} onOpen={open} />
     </div>
   )
 }
