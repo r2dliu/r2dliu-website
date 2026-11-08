@@ -28,7 +28,7 @@ export function CardDetails({ card }: { card: Card }) {
       setDrawSize(
         Math.round(
           // Reserve room for the mode toggle, the result lines and buttons
-          Math.max(140, Math.min(340, el.clientWidth, el.clientHeight - 156)),
+          Math.max(140, Math.min(340, el.clientWidth, el.clientHeight - 176)),
         ),
       ),
     )

@@ -83,6 +83,10 @@ const STRINGS = {
     '错误 {m} 次（最多 {max}）。再写一次 {c}。',
   ],
   showCardAgain: ['Show the card again', '再看一遍卡片'],
+  exploreHintTabs: [
+    'Open at least {n} in each tab — words sharing that character. Opened {d} / {r}.',
+    '每个标签至少打开 {n} 个——含有这个字的词。已打开 {d} / {r}。',
+  ],
   exploreHint: [
     'Open at least {n} of these — they share characters with the card. Opened {d} / {n}.',
     '至少打开 {n} 个——它们和这张卡片有相同的字。已打开 {d} / {n}。',
@@ -110,6 +114,8 @@ const STRINGS = {
   backToDrawing: ['Back to drawing', '返回书写'],
   startOver: ['Start over', '重新开始'],
   drawAgain: ['Draw again', '再写一次'],
+  drawNext: ['Next: {h}', '下一个：{h}'],
+  dismiss: ['Dismiss', '关闭'],
   strokesLine: [
     'Strokes {s}/{e} · Order {o}/{e} · Direction {d}/{e}',
     '笔画 {s}/{e} · 顺序 {o}/{e} · 方向 {d}/{e}',
@@ -196,7 +202,7 @@ const STRINGS = {
   opt_mode: ['Drawing', '书写方式'],
   opt_minAccuracy: ['Min accuracy (%), free draw', '最低准确率（%，自由书写）'],
   opt_maxMistakes: ['Max mistakes, guided', '最多错误（描写）'],
-  opt_minOpened: ['Must open at least', '至少打开'],
+  opt_minOpened: ['Must open at least (per character)', '至少打开（每个字）'],
   opt_maxItems: ['Items in list', '列表数量'],
   choice_ALL: ['All in the card', '卡片里的所有字'],
   choice_FIRST: ['Just the first', '只写第一个'],

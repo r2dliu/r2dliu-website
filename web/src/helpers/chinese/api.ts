@@ -153,6 +153,15 @@ export interface RelatedItem {
   hskLevel: number | null
 }
 
+/** Related vocab for one character of a card (a tab) */
+export interface RelatedGroup {
+  hanzi: string
+  items: Array<RelatedItem>
+  /** Items to open in this group during a remediation (0 otherwise) */
+  required: number
+  done: number
+}
+
 export interface FailureStep {
   type: FailureStepType
   [option: string]: unknown
@@ -168,6 +177,7 @@ export interface RemediationStep {
   drawTargets: Array<string> | null
   drawProgress: Record<string, number> | null
   relatedItems: Array<RelatedItem> | null
+  relatedGroups: Array<RelatedGroup> | null
   openedKeys: Array<string> | null
   attempts: number | null
 }
@@ -256,6 +266,7 @@ const STUDY_FIELDS = `
       index type config required done satisfied
       drawTargets drawProgress openedKeys attempts
       relatedItems { key kind hanzi pinyin definition definitionZh frequencyRank hskLevel }
+      relatedGroups { hanzi required done items { key kind hanzi pinyin definition definitionZh frequencyRank hskLevel } }
     }
   }
 `
@@ -350,6 +361,15 @@ export const api = {
       `mutation($deckId: ID!, $count: Int) { studyMore(deckId: $deckId, count: $count) { study { ${STUDY_FIELDS} } } }`,
       { deckId, count },
     ).then((d) => d.studyMore.study),
+
+  relatedGroups: (cardId: string) =>
+    gql<{ relatedGroups: Array<RelatedGroup> }>(
+      `query($cardId: ID!) { relatedGroups(cardId: $cardId) {
+        hanzi required done
+        items { key kind hanzi pinyin definition definitionZh frequencyRank hskLevel }
+      } }`,
+      { cardId },
+    ).then((d) => d.relatedGroups),
 
   relatedItems: (cardId: string) =>
     gql<{ relatedItems: Array<RelatedItem> }>(

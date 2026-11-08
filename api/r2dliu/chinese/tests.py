@@ -165,7 +165,8 @@ class StudyFlowTests(TestCase):
         card { id hanzi state intervalPreview { rating label } }
         remediation { id status currentStep steps {
             type required done satisfied drawTargets openedKeys
-            relatedItems { key hanzi } } }
+            relatedItems { key hanzi }
+            relatedGroups { hanzi required done items { key hanzi } } } }
         counts { new learning review }
     """
 
@@ -219,10 +220,14 @@ class StudyFlowTests(TestCase):
         self.assertEqual(rem["status"], "ACTIVE")
         draw, explore, typing = rem["steps"]
         self.assertEqual(draw["drawTargets"], ["你", "好"])
-        related = [i["hanzi"] for i in explore["relatedItems"]]
-        self.assertEqual(related[:2], ["你", "好"])  # component characters first
-        self.assertIn("你们", related)
-        self.assertNotIn("你好", related)
+        # One group (tab) per character, each starting with the character
+        groups = {
+            g["hanzi"]: [i["hanzi"] for i in g["items"]]
+            for g in explore["relatedGroups"]
+        }
+        self.assertEqual(groups, {"你": ["你", "你们"], "好": ["好", "好人"]})
+        self.assertEqual([g["required"] for g in explore["relatedGroups"]], [2, 2])
+        self.assertEqual(explore["required"], 4)
 
         # The queue is blocked while the remediation is active
         _, errors = self.answer(card["id"], "GOOD")
@@ -256,13 +261,17 @@ class StudyFlowTests(TestCase):
 
         open_q = """mutation($r: ID!, $k: String!) {
             openRelatedItem(remediationId: $r, key: $k) { remediation { currentStep } } }"""
-        keys = [i["key"] for i in explore["relatedItems"]]
+        ni, hao = [[i["key"] for i in g["items"]] for g in explore["relatedGroups"]]
         _, errors = self.gql(open_q, r=rem["id"], k="W:" + str(uuid.uuid4()))
         self.assertIsNotNone(errors)
-        self.gql(open_q, r=rem["id"], k=keys[0])
-        data, _ = self.gql(open_q, r=rem["id"], k=keys[0])  # repeat doesn't count
+        self.gql(open_q, r=rem["id"], k=ni[0])
+        data, _ = self.gql(open_q, r=rem["id"], k=ni[0])  # repeat doesn't count
         self.assertEqual(data["openRelatedItem"]["remediation"]["currentStep"], 1)
-        data, _ = self.gql(open_q, r=rem["id"], k=keys[1])
+        # Finishing one tab isn't enough: every character's tab needs its share
+        data, _ = self.gql(open_q, r=rem["id"], k=ni[1])
+        self.assertEqual(data["openRelatedItem"]["remediation"]["currentStep"], 1)
+        self.gql(open_q, r=rem["id"], k=hao[0])
+        data, _ = self.gql(open_q, r=rem["id"], k=hao[1])
         self.assertEqual(data["openRelatedItem"]["remediation"]["currentStep"], 2)
 
         pinyin_q = """mutation($r: ID!, $a: String!) {
@@ -343,8 +352,31 @@ class StudyFlowTests(TestCase):
         )
         self.assertIsNone(errors)
         hanzi = [i["hanzi"] for i in data["relatedItems"]]
-        self.assertEqual(hanzi[:2], ["你", "好"])
-        self.assertIn("你们", hanzi)
+        self.assertEqual(hanzi, ["你", "你们", "好", "好人"])
+        data, errors = self.gql(
+            "query($c: ID!) { relatedGroups(cardId: $c) { hanzi items { hanzi } } }",
+            c=card["id"],
+        )
+        self.assertIsNone(errors)
+        self.assertEqual(
+            [(g["hanzi"], len(g["items"])) for g in data["relatedGroups"]],
+            [("你", 2), ("好", 2)],
+        )
+
+    def test_shared_words_listed_under_one_character(self):
+        # 你们好 contains both of 你好's characters: it goes in one tab only
+        make_word("你们好", 4, [self.ni, self.men, self.hao], "ni3 men5 hao3")
+        deck_id = self.create_deck("WORD", [])
+        card = self.study(deck_id)["card"]
+        data, _ = self.gql(
+            "query($c: ID!) { relatedGroups(cardId: $c) { hanzi items { hanzi } } }",
+            c=card["id"],
+        )
+        groups = {g["hanzi"]: [i["hanzi"] for i in g["items"]] for g in data["relatedGroups"]}
+        listed = groups["你"] + groups["好"]
+        self.assertEqual(listed.count("你们好"), 1)
+        self.assertEqual(groups["你"][0], "你")
+        self.assertEqual(groups["好"][0], "好")
 
     def test_new_card_daily_limit(self):
         deck_id = self.create_deck("CHARACTER", [])

@@ -223,6 +223,17 @@ class CardType(graphene.ObjectType):
         ]
 
 
+class RelatedGroupType(graphene.ObjectType):
+    """Related vocab for one of the card's characters (a tab)."""
+
+    hanzi = graphene.String(required=True)
+    items = graphene.List(graphene.NonNull(RelatedItemType), required=True)
+    required = graphene.Int(
+        required=True, description="Items to open in this group (remediation)"
+    )
+    done = graphene.Int(required=True)
+
+
 class RemediationStepType(graphene.ObjectType):
     index = graphene.Int(required=True)
     type = graphene.String(required=True)
@@ -235,6 +246,7 @@ class RemediationStepType(graphene.ObjectType):
     draw_progress = GenericScalar(description="{hanzi: clean drawings so far}")
     # EXPLORE_RELATED
     related_items = graphene.List(graphene.NonNull(RelatedItemType))
+    related_groups = graphene.List(graphene.NonNull(RelatedGroupType))
     opened_keys = graphene.List(graphene.NonNull(graphene.String))
     # TYPE_PINYIN
     attempts = graphene.Int()
@@ -261,13 +273,31 @@ class RemediationType(graphene.ObjectType):
                 satisfied=done >= required,
             )
             if step["type"] == remediation.DRAW_STROKES:
-                node.draw_targets = list(progress["completed"])
+                # Postgres jsonb doesn't keep key order: use the word's order
+                node.draw_targets = sorted(
+                    progress["completed"], key=rem.card.hanzi.find
+                )
                 node.draw_progress = progress["completed"]
             elif step["type"] == remediation.EXPLORE_RELATED:
-                node.related_items = [
-                    RelatedItemType.build(item)
-                    for item in remediation.load_items(progress["items"])
-                ]
+                groups = remediation.explore_groups(progress)
+                keys = list(dict.fromkeys(k for g in groups for k in g["items"]))
+                built = {
+                    remediation.item_key(i): RelatedItemType.build(i)
+                    for i in remediation.load_items(keys)
+                }
+                opened = set(progress["opened"])
+                node.related_items = [built[k] for k in keys if k in built]
+                node.related_groups = []
+                for g in groups:
+                    need = min(step["minOpened"], len(g["items"]))
+                    node.related_groups.append(
+                        RelatedGroupType(
+                            hanzi=g["hanzi"],
+                            items=[built[k] for k in g["items"] if k in built],
+                            required=need,
+                            done=min(need, len(opened & set(g["items"]))),
+                        )
+                    )
                 node.opened_keys = progress["opened"]
             elif step["type"] == remediation.TYPE_PINYIN:
                 node.attempts = progress["attempts"]
@@ -440,6 +470,13 @@ class Query(graphene.ObjectType):
         limit=graphene.Int(default_value=12),
         description="Vocab sharing characters with a card, most common first",
     )
+    related_groups = graphene.List(
+        graphene.NonNull(RelatedGroupType),
+        required=True,
+        card_id=graphene.ID(required=True),
+        limit=graphene.Int(default_value=12),
+        description="Related vocab per character of the card (one tab each)",
+    )
     score_drawing = graphene.Field(
         DrawingResultType,
         hanzi=graphene.String(required=True),
@@ -498,6 +535,20 @@ class Query(graphene.ObjectType):
         card = get_card(info, card_id, allow_preview=True)
         items = remediation.related_items(card, max(1, min(limit, 50)))
         return [RelatedItemType.build(item) for item in items]
+
+    def resolve_related_groups(root, info, card_id, limit):
+        card = get_card(info, card_id, allow_preview=True)
+        return [
+            RelatedGroupType(
+                hanzi=hanzi,
+                items=[RelatedItemType.build(i) for i in items],
+                required=0,
+                done=0,
+            )
+            for hanzi, items in remediation.related_groups(
+                card, max(1, min(limit, 50))
+            )
+        ]
 
     def resolve_failure_step_types(root, info):
         return [
