@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import { useT } from '../../helpers/chinese/i18n'
 import { HanziCanvas } from './HanziCanvas'
-import { Btn, NO_SELECT, noSelectWhileDrawing } from './ui'
+import { Btn, DrawingSurface, NO_SELECT } from './ui'
 
 /**
  * Draw a character stroke by stroke. "Show strokes" plays the stroke order
@@ -34,7 +34,7 @@ export function DrawingPad({
 
   return (
     <div className={cn('flex flex-col items-center gap-3', NO_SELECT)}>
-      <div {...noSelectWhileDrawing()}>
+      <DrawingSurface>
         <HanziCanvas
           key={`${hanzi}-${attempt}-${showing}`}
           hanzi={hanzi}
@@ -44,7 +44,7 @@ export function DrawingPad({
           onQuizMistake={onMistake}
           onQuizComplete={onComplete}
         />
-      </div>
+      </DrawingSurface>
       <div className="flex gap-2">
         {showing ? (
           <Btn variant="text" onClick={restart}>

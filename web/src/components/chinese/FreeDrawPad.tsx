@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { useT } from '../../helpers/chinese/i18n'
 import { HanziCanvas, loadStrokes } from './HanziCanvas'
-import { Btn, NO_SELECT, noSelectWhileDrawing } from './ui'
+import { Btn, DrawingSurface, NO_SELECT } from './ui'
 import type {
   DrawingResult,
   DrawnStroke,
@@ -172,10 +172,9 @@ export function FreeDrawPad({
 
   return (
     <div className={cn('flex flex-col items-center gap-3', NO_SELECT)}>
-      <div
+      <DrawingSurface
         className="relative"
         style={{ width: size, height: size }}
-        {...noSelectWhileDrawing()}
       >
         {showing ? (
           <HanziCanvas hanzi={hanzi} mode="animate" size={size} />
@@ -227,7 +226,7 @@ export function FreeDrawPad({
             {Math.round(result.accuracy)}%
           </div>
         )}
-      </div>
+      </DrawingSurface>
 
       <div className="flex min-h-10 flex-nowrap justify-center gap-2 whitespace-nowrap max-md:gap-0.5 [&>button]:max-md:!px-1.5">
         {controls}
