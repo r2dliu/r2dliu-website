@@ -5,6 +5,7 @@ import cn from 'classnames'
 import { useEffect, useRef, useState } from 'react'
 import type {
   ButtonHTMLAttributes,
+  CSSProperties,
   InputHTMLAttributes,
   ReactNode,
   SelectHTMLAttributes,
@@ -161,27 +162,77 @@ export function Expandable({
 }
 
 /**
- * While a finger or pen is down on a drawing surface, stop the page from
- * selecting text (a stroke that strays off the canvas otherwise highlights
- * whatever it crosses). Spread the result onto the drawing's container.
+ * Wraps a drawing canvas so touching it only ever draws:
+ * - no native drag (iOS otherwise lifts the canvas as a "ghost" image, as if
+ *   it were a picture being dragged), long-press menu or tap highlight
+ * - no text selection anywhere on the page while a finger is down (a stroke
+ *   that strays off the canvas would otherwise highlight what it crosses)
  */
-export function noSelectWhileDrawing() {
-  return {
-    onPointerDownCapture: () => {
-      const root = document.documentElement
-      window.getSelection()?.removeAllRanges()
-      root.style.setProperty('user-select', 'none')
-      root.style.setProperty('-webkit-user-select', 'none')
-      const release = () => {
-        root.style.removeProperty('user-select')
-        root.style.removeProperty('-webkit-user-select')
-        window.removeEventListener('pointerup', release)
-        window.removeEventListener('pointercancel', release)
-      }
-      window.addEventListener('pointerup', release)
-      window.addEventListener('pointercancel', release)
-    },
+export function DrawingSurface({
+  className,
+  style,
+  children,
+}: {
+  className?: string
+  style?: CSSProperties
+  children: ReactNode
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    // Must be non-passive to cancel the browser's own touch handling (drag,
+    // long-press, scrolling). React's touch listeners are passive, so attach
+    // directly. Pointer events, which do the drawing, still fire.
+    const cancel = (e: Event) => {
+      if (e.cancelable) e.preventDefault()
+    }
+    el.addEventListener('touchstart', cancel, { passive: false })
+    el.addEventListener('touchmove', cancel, { passive: false })
+    el.addEventListener('dragstart', cancel)
+    el.addEventListener('contextmenu', cancel)
+    return () => {
+      el.removeEventListener('touchstart', cancel)
+      el.removeEventListener('touchmove', cancel)
+      el.removeEventListener('dragstart', cancel)
+      el.removeEventListener('contextmenu', cancel)
+    }
+  }, [])
+
+  const lockSelection = () => {
+    const root = document.documentElement
+    window.getSelection()?.removeAllRanges()
+    root.style.setProperty('user-select', 'none')
+    root.style.setProperty('-webkit-user-select', 'none')
+    const release = () => {
+      root.style.removeProperty('user-select')
+      root.style.removeProperty('-webkit-user-select')
+      window.removeEventListener('pointerup', release)
+      window.removeEventListener('pointercancel', release)
+    }
+    window.addEventListener('pointerup', release)
+    window.addEventListener('pointercancel', release)
   }
+
+  return (
+    <div
+      ref={ref}
+      draggable={false}
+      onPointerDownCapture={lockSelection}
+      className={cn('touch-none select-none', className)}
+      style={{
+        WebkitUserSelect: 'none',
+        WebkitTouchCallout: 'none',
+        WebkitTapHighlightColor: 'transparent',
+        // Not in React's CSS types
+        ...({ WebkitUserDrag: 'none' } as CSSProperties),
+        ...style,
+      }}
+    >
+      {children}
+    </div>
+  )
 }
 
 /** Classes for drawing areas: no text selection or iOS long-press menu */
